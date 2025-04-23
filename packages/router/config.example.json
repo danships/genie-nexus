@@ -1,0 +1,22 @@
+{
+  "port": 3000,
+  "providers": [
+    {
+      "id": "openai",
+      "name": "openai",
+      "type": "openai",
+      "apiKey": "sk-...",
+      "baseURL": "https://api.openai.com/v1"
+    }
+  ],
+  "deployments": [
+    {
+      "id": "default",
+      "default": {
+        "name": "gpt-3.5-turbo",
+        "provider": "openai",
+        "model": "gpt-3.5-turbo"
+      }
+    }
+  ]
+}

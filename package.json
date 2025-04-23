@@ -1,0 +1,31 @@
+{
+  "name": "genie-nexus",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "tsc-watch --onSuccess \"node dist/server.js\"",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint:prettier": "prettier --check .",
+    "lint:eslint": "eslint .",
+    "lint": "concurrently --kill-others-on-fail \"npm:lint:*\"",
+    "format": "concurrently \"npm:format:*\"",
+    "format:prettier": "prettier --write .",
+    "format:eslint": "eslint --fix"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "@tsconfig/node22": "^22.0.1",
+    "@tsconfig/strictest": "^2.0.5",
+    "@types/node": "^22.14.1",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.25.1",
+    "eslint-plugin-unicorn": "^58.0.0",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
+    "typescript-eslint": "^8.31.0"
+  }
+}
