@@ -1,0 +1,39 @@
+import type { SuperSave } from 'supersave';
+import { Migration } from '../entities';
+import { tenantAndSampleData } from './migrations/0001_tenant-and-sample-data';
+import type { MigrationDefinition } from './types';
+import type { Migration as MigrationType } from '../types';
+import { logger } from '../../logger';
+
+const MIGRATIONS: Record<string, MigrationDefinition> = {
+  '0001': tenantAndSampleData,
+};
+
+export async function migrate(superSave: SuperSave) {
+  const migrationRepository = superSave.getRepository<MigrationType>(
+    Migration.name,
+    Migration.namespace,
+  );
+
+  const lastMigration = await migrationRepository.getOneByQuery(
+    migrationRepository.createQuery().sort('version', 'desc'),
+  );
+  logger.debug('Last ran migration', { last: lastMigration });
+
+  const migrationsToRun =
+    lastMigration === null
+      ? Object.keys(MIGRATIONS)
+      : Object.keys(MIGRATIONS).filter(
+          (migration) => migration > lastMigration['version'],
+        );
+
+  logger.debug('Migrations to run', { count: migrationsToRun.length });
+
+  for (const migration of migrationsToRun) {
+    logger.debug('Running migration', { key: migration });
+    await MIGRATIONS[migration]?.migrate(superSave);
+    await migrationRepository.create({
+      version: migration,
+    });
+  }
+}

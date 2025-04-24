@@ -5,6 +5,7 @@
   "workspaces": [
     "packages/*"
   ],
+  "license": "BSL-1.1",
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node dist/server.js\"",
     "build": "tsc",

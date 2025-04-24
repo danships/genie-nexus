@@ -7,4 +7,7 @@ export const environment = cleanEnv(process.env, {
     choices: ['info', 'debug', 'warning', 'error'],
     devDefault: 'debug',
   }),
+  DB: str({
+    default: 'sqlite://db.sqlite',
+  }),
 });

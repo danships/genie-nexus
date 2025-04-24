@@ -1,4 +1,4 @@
-import type { Configuration } from './validate';
+export type Configuration = {};
 
 let configuration: Configuration | null = null;
 

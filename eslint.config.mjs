@@ -5,8 +5,19 @@ import { defineConfig } from 'eslint/config';
 // import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 
 export default defineConfig([
+  tseslint.configs.recommendedTypeChecked,
+  // eslintPluginUnicorn.configs.recommended,
   {
-    files: ['packages/**/*.{js,mjs,cjs,ts,test.ts}'],
+    languageOptions: {
+      parserOptions: {
+        projectService: './tsconfig.eslint.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    files: ['**/*.{ts,test.ts}'],
+    ignores: ['**/dist/**', '**/node_modules/**', 'eslint.config.mjs'],
     plugins: { js },
     languageOptions: {
       globals: {
@@ -20,16 +31,6 @@ export default defineConfig([
       '@typescript-eslint/consistent-type-imports': 'error',
       'no-console': 'error',
       'no-debugger': 'error',
-    },
-  },
-  tseslint.configs.recommendedTypeChecked,
-  // eslintPluginUnicorn.configs.recommended,
-  {
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
     },
   },
 ]);

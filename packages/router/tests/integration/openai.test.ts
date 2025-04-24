@@ -1,37 +1,31 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { startServer, type Configuration } from '../..';
+import {
+  startServer,
+  type StartServerOptions,
+  generateManagementApiKey,
+  DEFAULT_TENANT_ID,
+  generatePublicApiKey,
+} from '../../src/index.ts';
 import { OpenAI } from 'openai';
 
-const CONFIGURATION: Configuration = {
+const OPTIONS: StartServerOptions = {
   port: 3030,
-  providers: [
-    {
-      id: 'openai',
-      name: 'openai',
-      type: 'openai',
-      apiKey: 'sk-...',
-      baseURL: 'https://api.openai.com/v1',
-    },
-  ],
-  deployments: [
-    {
-      id: 'default',
-      default: {
-        name: 'gpt-3.5-turbo',
-        provider: 'openai',
-        model: 'gpt-3.5-turbo',
-      },
-    },
-  ],
+  dbConnectionString: 'sqlite://:memory:',
 };
 
 describe('OpenAI Compatibility', () => {
   let endServer: (() => void) | undefined;
+  let managementApiKey: string = '';
+  let publicApiKey: string = '';
 
   beforeAll(async () => {
-    endServer = startServer({
-      port: 3030,
-    });
+    endServer = await startServer(OPTIONS);
+    managementApiKey = await generateManagementApiKey(
+      DEFAULT_TENANT_ID,
+      'test',
+      ['admin'],
+    );
+    publicApiKey = await generatePublicApiKey(DEFAULT_TENANT_ID, 'test');
   });
 
   afterAll(() => {
@@ -44,15 +38,41 @@ describe('OpenAI Compatibility', () => {
 
   it('should be able to use the OpenAI API', async () => {
     const openai = new OpenAI({
-      apiKey: 'abcde',
-      baseURL: `http://localhost:${CONFIGURATION.port}/api/v1`,
+      apiKey: publicApiKey,
+      baseURL: `http://localhost:${OPTIONS.port}/api/v1`,
     });
 
     const response = await openai.chat.completions.create({
       messages: [{ role: 'user', content: 'Hello, world!' }],
-      model: 'gpt-3.5-turbo',
+      model: 'static-echo',
     });
 
     expect(response).toBeDefined();
+  });
+
+  it('should be able to stream responses from the OpenAI API', async () => {
+    const openai = new OpenAI({
+      apiKey: publicApiKey,
+      baseURL: `http://localhost:${OPTIONS.port}/api/v1`,
+    });
+
+    const stream = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: 'Hello, world!' }],
+      model: 'static-echo',
+      stream: true,
+    });
+
+    const chunks: string[] = [];
+    for await (const chunk of stream) {
+      if (chunk.choices[0]?.delta?.content) {
+        chunks.push(chunk.choices[0].delta.content);
+      }
+    }
+
+    const fullResponse = chunks.join('');
+    expect(chunks.length).toBeGreaterThan(0);
+    expect(fullResponse).toBeDefined();
+    expect(typeof fullResponse).toBe('string');
+    expect(fullResponse.length).toBeGreaterThan(0);
   });
 });
