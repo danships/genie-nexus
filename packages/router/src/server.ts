@@ -4,7 +4,8 @@ import express, {
   type Request,
   type Response,
 } from 'express';
-import { initialize } from './modules/chat-completions/routes';
+import { initialize as initializeChatCompletions } from './modules/chat-completions/routes';
+import { initialize as initializeWeave } from './modules/weave/routes';
 import { initialize as initializeDb } from './core/db';
 import { logger, setLoggerLevel } from './core/logger';
 import { isProduction } from './core/utils/is-production';
@@ -23,6 +24,7 @@ export async function startServer(
   }
 
   const app = express();
+  app.disable('x-powered-by');
 
   const db = await initializeDb(options.dbConnectionString, app);
 
@@ -31,20 +33,33 @@ export async function startServer(
     next();
   });
 
-  app.use(initialize());
+  app.use(initializeChatCompletions());
+  app.use(initializeWeave());
 
-  // Error handler middleware
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
-    logger.error('Error:', { err });
+  app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+    logger.error('Error:', { err: error });
+
+    if (res.headersSent) {
+      return next(error);
+    }
+
+    if ('statusCode' in error && typeof error.statusCode === 'number') {
+      res.status(error.statusCode);
+    } else {
+      res.status(500);
+    }
 
     if (req.path.startsWith('/api')) {
       res.setHeader('Content-Type', 'application/json');
-      res.status(500).json({
-        error: isProduction() ? 'An unexpected error occurred' : err.message,
+      res.json({
+        error: isProduction() ? 'An unexpected error occurred' : error,
       });
     } else {
-      res.status(500).send('An unexpected error occurred');
+      res.send(
+        isProduction()
+          ? 'An unexpected error occurred'
+          : `${error.message}: ${error.stack}`,
+      );
     }
   });
 

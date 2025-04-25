@@ -1,1 +1,1 @@
-export const DEFAULT_TENANT_ID = 'default-tenant';
+export const DEFAULT_TENANT_ID = 'default';

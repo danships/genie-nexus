@@ -7,9 +7,6 @@
   ],
   "license": "BSL-1.1",
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"node dist/server.js\"",
-    "build": "tsc",
-    "start": "node dist/server.js",
     "lint:prettier": "prettier --check .",
     "lint:eslint": "eslint .",
     "lint": "concurrently --kill-others-on-fail \"npm:lint:*\"",

@@ -6,14 +6,14 @@ import type { Request, Response, RequestHandler } from 'express';
 import {
   createChatCompletion as openAICreateChatCompletion,
   createStreamingChatCompletion as openAICreateStreamingChatCompletion,
-} from '../../providers/open-ai/proxy';
+} from '../../llm-providers/open-ai/proxy';
 import {
   createChatCompletion as staticCreateChatCompletion,
   createStreamingChatCompletion as staticCreateStreamingChatCompletion,
-} from '../../providers/static/proxy';
+} from '../../llm-providers/static/proxy';
 import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response';
 import { getDeploymentByName } from '../../deployments/get-deployment-by-name';
-import { execute } from '../../deployments/execute';
+import { executeForLlm } from '../../deployments/execute';
 
 export const handler: RequestHandler<
   object,
@@ -43,6 +43,7 @@ export const handler: RequestHandler<
     const deployment = await getDeploymentByName(
       apiKey.tenantId,
       request.model,
+      'llm',
     );
     if (
       Array.isArray(apiKey.allowedDeployments) &&
@@ -57,7 +58,10 @@ export const handler: RequestHandler<
       return;
     }
 
-    const { transformedRequest, provider } = await execute(deployment, request);
+    const { transformedRequest, provider } = await executeForLlm(
+      deployment,
+      request,
+    );
 
     if (isStreaming) {
       // Set headers for streaming
@@ -156,8 +160,7 @@ export const handler: RequestHandler<
           break;
         }
         default: {
-          // @ts-expect-error TS believes we don't need a fallback if all types are handled
-          throw new Error(`Unsupported provider type ${provider.type}`);
+          throw new Error(`Unsupported LLM provider type ${provider.type}`);
         }
       }
     } else {
@@ -225,8 +228,7 @@ export const handler: RequestHandler<
         }
 
         default: {
-          // @ts-expect-error TS believes we don't need a fallback if all types are handled
-          throw new Error(`Unsupported provider type ${provider.type}`);
+          throw new Error(`Unsupported LLM provider type ${provider.type}`);
         }
       }
     }

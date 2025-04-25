@@ -5,7 +5,7 @@ import {
   generateManagementApiKey,
   DEFAULT_TENANT_ID,
   generatePublicApiKey,
-} from '../../src/index.ts';
+} from '../../../src/index.ts';
 import { OpenAI } from 'openai';
 
 const OPTIONS: StartServerOptions = {
