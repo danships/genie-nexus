@@ -12,7 +12,8 @@
     "lint": "concurrently --kill-others-on-fail \"npm:lint:*\"",
     "format": "concurrently \"npm:format:*\"",
     "format:prettier": "prettier --write .",
-    "format:eslint": "eslint --fix"
+    "format:eslint": "eslint --fix",
+    "test": "pnpm -r test"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
