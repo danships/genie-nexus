@@ -10,12 +10,15 @@ import { initialize as initializeDb } from './core/db';
 import { logger, setLoggerLevel } from './core/logger';
 import { isProduction } from './core/utils/is-production';
 import { setConfiguration } from './core/configuration/get';
+import { initializeUI } from './ui/initialize';
 
 export type StartServerOptions = {
   port: number;
   dbConnectionString: string;
   logLevel: string;
   multiTenant: boolean;
+  integrateManagementInterface: boolean;
+  devMode: boolean;
 };
 
 export async function startServer(
@@ -27,6 +30,7 @@ export async function startServer(
 
   setConfiguration({
     multiTenant: options.multiTenant,
+    devMode: options.devMode,
   });
 
   const app = express();
@@ -35,12 +39,17 @@ export async function startServer(
   const db = await initializeDb(options.dbConnectionString, app);
 
   app.use((req: Request, _res: Response, next: NextFunction) => {
-    logger.debug('req', req.method, req.url);
+    logger.debug('req', { method: req.method, url: req.url });
     next();
   });
 
   app.use(initializeChatCompletions());
   app.use(initializeWeave());
+
+  // Link the next app
+  if (options.integrateManagementInterface) {
+    await initializeUI(app);
+  }
 
   app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     logger.error('Error:', { err: error });
@@ -75,7 +84,7 @@ export async function startServer(
 
   return () => {
     app.listen().close();
-    void db.close();
+    void db?.close();
   };
 }
 
@@ -90,6 +99,8 @@ if (require.main === module) {
       dbConnectionString: environment.DB,
       logLevel: environment.LOG_LEVEL,
       multiTenant: environment.MULTI_TENANT,
+      integrateManagementInterface: environment.INTEGRATE_WEB,
+      devMode: environment.isDevelopment,
     });
   })();
 }

@@ -13,4 +13,8 @@ export const environment = cleanEnv(process.env, {
   MULTI_TENANT: bool({
     default: false,
   }),
+  INTEGRATE_WEB: bool({
+    default: true,
+    devDefault: false,
+  }),
 });

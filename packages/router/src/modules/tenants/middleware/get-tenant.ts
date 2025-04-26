@@ -4,6 +4,7 @@ import { generateDefaultTenant } from '../generate-default-tenant';
 import { requestHasParamTenantId } from './types';
 import { TenantMissingError } from '../errors/tenant-missing-error';
 import { getTenantRepository } from '../../../core/db';
+import { RESPONSE_LOCALS_TENANT } from '../constants';
 
 export async function getTenant(
   // We explicitly do unknown so that it does not clash with other handlers in a route.
@@ -12,7 +13,7 @@ export async function getTenant(
   next: NextFunction,
 ) {
   if (!getConfiguration().multiTenant) {
-    res.locals['tenant'] = generateDefaultTenant();
+    res.locals[RESPONSE_LOCALS_TENANT] = generateDefaultTenant();
     return next();
   }
 
@@ -26,6 +27,6 @@ export async function getTenant(
     throw new TenantMissingError();
   }
 
-  res.locals['tenant'] = tenant;
+  res.locals[RESPONSE_LOCALS_TENANT] = tenant;
   next();
 }

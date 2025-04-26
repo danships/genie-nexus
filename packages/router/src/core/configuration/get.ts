@@ -1,5 +1,6 @@
 export type Configuration = {
   multiTenant: boolean;
+  devMode: boolean;
 };
 
 let configuration: Configuration | null = null;

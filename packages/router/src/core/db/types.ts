@@ -1,8 +1,12 @@
 import type { BaseEntity } from 'supersave';
 
-interface LocalBaseEntity extends BaseEntity {
+export interface LocalBaseEntity extends BaseEntity {
   id: string;
 }
+
+export type CollectionEntityWithTenantId = LocalBaseEntity & {
+  tenantId: string;
+};
 
 export type OpenAIProvider = {
   type: 'openai';
@@ -32,9 +36,8 @@ export type WeaveHttpStaticProvider = {
   statusCode?: number;
 };
 
-interface BaseProvider extends LocalBaseEntity {
+interface BaseProvider extends CollectionEntityWithTenantId {
   name: string;
-  tenantId: string;
 }
 
 export type Provider = BaseProvider &
@@ -58,10 +61,9 @@ export type DeploymentWeave = {
   allowedDeployments?: string[];
 };
 
-interface BaseDeployment extends LocalBaseEntity {
+interface BaseDeployment extends CollectionEntityWithTenantId {
   name: string;
   model: string;
-  tenantId: string;
   active: boolean;
   defaultProviderId: string;
 }
@@ -80,9 +82,8 @@ type WeaveApiKey = {
   allowedDeployments: [];
 };
 
-export interface SharedApiKey extends BaseEntity {
+export interface SharedApiKey extends CollectionEntityWithTenantId {
   label: string;
-  tenantId: string;
   hash: string;
 }
 export type ApiKey = SharedApiKey & (LlmApiKey | ManagementKey | WeaveApiKey);

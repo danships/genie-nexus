@@ -1,6 +1,7 @@
-import type { EntityDefinition } from 'supersave';
+import type { Collection, EntityDefinition } from 'supersave';
+import { getHooksForCollection } from './hooks/get-hooks-for-collection';
 
-export const Provider: EntityDefinition = {
+export const Provider: Collection = {
   name: 'provider',
   relations: [],
   template: {},
@@ -8,9 +9,10 @@ export const Provider: EntityDefinition = {
     name: 'string',
     tenantId: 'string',
   },
+  hooks: getHooksForCollection(),
 };
 
-export const Deployment: EntityDefinition = {
+export const Deployment: Collection = {
   name: 'deployment',
   relations: [],
   template: {},
@@ -18,9 +20,10 @@ export const Deployment: EntityDefinition = {
     name: 'string',
     tenantId: 'string',
   },
+  hooks: getHooksForCollection(),
 };
 
-export const ApiKey: EntityDefinition = {
+export const ApiKey: Collection = {
   name: 'apiKey',
   relations: [],
   template: {},
@@ -28,6 +31,7 @@ export const ApiKey: EntityDefinition = {
     key: 'string',
     tenantId: 'string',
   },
+  hooks: getHooksForCollection(),
 };
 
 export const Tenant: EntityDefinition = {
