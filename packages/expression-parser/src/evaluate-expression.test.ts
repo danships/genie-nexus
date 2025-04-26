@@ -224,4 +224,22 @@ describe('evaluateExpression', () => {
       expect(() => evaluateExpression('plain text')).toThrow();
     });
   });
+
+  describe('Timeout Configuration', () => {
+    it('should handle complex expressions within timeout', () => {
+      // A complex but fast expression
+      const complexExpression =
+        '{{ Array(1000).fill(0).reduce((a, b) => a + b, 0) }}';
+      expect(evaluateExpression(complexExpression, { timeout: 1000 })).toBe(
+        '0',
+      );
+    });
+
+    it('should handle template with multiple expressions and timeout', () => {
+      const template = 'Start {{ 1 + 1 }} middle {{ 2 + 2 }} end';
+      expect(evaluateExpression(template, { timeout: 1000 })).toBe(
+        'Start 2 middle 4 end',
+      );
+    });
+  });
 });

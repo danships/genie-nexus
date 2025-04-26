@@ -45,9 +45,18 @@ importers:
         specifier: ^5.0.0
         version: 5.8.3
     devDependencies:
+      '@types/acorn':
+        specifier: ^6.0.4
+        version: 6.0.4
       '@types/node':
         specifier: ^20.0.0
         version: 20.17.31
+      acorn:
+        specifier: ^8.14.1
+        version: 8.14.1
+      acorn-walk:
+        specifier: ^8.3.4
+        version: 8.3.4
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
@@ -521,6 +530,10 @@ packages:
   '@tsconfig/strictest@2.0.5':
     resolution: {integrity: sha512-ec4tjL2Rr0pkZ5hww65c+EEPYwxOi4Ryv+0MtjeaSQRJyq322Q27eOQiFbuNgw2hpL4hB1/W/HBGk3VKS43osg==}
 
+  '@types/acorn@6.0.4':
+    resolution: {integrity: sha512-DafqcBAjbOOmgqIx3EF9EAdBKAKgspv00aQVIW3fVQ0TXo5ZPBeSRey1SboVAUzjw8Ucm7cd1gtTSlosYoEQLA==}
+    deprecated: This is a stub types definition. acorn provides its own type definitions, so you do not need this installed.
+
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
 
@@ -672,6 +685,10 @@ packages:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
+
+  acorn-walk@8.3.4:
+    resolution: {integrity: sha512-ueEepnujpqee2o5aIYnvHU6C0A42MNdsIDeqy5BydrkuC5R1ZuUFnm27EeFJGoEHJQgn3uleRvmTXaJgfXbt4g==}
+    engines: {node: '>=0.4.0'}
 
   acorn@8.14.1:
     resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
@@ -2769,6 +2786,10 @@ snapshots:
 
   '@tsconfig/strictest@2.0.5': {}
 
+  '@types/acorn@6.0.4':
+    dependencies:
+      acorn: 8.14.1
+
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
@@ -2979,6 +3000,10 @@ snapshots:
       negotiator: 1.0.0
 
   acorn-jsx@5.3.2(acorn@8.14.1):
+    dependencies:
+      acorn: 8.14.1
+
+  acorn-walk@8.3.4:
     dependencies:
       acorn: 8.14.1
 

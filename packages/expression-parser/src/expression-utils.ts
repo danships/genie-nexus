@@ -1,5 +1,3 @@
-import { Script } from 'vm';
-
 // Regular expression to match expressions within {{ }}
 export const expressionRegex = /{{(.*?)}}/g;
 
@@ -58,28 +56,4 @@ export function validateTemplateStructure(template: string): {
   }
 
   return { isValid: true, errors };
-}
-
-/**
- * Validates the syntax of a single expression
- * @param expression - The expression to validate
- * @returns An object containing validation results
- */
-export function validateExpressionSyntax(expression: string): {
-  isValid: boolean;
-  error?: string;
-} {
-  try {
-    // Check for dangerous operations
-    checkForDangerousOperations(expression);
-
-    // Try to parse the expression to check syntax
-    new Script(expression);
-    return { isValid: true };
-  } catch (error) {
-    return {
-      isValid: false,
-      error: error instanceof Error ? error.message : 'Invalid expression',
-    };
-  }
 }

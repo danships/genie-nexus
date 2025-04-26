@@ -28,6 +28,60 @@ describe('validateExpression', () => {
     });
   });
 
+  describe('Variable Validation', () => {
+    it('should validate expressions with variables', () => {
+      const result = validateExpression('{{ x + y }}');
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should validate expressions with undefined variables', () => {
+      const result = validateExpression('{{ x + y }}');
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should validate built-in JavaScript values', () => {
+      const result = validateExpression('{{ true && false }}');
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+
+      const result2 = validateExpression('{{ null }}');
+      expect(result2.isValid).toBe(true);
+      expect(result2.errors).toHaveLength(0);
+
+      const result3 = validateExpression('{{ undefined }}');
+      expect(result3.isValid).toBe(true);
+      expect(result3.errors).toHaveLength(0);
+
+      const result4 = validateExpression('{{ NaN }}');
+      expect(result4.isValid).toBe(true);
+      expect(result4.errors).toHaveLength(0);
+
+      const result5 = validateExpression('{{ Infinity }}');
+      expect(result5.isValid).toBe(true);
+      expect(result5.errors).toHaveLength(0);
+    });
+
+    it('should validate object property access', () => {
+      const result = validateExpression('{{ obj.prop }}');
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should validate array index access', () => {
+      const result = validateExpression('{{ arr[0] }}');
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should validate function calls on variables', () => {
+      const result = validateExpression('{{ str.length }}');
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+  });
+
   describe('Error Cases', () => {
     it('should detect missing expressions', () => {
       const result = validateExpression('plain text');
