@@ -9,11 +9,13 @@ import { initialize as initializeWeave } from './modules/weave/routes';
 import { initialize as initializeDb } from './core/db';
 import { logger, setLoggerLevel } from './core/logger';
 import { isProduction } from './core/utils/is-production';
+import { setConfiguration } from './core/configuration/get';
 
 export type StartServerOptions = {
   port: number;
   dbConnectionString: string;
-  logLevel?: string;
+  logLevel: string;
+  multiTenant: boolean;
 };
 
 export async function startServer(
@@ -22,6 +24,10 @@ export async function startServer(
   if (options.logLevel) {
     setLoggerLevel(options.logLevel);
   }
+
+  setConfiguration({
+    multiTenant: options.multiTenant,
+  });
 
   const app = express();
   app.disable('x-powered-by');
@@ -83,6 +89,7 @@ if (require.main === module) {
       port: environment.PORT,
       dbConnectionString: environment.DB,
       logLevel: environment.LOG_LEVEL,
+      multiTenant: environment.MULTI_TENANT,
     });
   })();
 }

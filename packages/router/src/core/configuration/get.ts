@@ -1,4 +1,6 @@
-export type Configuration = {};
+export type Configuration = {
+  multiTenant: boolean;
+};
 
 let configuration: Configuration | null = null;
 

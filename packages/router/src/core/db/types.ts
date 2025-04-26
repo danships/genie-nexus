@@ -55,6 +55,7 @@ export type DeploymentWeave = {
   supportedMethods?: Array<
     'get' | 'post' | 'put' | 'delete' | 'patch' | 'options'
   >;
+  allowedDeployments?: string[];
 };
 
 interface BaseDeployment extends LocalBaseEntity {
@@ -68,7 +69,7 @@ export type Deployment = BaseDeployment & (DeploymentLLM | DeploymentWeave);
 
 type LlmApiKey = {
   type: 'llm-api-key';
-  allowedDeployments: [];
+  allowedDeployments: string[];
 };
 type ManagementKey = {
   type: 'management-key';
@@ -86,7 +87,7 @@ export interface SharedApiKey extends BaseEntity {
 }
 export type ApiKey = SharedApiKey & (LlmApiKey | ManagementKey | WeaveApiKey);
 
-export interface Tenant extends BaseEntity {
+export interface Tenant extends LocalBaseEntity {
   name: string;
 }
 

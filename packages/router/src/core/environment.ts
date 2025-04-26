@@ -1,4 +1,4 @@
-import { str, cleanEnv, num } from 'envalid';
+import { str, cleanEnv, num, bool } from 'envalid';
 
 export const environment = cleanEnv(process.env, {
   PORT: num({ default: 3000 }),
@@ -9,5 +9,8 @@ export const environment = cleanEnv(process.env, {
   }),
   DB: str({
     default: 'sqlite://db.sqlite',
+  }),
+  MULTI_TENANT: bool({
+    default: false,
   }),
 });

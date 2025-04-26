@@ -10,6 +10,8 @@ import {
 const OPTIONS: StartServerOptions = {
   port: 3031,
   dbConnectionString: 'sqlite://:memory:',
+  multiTenant: false,
+  logLevel: 'error',
 };
 
 describe('Static HTTP Provider', () => {
@@ -36,9 +38,7 @@ describe('Static HTTP Provider', () => {
   });
 
   it('should return a static response', async () => {
-    const response = await fetch(
-      `http://localhost:3031/weave/${DEFAULT_TENANT_ID}/static-http`,
-    );
+    const response = await fetch(`http://localhost:3031/weave/static-http`);
 
     const body = await response.text();
     expect(body).toBe('Hello World');
@@ -47,10 +47,9 @@ describe('Static HTTP Provider', () => {
   });
 
   it('should not allow a post request', async () => {
-    const response = await fetch(
-      `http://localhost:3031/weave/${DEFAULT_TENANT_ID}/static-http`,
-      { method: 'POST' },
-    );
+    const response = await fetch(`http://localhost:3031/weave/static-http`, {
+      method: 'POST',
+    });
     expect(response.status).toBe(405);
   });
 });

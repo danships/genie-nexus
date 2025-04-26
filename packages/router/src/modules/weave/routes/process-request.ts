@@ -6,19 +6,21 @@ import { checkApiKeyInRequest } from '../../api-key/check-api-key-in-request';
 import { ApiKeyNotPresentError } from '../../api-key/errors/api-key-not-present-error';
 import { ApiKeyValidationError } from '../../api-key/errors/api-key-validation-error';
 import { proxyRequest } from '../../../weave-providers/http-proxy/proxy';
+import type { ResponseLocalsTenant } from '../../tenants/middleware/types';
+import { getTenantFromResponse } from '../../tenants/get-tenant-from-response';
 
 export async function processRequest(
   req: Request<{
     path: string | string[];
     deploymentName: string;
-    tenantId: string;
   }>,
-  res: Response,
+  res: Response<unknown, ResponseLocalsTenant>,
 ) {
-  const { deploymentName, tenantId, path } = req.params;
+  const { deploymentName, path } = req.params;
+  const tenant = getTenantFromResponse(res);
 
   const deployment = await getDeploymentByName(
-    tenantId ?? '',
+    tenant.id,
     deploymentName ?? '',
     'weave',
   );
@@ -55,6 +57,13 @@ export async function processRequest(
   }
 
   const { provider } = await executeDeploymentForHttp(deployment);
+  if (
+    deployment.allowedDeployments &&
+    !deployment.allowedDeployments.includes(tenant.id)
+  ) {
+    res.status(403).json({ error: 'Deployment not allowed' });
+    return;
+  }
 
   switch (provider.type) {
     case 'http-proxy': {
