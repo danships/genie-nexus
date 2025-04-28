@@ -1,4 +1,4 @@
-import type { Provider } from '../../core/db/types';
+import type { Provider } from '@genie-nexus/database';
 import type { Response } from 'express';
 
 export function generateStaticResponse(provider: Provider, res: Response) {

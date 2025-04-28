@@ -6,7 +6,9 @@ import type {
   Deployment as DeploymentType,
 } from '../../types';
 import { Provider, Tenant, Deployment } from '../../entities';
-import { DEFAULT_TENANT_ID } from '../../../..';
+
+// TODO duplicatie from the constant in the router package
+const DEFAULT_TENANT_ID = 'default';
 
 export const tenantAndSampleData: MigrationDefinition = {
   migrate: async function migration0001(superSave: SuperSave) {

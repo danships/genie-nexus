@@ -1,7 +1,6 @@
 'use client';
-import { debugLogger } from '@lib/core/debug-logger';
-import axios, { AxiosInstance, isAxiosError } from 'axios';
-import React, {
+import axios, { AxiosInstance } from 'axios';
+import {
   FunctionComponent,
   PropsWithChildren,
   useEffect,
@@ -79,22 +78,6 @@ const SwrDefaultApiConfigInner: FunctionComponent<
     client = axios.create({
       baseURL: customOptions.baseURL ?? defaultOptions.baseURL,
     });
-    // const configuredOptions = {
-    //   ...defaultOptions,
-    //   ...customOptions,
-    // };
-
-    client.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (!isAxiosError(error)) {
-          throw error;
-        }
-        if (error.config?.method?.toLocaleLowerCase() === 'get') {
-          throw error; // the initialize-client already takes care of this.
-        }
-      },
-    );
 
     setClientAvailable(true);
   }, [client]);
@@ -103,7 +86,6 @@ const SwrDefaultApiConfigInner: FunctionComponent<
     <SWRConfig
       value={{
         fetcher,
-        onError: (error) => debugLogger(error),
       }}
     >
       {clientAvailable && children}

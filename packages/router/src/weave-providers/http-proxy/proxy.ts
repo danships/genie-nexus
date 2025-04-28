@@ -2,7 +2,7 @@ import type {
   Request as ExpressRequest,
   Response as ExpressResponse,
 } from 'express';
-import type { WeaveHttpProxyProvider } from '../../core/db/types';
+import type { WeaveHttpProxyProvider } from '@genie-nexus/database';
 import { logger } from '../../core/logger';
 import { validateUrlDestination } from '../../core/utils/validate-url-destination';
 
@@ -106,6 +106,11 @@ export async function proxyRequest(
         }
       }
     }
+
+    /**
+     * Express updates the Content-Type header and adds a charset.
+     * //TODO https://stackoverflow.com/a/59449326/13944042
+     */
 
     // Set the response headers
     Object.entries(responseHeaders).forEach(([key, value]) => {

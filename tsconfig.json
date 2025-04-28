@@ -10,6 +10,13 @@
     "sourceMap": true,
     "noEmit": true
   },
-  "include": ["**/*.ts"],
+  "include": [
+    "**/*.ts",
+    "packages/router/src/modules/auth/next-auth/initialize.mts",
+    "packages/router/src/modules/auth/next-auth/get-credentials-provider.mts",
+    "packages/router/src/modules/auth/next-auth/get-next-auth-config.mts",
+    "packages/router/src/modules/auth/next-auth/types.mts",
+    "packages/router/src/modules/auth/next-auth/get-session.mts"
+  ],
   "exclude": ["node_modules", "**/*.test.ts", "eslint.config.mjs"]
 }

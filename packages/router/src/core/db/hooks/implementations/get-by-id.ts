@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import type { Collection } from 'supersave';
 import { HookError } from 'supersave';
 import { getTenantFromResponse } from '../../../../modules/tenants/get-tenant-from-response';
-import type { CollectionEntityWithTenantId } from '../../types';
+import type { CollectionEntityWithTenantId } from '@genie-nexus/database';
 
 export default function (
   _collection: Collection,

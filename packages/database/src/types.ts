@@ -22,6 +22,7 @@ export type HeaderDefinition = {
   operation: 'set' | 'add' | 'remove';
   value?: string;
 };
+
 export type WeaveHttpProxyProvider = {
   type: 'http-proxy';
   baseUrl: string;
@@ -95,3 +96,11 @@ export interface Tenant extends LocalBaseEntity {
 export interface Migration extends BaseEntity {
   version: string;
 }
+
+export type NextAuthUser = LocalBaseEntity & {
+  email: string;
+  password: string;
+  name?: string;
+  created: string;
+  lastLogin: string | null;
+};

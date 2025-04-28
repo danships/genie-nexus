@@ -1,4 +1,4 @@
-import type { Tenant } from '../../../core/db/types';
+import type { Tenant } from '@genie-nexus/database';
 import type { Request } from 'express';
 
 export type ResponseLocalsTenant = {

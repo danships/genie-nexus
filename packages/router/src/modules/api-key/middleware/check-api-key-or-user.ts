@@ -1,7 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
-import type { ApiKey } from '../../../core/db/types';
+import type { ApiKey } from '@genie-nexus/database';
 import { checkApiKey } from './check-api-key';
 import { API_KEY_PREFIX } from '../constants';
+import { ApplicationError } from '../../../core/errors/application-error';
 
 export const checkApiKeyOrUser =
   (type: ApiKey['type']) =>
@@ -17,7 +18,12 @@ export const checkApiKeyOrUser =
       return checkApiKey(type)(req, res, next);
     }
 
-    // TODO: Implement user authentication fallback
-    // For now, just continue without authentication
+    const { getSession } = await import('../../auth/next-auth/get-session.mjs');
+
+    const session = await getSession(req, res);
+    if (!session?.user) {
+      throw new ApplicationError('Unauthorized', 401);
+    }
+
     next();
   };

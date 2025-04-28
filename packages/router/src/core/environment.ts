@@ -17,4 +17,8 @@ export const environment = cleanEnv(process.env, {
     default: true,
     devDefault: false,
   }),
+  AUTH_METHOD: str({
+    choices: ['none', 'credentials'],
+    default: 'credentials',
+  }),
 });

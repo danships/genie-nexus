@@ -1,6 +1,11 @@
 export type Configuration = {
   multiTenant: boolean;
   devMode: boolean;
+  authentication:
+    | {
+        type: 'none';
+      }
+    | { type: 'credentials' };
 };
 
 let configuration: Configuration | null = null;

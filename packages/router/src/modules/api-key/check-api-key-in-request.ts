@@ -1,6 +1,6 @@
 import type { Request } from 'express';
 import { ValidationError } from './errors/validation-error';
-import type { ApiKey } from '../../core/db/types';
+import type { ApiKey } from '@genie-nexus/database';
 import { breakDownApiKey } from './utils/break-down-api-key';
 import { getApiKeyRepository } from '../../core/db';
 import { validateApiKey } from './secrets/validate-api-key';

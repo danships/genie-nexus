@@ -1,5 +1,5 @@
 import { getApiKeyRepository } from '../../core/db';
-import type { ApiKey } from '../../core/db/types';
+import type { ApiKey } from '@genie-nexus/database';
 import { API_KEY_PREFIX, ID_SEPARATOR } from './constants';
 import { generateApiKey } from './secrets/generate-api-key';
 

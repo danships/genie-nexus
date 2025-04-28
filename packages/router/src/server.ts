@@ -9,17 +9,15 @@ import { initialize as initializeWeave } from './modules/weave/routes';
 import { initialize as initializeDb } from './core/db';
 import { logger, setLoggerLevel } from './core/logger';
 import { isProduction } from './core/utils/is-production';
-import { setConfiguration } from './core/configuration/get';
+import { type Configuration, setConfiguration } from './core/configuration/get';
 import { initializeUI } from './ui/initialize';
 
 export type StartServerOptions = {
   port: number;
   dbConnectionString: string;
   logLevel: string;
-  multiTenant: boolean;
   integrateManagementInterface: boolean;
-  devMode: boolean;
-};
+} & Configuration;
 
 export async function startServer(
   options: StartServerOptions,
@@ -31,6 +29,7 @@ export async function startServer(
   setConfiguration({
     multiTenant: options.multiTenant,
     devMode: options.devMode,
+    authentication: options.authentication,
   });
 
   const app = express();
@@ -45,6 +44,11 @@ export async function startServer(
 
   app.use(initializeChatCompletions());
   app.use(initializeWeave());
+
+  const { initialize: initializeAuthentication } = await import(
+    './modules/auth/next-auth/initialize.mjs'
+  );
+  await initializeAuthentication();
 
   // Link the next app
   if (options.integrateManagementInterface) {
@@ -101,6 +105,9 @@ if (require.main === module) {
       multiTenant: environment.MULTI_TENANT,
       integrateManagementInterface: environment.INTEGRATE_WEB,
       devMode: environment.isDevelopment,
+      authentication: {
+        type: environment.AUTH_METHOD,
+      },
     });
   })();
 }

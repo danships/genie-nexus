@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^0.2.12",
+    "@auth/express": "^0.10.0",
+    "@genie-nexus/auth": "workspace:*",
+    "@genie-nexus/database": "workspace:*",
     "@genie-nexus/management": "workspace:*",
     "ai": "^4.3.9",
     "argon2": "^0.41.1",
@@ -19,11 +22,7 @@
     "dotenv": "^16.5.0",
     "envalid": "^8.0.0",
     "express": "^5.1.0",
-    "mysql2": "^3.14.0",
     "next": "15.3.1",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7",
-    "supersave": "^0.16.0",
     "winston": "^3.17.0",
     "zod": "^3.24.3"
   },
@@ -32,6 +31,7 @@
     "@types/express": "^5.0.1",
     "openai": "^4.96.0",
     "rimraf": "^6.0.1",
+    "supersave": "^0.16.0",
     "tsc-watch": "^6.2.1",
     "vitest": "^3.1.2"
   }

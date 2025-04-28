@@ -3,7 +3,7 @@ import type { Collection } from 'supersave';
 import type {
   CollectionEntityWithTenantId,
   LocalBaseEntity,
-} from '../../types';
+} from '@genie-nexus/database';
 
 export default function (
   collection: Collection,

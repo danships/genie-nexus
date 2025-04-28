@@ -1,5 +1,5 @@
 import type { Collection, EntityDefinition } from 'supersave';
-import { getHooksForCollection } from './hooks/get-hooks-for-collection';
+import type { ApiKey as ApiKeyType } from './types';
 
 export const Provider: Collection = {
   name: 'provider',
@@ -9,7 +9,6 @@ export const Provider: Collection = {
     name: 'string',
     tenantId: 'string',
   },
-  hooks: getHooksForCollection(),
 };
 
 export const Deployment: Collection = {
@@ -20,7 +19,6 @@ export const Deployment: Collection = {
     name: 'string',
     tenantId: 'string',
   },
-  hooks: getHooksForCollection(),
 };
 
 export const ApiKey: Collection = {
@@ -31,7 +29,20 @@ export const ApiKey: Collection = {
     key: 'string',
     tenantId: 'string',
   },
-  hooks: getHooksForCollection(),
+  hooks: [
+    {
+      // @ts-expect-error - Type mismatch in entity transform function
+      entityTransform: (
+        _collection,
+        _req,
+        _res,
+        entity: ApiKeyType,
+      ): Omit<ApiKeyType, 'key'> => {
+        delete entity['key'];
+        return entity;
+      },
+    },
+  ],
 };
 
 export const Tenant: EntityDefinition = {
@@ -50,5 +61,15 @@ export const Migration: EntityDefinition = {
   template: {},
   filterSortFields: {
     version: 'string',
+  },
+};
+
+export const NextAuthUser: EntityDefinition = {
+  name: 'user',
+  namespace: 'nextauth',
+  relations: [],
+  template: {},
+  filterSortFields: {
+    email: 'string',
   },
 };

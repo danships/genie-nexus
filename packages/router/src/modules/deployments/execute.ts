@@ -1,5 +1,5 @@
 import type { OpenAIChatCompletionRequest } from '../chat-completions/types/openai';
-import type { Deployment, Provider } from '../../core/db/types';
+import type { Deployment, Provider } from '@genie-nexus/database';
 import { getProviderRepository } from '../../core/db';
 
 export async function executeForLlm(

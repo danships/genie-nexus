@@ -1,5 +1,5 @@
 import { getDeploymentRepository } from '../../core/db';
-import type { Deployment } from '../../core/db/types';
+import type { Deployment } from '@genie-nexus/database';
 
 export async function getDeploymentByName(
   tenantId: string,

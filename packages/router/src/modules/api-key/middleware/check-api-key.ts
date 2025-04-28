@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import type { ApiKey } from '../../../core/db/types';
+import type { ApiKey } from '@genie-nexus/database';
 import { ApiKeyValidationError } from '../errors/api-key-validation-error';
 import { ApiKeyNotPresentError } from '../errors/api-key-not-present-error';
 import { checkApiKeyInRequest } from '../check-api-key-in-request';

@@ -1,5 +1,5 @@
 import type { Response } from 'express';
-import type { Tenant } from '../../core/db/types';
+import type { Tenant } from '@genie-nexus/database';
 
 export function getTenantFromResponse(response: Response) {
   if (!response.locals['tenant']) {

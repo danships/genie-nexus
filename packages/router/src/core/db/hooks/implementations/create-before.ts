@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import type { Collection } from 'supersave';
-import type { CollectionEntityWithTenantId } from '../../types';
+import type { CollectionEntityWithTenantId } from '@genie-nexus/database';
 import { getTenantFromResponse } from '../../../../modules/tenants/get-tenant-from-response';
 
 export default function (

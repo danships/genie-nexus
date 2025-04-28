@@ -6,7 +6,7 @@ import {
 import { startServer as startServerFunction } from './server';
 
 export type { StartServerOptions } from './server';
-export * from './core/db/types';
+export * from '@genie-nexus/database';
 export { DEFAULT_TENANT_ID } from './modules/tenants/constants';
 
 export const startServer = isProduction()

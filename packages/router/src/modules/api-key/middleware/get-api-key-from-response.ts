@@ -1,5 +1,5 @@
 import type { Response } from 'express';
-import type { ApiKey } from '../../../core/db/types';
+import type { ApiKey } from '@genie-nexus/database';
 
 export function getApiKeyFromResponse(
   response: Response,

@@ -1,6 +1,6 @@
 import useSWR, { type SWRConfiguration } from 'swr';
 import { fetcher as defaultFetcher, getClient } from './swr-config';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 export { useMatchMutate } from './use-match-mutate';
 export { getClient, SwrDefaultApiConfig, noUnwrapFetcher } from './swr-config';
 
@@ -10,6 +10,13 @@ export const useApi = <T>(
 ) => {
   const fetcher = options.fetcher || defaultFetcher;
   const result = useSWR<T>(url, fetcher, options);
+
+  useEffect(() => {
+    // Make sure it gets caught by the error boundary
+    if (result.error) {
+      throw result.error;
+    }
+  }, [result.error]);
 
   return {
     ...result,
