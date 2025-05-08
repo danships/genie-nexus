@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 export { useMatchMutate } from './use-match-mutate';
 export { getClient, SwrDefaultApiConfig, noUnwrapFetcher } from './swr-config';
 
-export const useApi = <T>(
+export const useApi = <T = unknown>(
   url: string | (() => string | false),
   options: Partial<SWRConfiguration> = {},
 ) => {

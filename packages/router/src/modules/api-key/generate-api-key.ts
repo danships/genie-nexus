@@ -2,6 +2,7 @@ import { getApiKeyRepository } from '../../core/db';
 import type { ApiKey } from '@genie-nexus/database';
 import { API_KEY_PREFIX, ID_SEPARATOR } from './constants';
 import { generateApiKey } from './secrets/generate-api-key';
+import type { LlmApiKey, ManagementApiKey } from '../../../../types/dist';
 
 async function generatApiKeyHelper(
   apiKeyToCreate: Omit<ApiKey, 'id'>,
@@ -21,7 +22,7 @@ export async function generatePublicApiKey(
   label: string,
   allowedDeployments?: string[],
 ) {
-  const apiKeyToCreate: Omit<ApiKey, 'id'> = {
+  const apiKeyToCreate: Omit<LlmApiKey, 'id'> = {
     tenantId,
     label,
     active: true,
@@ -40,7 +41,7 @@ export async function generateManagementApiKey(
   label: string,
   scopes: string[],
 ): Promise<string> {
-  const apiKeyToCreate: Omit<ApiKey, 'id'> = {
+  const apiKeyToCreate: Omit<ManagementApiKey, 'id'> = {
     tenantId,
     label,
     active: true,

@@ -1,26 +1,16 @@
-'use client';
-import '@mantine/core/styles.css';
-import { MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
+import { LayoutClient } from './_layout-client';
 
-const theme = createTheme({
-  /** Put your mantine theme override here */
-});
+export const metadata = {
+  title: {
+    template: '%s | Genie Nexus',
+    default: 'Genie Nexus',
+  },
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <ColorSchemeScript />
-      </head>
-      <body>
-        <MantineProvider theme={theme} defaultColorScheme="auto">
-          {children}
-        </MantineProvider>
-      </body>
-    </html>
-  );
+  return <LayoutClient>{children}</LayoutClient>;
 }

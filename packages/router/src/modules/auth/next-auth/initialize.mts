@@ -4,6 +4,7 @@ import { logger } from '../../../core/logger.js';
 import { saltAndHashPassword } from '@genie-nexus/auth';
 import { generatePassword } from './generate-password.js';
 import { DEFAULT_USER_EMAIL, DEFAULT_USER_ID } from '../constants.js';
+import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
 
 const DEV_PASSWORD = 'Tester01';
 
@@ -17,6 +18,7 @@ export async function initialize() {
     logger.info('Authentication is disabled');
     if (users.length === 0) {
       await userRepository.create({
+        // @ts-expect-error superSave support providing an ID, but the typings don't expose it.
         id: DEFAULT_USER_ID,
         email: DEFAULT_USER_EMAIL,
         password: '', // Nobody needs to sign in with this user
@@ -27,7 +29,7 @@ export async function initialize() {
     return;
   }
 
-  if (users.length === 0) {
+  if (users.length === 0 && !getConfiguration().multiTenant) {
     logger.info('No users found, creating default user');
     const password = getConfiguration().devMode
       ? DEV_PASSWORD
@@ -37,6 +39,7 @@ export async function initialize() {
       password: await saltAndHashPassword(password),
       created: new Date().toISOString(),
       lastLogin: null,
+      tenantId: DEFAULT_TENANT_ID,
     });
     logger.info('Default user created', {
       email: DEFAULT_USER_EMAIL,

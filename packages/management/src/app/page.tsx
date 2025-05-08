@@ -1,4 +1,5 @@
-import { Container, Title, Text } from '@mantine/core';
+import { Container, Title, Text, Button } from '@mantine/core';
+import Link from 'next/link';
 
 export default function HomePage() {
   return (
@@ -9,6 +10,9 @@ export default function HomePage() {
       <Text size="lg" ta="center" c="dimmed">
         Your AI-powered management interface
       </Text>
+      <Button component={Link} href="/manage">
+        Manage
+      </Button>
     </Container>
   );
 }

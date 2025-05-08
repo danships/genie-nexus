@@ -16,6 +16,7 @@
     "@genie-nexus/auth": "workspace:*",
     "@genie-nexus/database": "workspace:*",
     "@genie-nexus/management": "workspace:*",
+    "@genie-nexus/types": "workspace:*",
     "ai": "^4.3.9",
     "argon2": "^0.41.1",
     "cors": "^2.8.5",

@@ -37,9 +37,10 @@ export const ApiKey: Collection = {
         _req,
         _res,
         entity: ApiKeyType,
-      ): Omit<ApiKeyType, 'key'> => {
-        delete entity['key'];
-        return entity;
+      ): Omit<ApiKeyType, 'hash'> => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { hash, ...rest } = entity;
+        return rest;
       },
     },
   ],

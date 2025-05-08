@@ -6,8 +6,14 @@ import type {
   Deployment as DeploymentType,
 } from '../../types';
 import { Provider, Tenant, Deployment } from '../../entities';
+import type {
+  DeploymentLLM,
+  DeploymentWeave,
+  WeaveHttpProxyProvider,
+  WeaveHttpStaticProvider,
+} from '@genie-nexus/types';
 
-// TODO duplicatie from the constant in the router package
+// TODO duplicate from the constant in the router package
 const DEFAULT_TENANT_ID = 'default';
 
 export const tenantAndSampleData: MigrationDefinition = {
@@ -15,6 +21,7 @@ export const tenantAndSampleData: MigrationDefinition = {
     const tenantRepository = superSave.getRepository<TenantType>(Tenant.name);
 
     await tenantRepository.create({
+      // @ts-expect-error - Supersave allows specifying the id, but does not reflect that in the typings.
       id: DEFAULT_TENANT_ID,
       name: 'Default Tenant',
     } satisfies Omit<TenantType, 'id'>);
@@ -31,16 +38,17 @@ export const tenantAndSampleData: MigrationDefinition = {
     const deploymentRepository = superSave.getRepository<DeploymentType>(
       Deployment.name,
     );
-    await deploymentRepository.create({
+    const staticEchoDeployment: Omit<DeploymentLLM, 'id'> = {
       name: 'static-echo',
       tenantId: DEFAULT_TENANT_ID,
       active: true,
       defaultProviderId: createdLlmProvider.id,
       model: 'static',
       type: 'llm',
-    } satisfies Omit<DeploymentType, 'id'>);
+    };
+    await deploymentRepository.create(staticEchoDeployment);
 
-    const staticHttpProvider = await providerRepository.create({
+    const staticHttpProviderToCreate: Omit<WeaveHttpStaticProvider, 'id'> = {
       name: 'Static HTTP Provider',
       tenantId: DEFAULT_TENANT_ID,
       type: 'http-static',
@@ -58,7 +66,10 @@ export const tenantAndSampleData: MigrationDefinition = {
           value: 'it is done.',
         },
       ],
-    } satisfies Omit<ProviderType, 'id'>);
+    };
+    const staticHttpProvider = await providerRepository.create(
+      staticHttpProviderToCreate,
+    );
 
     await deploymentRepository.create({
       name: `static-http`,
@@ -66,11 +77,12 @@ export const tenantAndSampleData: MigrationDefinition = {
       active: true,
       defaultProviderId: staticHttpProvider.id,
       type: 'weave',
+      // @ts-expect-error TODO the discriminated union does not work with the zod schemas
       requiresApiKey: false,
       supportedMethods: ['get'],
-    } satisfies Omit<DeploymentType, 'id'>);
+    } satisfies Omit<DeploymentWeave, 'id'>);
 
-    const proxyHttpProvider = await providerRepository.create({
+    const proxyHttpProviderToCreate: Omit<WeaveHttpProxyProvider, 'id'> = {
       name: 'Proxy HTTP Provider',
       tenantId: DEFAULT_TENANT_ID,
       type: 'http-proxy',
@@ -82,9 +94,12 @@ export const tenantAndSampleData: MigrationDefinition = {
           value: 'application/json',
         },
       ],
-    } satisfies Omit<ProviderType, 'id'>);
+    };
+    const proxyHttpProvider = await providerRepository.create(
+      proxyHttpProviderToCreate,
+    );
 
-    await deploymentRepository.create({
+    const deploymentToCreate: Omit<DeploymentWeave, 'id'> = {
       name: `proxy-http`,
       tenantId: DEFAULT_TENANT_ID,
       active: true,
@@ -92,6 +107,7 @@ export const tenantAndSampleData: MigrationDefinition = {
       type: 'weave',
       requiresApiKey: false,
       supportedMethods: ['get'],
-    } satisfies Omit<DeploymentType, 'id'>);
+    };
+    await deploymentRepository.create(deploymentToCreate);
   },
 };

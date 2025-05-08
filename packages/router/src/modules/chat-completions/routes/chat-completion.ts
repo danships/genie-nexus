@@ -14,6 +14,7 @@ import {
 import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response';
 import { getDeploymentByName } from '../../deployments/get-deployment-by-name';
 import { executeForLlm } from '../../deployments/execute';
+import { isLlmApiKey } from '@genie-nexus/types';
 
 export const handler: RequestHandler<
   object,
@@ -46,8 +47,9 @@ export const handler: RequestHandler<
       'llm',
     );
     if (
-      Array.isArray(apiKey.allowedDeployments) &&
-      !apiKey.allowedDeployments.includes(deployment.id)
+      !isLlmApiKey(apiKey) ||
+      (Array.isArray(apiKey.allowedDeployments) &&
+        !apiKey.allowedDeployments.includes(deployment.id))
     ) {
       res.status(400).json({
         error: {

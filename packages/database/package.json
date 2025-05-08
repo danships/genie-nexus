@@ -19,6 +19,7 @@
     "express": "5.x"
   },
   "devDependencies": {
+    "@genie-nexus/types": "workspace:*",
     "@types/debug": "^4.1.12",
     "@types/express": "^5.0.0",
     "typescript": "^5.8.3"

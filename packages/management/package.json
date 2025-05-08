@@ -24,7 +24,8 @@
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
     "swr": "^2.3.3",
-    "zod": "^3.24.3"
+    "zod": "^3.24.3",
+    "@genie-nexus/types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20",

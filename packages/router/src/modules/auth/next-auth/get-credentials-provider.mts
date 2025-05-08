@@ -9,6 +9,7 @@ export async function getCredentialsProvider() {
       email: { label: 'Email', type: 'email' },
       password: { label: 'Password', type: 'password' },
     },
+    // @ts-expect-error TODO, cannot align the zod generated DB type for the name attribute (undefined/null)
     authorize: getCredentialsAuthorize(userRepository),
   });
 }

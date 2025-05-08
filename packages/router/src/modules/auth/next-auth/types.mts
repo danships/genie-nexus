@@ -1,5 +1,5 @@
 import type { Session, DefaultSession } from '@auth/express';
-import { NextAuthUser } from '@genie-nexus/database';
+import type { NextAuthUser } from '@genie-nexus/database';
 import type { Response } from 'express';
 
 declare module '@auth/express' {

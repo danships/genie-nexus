@@ -2,7 +2,7 @@ import type {
   Request as ExpressRequest,
   Response as ExpressResponse,
 } from 'express';
-import type { WeaveHttpProxyProvider } from '@genie-nexus/database';
+import type { WeaveHttpProxyProvider } from '@genie-nexus/types';
 import { logger } from '../../core/logger';
 import { validateUrlDestination } from '../../core/utils/validate-url-destination';
 
