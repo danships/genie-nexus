@@ -11,6 +11,11 @@ import { OpenAI } from 'openai';
 const OPTIONS: StartServerOptions = {
   port: 3030,
   dbConnectionString: 'sqlite://:memory:',
+  devMode: false,
+  authentication: { type: 'none' },
+  integrateManagementInterface: false,
+  logLevel: 'error',
+  multiTenant: false,
 };
 
 describe('OpenAI Compatibility', () => {

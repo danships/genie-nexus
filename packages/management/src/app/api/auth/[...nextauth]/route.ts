@@ -2,6 +2,8 @@ import { getNextAuth } from '@lib/auth/next-auth';
 import { environment } from '@lib/environment';
 import { type NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 const dummyHandler = () => {
   return new NextResponse('Authentication method not available', {
     status: 500,
@@ -14,7 +16,6 @@ export async function GET(request: NextRequest) {
   }
 
   const { handlers } = await getNextAuth();
-  console.log('GET', handlers.GET);
   return handlers.GET(request);
 }
 

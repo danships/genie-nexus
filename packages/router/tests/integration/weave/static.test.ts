@@ -12,6 +12,11 @@ const OPTIONS: StartServerOptions = {
   dbConnectionString: 'sqlite://:memory:',
   multiTenant: false,
   logLevel: 'error',
+  integrateManagementInterface: true,
+  devMode: false,
+  authentication: {
+    type: 'none',
+  },
 };
 
 describe('Static HTTP Provider', () => {
