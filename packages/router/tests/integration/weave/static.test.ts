@@ -12,7 +12,7 @@ const OPTIONS: StartServerOptions = {
   dbConnectionString: 'sqlite://:memory:',
   multiTenant: false,
   logLevel: 'error',
-  integrateManagementInterface: true,
+  integrateManagementInterface: false,
   devMode: false,
   authentication: {
     type: 'none',
