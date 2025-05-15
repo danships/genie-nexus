@@ -31,6 +31,7 @@ export function ProviderGenericForm({ name, submit }: Properties) {
         <TextInput
           label="Name"
           placeholder="Enter name"
+          required
           {...form.getInputProps('name')}
         />
         <Button type="submit">Save</Button>

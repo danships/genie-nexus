@@ -4,7 +4,7 @@ import { API_KEY_PREFIX, ID_SEPARATOR } from './constants';
 import { generateApiKey } from './secrets/generate-api-key';
 import type { LlmApiKey, ManagementApiKey } from '../../../../types/dist';
 
-async function generatApiKeyHelper(
+async function generateApiKeyHelper(
   apiKeyToCreate: Omit<ApiKey, 'id'>,
 ): Promise<string> {
   const apiKeyRepository = await getApiKeyRepository();
@@ -33,7 +33,7 @@ export async function generatePublicApiKey(
     apiKeyToCreate['allowedDeployments'] = allowedDeployments;
   }
 
-  return generatApiKeyHelper(apiKeyToCreate);
+  return generateApiKeyHelper(apiKeyToCreate);
 }
 
 export async function generateManagementApiKey(
@@ -50,5 +50,5 @@ export async function generateManagementApiKey(
     scopes,
   };
 
-  return generatApiKeyHelper(apiKeyToCreate);
+  return generateApiKeyHelper(apiKeyToCreate);
 }

@@ -1,36 +1,32 @@
 'use client';
 import { Provider } from '@genie-nexus/database';
 import {
+  OpenAIProvider,
   WeaveHttpProxyProvider,
   WeaveHttpStaticProvider,
 } from '@genie-nexus/types';
 import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
-import { useCudApi } from '@lib/api/use-api';
+import { useApi, useCudApi } from '@lib/api/use-api';
 import { Loader } from '@lib/components/atoms/loader';
 import { ProviderGenericForm } from '@lib/components/molecules/provider-generic-form';
 import { ProviderHttpProxyForm } from '@lib/components/molecules/provider-http-proxy-form';
 import { ProviderHttpStaticForm } from '@lib/components/molecules/provider-http-static-form';
-import { Tabs, Text, Title } from '@mantine/core';
+import { ProviderOpenAIForm } from '@lib/components/molecules/provider-openai-form';
+import { PROVIDER_TYPES_SUMMARY } from '@lib/constants/providers';
+import { Notification, Tabs, Text, Title } from '@mantine/core';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import useSWR from 'swr';
 
 const TAB_DETAILS = 'details';
 const TAB_STATIC_LLM = 'static-llm';
 const TAB_HTTP_STATIC = 'http-static';
 const TAB_HTTP_PROXY = 'http-proxy';
-
-const PROVIDER_TYPES_SUMMARY: Record<Provider['type'], string> = {
-  openai: 'OpenAI - Provider for connecting to OpenAI API endpoints',
-  static: 'Static LLM - Provider that returns static/hardcoded responses',
-  'http-proxy':
-    'Weave HTTP Proxy - Provider that forwards requests to another HTTP endpoint',
-  'http-static':
-    'Weave HTTP Static - Provider that returns static HTTP responses with configurable headers and body',
-};
+const TAB_OPENAI = 'openai';
 
 type Properties = {
   provider: Provider;
   refreshData: () => Promise<void>;
+  created?: boolean;
 };
 
 // open ai
@@ -40,10 +36,12 @@ type Properties = {
 
 export function ProviderDetailClientPage({
   provider: initialProvider,
+  created,
 }: Properties) {
   const { patch, inProgress } = useCudApi();
   const [provider, setProvider] = useState<Provider>(initialProvider);
-  const { mutate } = useSWR(ENDPOINT_PROVIDERS_OVERVIEW);
+  const { mutate } = useApi(ENDPOINT_PROVIDERS_OVERVIEW);
+  const router = useRouter();
 
   const [selectedTab, setSelectedTab] = useState<
     typeof TAB_DETAILS | typeof TAB_STATIC_LLM | typeof TAB_HTTP_STATIC
@@ -84,9 +82,34 @@ export function ProviderDetailClientPage({
     setProvider(updatedProviderResponse.data);
   };
 
+  const handleClose = () => {
+    router.push(`/app/providers/${provider.id}`);
+  };
+
+  const handleOpenAISubmit = async (values: {
+    baseURL: string;
+    apiKey?: string;
+  }) => {
+    const updatedProviderResponse = await patch<{ data: OpenAIProvider }>(
+      `/collections/providers/${provider.id}`,
+      values,
+    );
+    setProvider({ ...updatedProviderResponse.data, apiKey: '' });
+  };
+
   return (
     <>
       <Title order={1}>Viewing {provider.name}</Title>
+      {created && (
+        <Notification
+          m="md"
+          color="green"
+          title="Provider created"
+          onClose={handleClose}
+        >
+          Your provider has been created.
+        </Notification>
+      )}
       {inProgress && <Loader />}
       {!inProgress && (
         <Tabs
@@ -112,6 +135,9 @@ export function ProviderDetailClientPage({
             )}
             {provider.type === 'http-proxy' && (
               <Tabs.Tab value={TAB_HTTP_PROXY}>HTTP Proxy Details</Tabs.Tab>
+            )}
+            {provider.type === 'openai' && (
+              <Tabs.Tab value={TAB_OPENAI}>OpenAI API details</Tabs.Tab>
             )}
           </Tabs.List>
 
@@ -153,6 +179,17 @@ export function ProviderDetailClientPage({
               <ProviderHttpProxyForm
                 provider={provider}
                 submit={handleHttpProxyProviderSubmit}
+              />
+            )}
+          </Tabs.Panel>
+
+          <Tabs.Panel value={TAB_OPENAI}>
+            <Text>Configure the OpenAI API details for this provider.</Text>
+            <hr />
+            {provider.type === 'openai' && (
+              <ProviderOpenAIForm
+                provider={provider}
+                submit={handleOpenAISubmit}
               />
             )}
           </Tabs.Panel>

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import * as apiSchemas from './api';
 
 const baseEntitySchema = z.object({
   id: z.string(),
@@ -8,102 +9,54 @@ const entityWithTenantIdSchema = baseEntitySchema.extend({
   tenantId: z.string(),
 });
 
-// Header Definition schema
-export const headerDefinitionSchema = z.object({
-  key: z.string(),
-  operation: z.enum(['set', 'add', 'remove']),
-  value: z.string().optional(),
-});
+export const openAIProviderSchema = apiSchemas.openAIProviderSchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
-// Provider schemas
-const baseProviderSchema = entityWithTenantIdSchema.extend({
-  name: z.string(),
-});
+export const staticLlmProviderSchema =
+  apiSchemas.staticLlmProviderSchemaApi.and(entityWithTenantIdSchema);
 
-export const openAIProviderSchema = baseProviderSchema.extend({
-  type: z.literal('openai'),
-  apiKey: z.string(),
-  baseURL: z.string().url(),
-});
+export const weaveHttpProxyProviderSchema =
+  apiSchemas.weaveHttpProxyProviderSchemaApi.and(entityWithTenantIdSchema);
 
-export const staticLlmProviderSchema = baseProviderSchema.extend({
-  type: z.literal('static'),
-});
+export const weaveHttpStaticProviderSchema =
+  apiSchemas.weaveHttpStaticProviderSchemaApi.and(entityWithTenantIdSchema);
 
-export const weaveHttpProxyProviderSchema = baseProviderSchema.extend({
-  type: z.literal('http-proxy'),
-  baseUrl: z.string().url(),
-  requestHeaders: z.array(headerDefinitionSchema).optional(),
-  responseHeaders: z.array(headerDefinitionSchema).optional(),
-});
-
-export const weaveHttpStaticProviderSchema = baseProviderSchema.extend({
-  type: z.literal('http-static'),
-  responseHeaders: z.array(headerDefinitionSchema).optional(),
-  body: z.string().optional(),
-  statusCode: z.number().int().positive().optional(),
-});
-
-export const providerSchema = z.discriminatedUnion('type', [
-  openAIProviderSchema,
-  staticLlmProviderSchema,
-  weaveHttpProxyProviderSchema,
-  weaveHttpStaticProviderSchema,
-]);
+export const providerSchema = apiSchemas.providerSchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
 // Deployment schemas
-const baseDeploymentSchema = entityWithTenantIdSchema.extend({
-  name: z.string(),
-  active: z.boolean(),
-  defaultProviderId: z.string(),
-});
 
-export const deploymentLLMSchema = baseDeploymentSchema.extend({
-  type: z.literal('llm'),
-  model: z.string(),
-});
+export const deploymentLLMSchema = apiSchemas.deploymentLLMSchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
-export const deploymentWeaveSchema = baseDeploymentSchema.extend({
-  type: z.literal('weave'),
-  requiresApiKey: z.boolean(),
-  supportedMethods: z
-    .array(z.enum(['get', 'post', 'put', 'delete', 'patch', 'options']))
-    .optional(),
-  allowedDeployments: z.array(z.string()).optional(),
-});
+export const deploymentWeaveSchema = apiSchemas.deploymentWeaveSchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
-export const deploymentSchema = z.discriminatedUnion('type', [
-  deploymentLLMSchema,
-  deploymentWeaveSchema,
-]);
+export const deploymentSchema = apiSchemas.deploymentSchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
 // API Key schemas
-const baseApiKeySchema = entityWithTenantIdSchema.extend({
-  label: z.string(),
-  hash: z.string(),
-  active: z.boolean(),
-});
 
-export const llmApiKeySchema = baseApiKeySchema.extend({
-  type: z.literal('llm-api-key'),
-  allowedDeployments: z.array(z.string()).optional(),
-});
+export const llmApiKeySchema = apiSchemas.llmApiKeySchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
-export const managementKeySchema = baseApiKeySchema.extend({
-  type: z.literal('management-key'),
-  scopes: z.array(z.string()),
-});
+export const managementKeySchema = apiSchemas.managementKeySchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
-export const weaveApiKeySchema = baseApiKeySchema.extend({
-  type: z.literal('weave-api-key'),
-  allowedDeployments: z.array(z.string()).optional(),
-});
+export const weaveApiKeySchema = apiSchemas.weaveApiKeySchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
-export const apiKeySchema = z.discriminatedUnion('type', [
-  llmApiKeySchema,
-  managementKeySchema,
-  weaveApiKeySchema,
-]);
+export const apiKeySchema = apiSchemas.apiKeySchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
 // Tenant schema
 export const tenantSchema = baseEntitySchema.extend({
