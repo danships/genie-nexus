@@ -10,7 +10,7 @@ export default function HomePage() {
       <Text size="lg" ta="center" c="dimmed">
         Your AI-powered management interface
       </Text>
-      <Button component={Link} href="/manage">
+      <Button component={Link} href="/app">
         Manage
       </Button>
     </Container>

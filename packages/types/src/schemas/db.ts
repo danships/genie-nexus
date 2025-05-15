@@ -39,7 +39,6 @@ export const weaveHttpProxyProviderSchema = baseProviderSchema.extend({
 
 export const weaveHttpStaticProviderSchema = baseProviderSchema.extend({
   type: z.literal('http-static'),
-  requestHeaders: z.array(headerDefinitionSchema).optional(),
   responseHeaders: z.array(headerDefinitionSchema).optional(),
   body: z.string().optional(),
   statusCode: z.number().int().positive().optional(),
