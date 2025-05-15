@@ -48,6 +48,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 alt="Genie Nexus"
                 width="48"
                 height="48"
+                priority
               />
             </Group>
           </AppShell.Header>

@@ -3,6 +3,7 @@ import type { ApiKey } from '@genie-nexus/database';
 import { checkApiKey } from './check-api-key';
 import { API_KEY_PREFIX } from '../constants';
 import { ApplicationError } from '../../../core/errors/application-error';
+import { getConfiguration } from '../../../core/configuration/get';
 
 export const checkApiKeyOrUser =
   (type: ApiKey['type']) =>
@@ -11,6 +12,10 @@ export const checkApiKeyOrUser =
     res: Response<unknown, { apiKey: ApiKey }>,
     next: NextFunction,
   ) => {
+    if (getConfiguration().authentication.type === 'none') {
+      return next();
+    }
+
     const authHeader = req.headers.authorization;
 
     if (authHeader?.toLowerCase().startsWith(API_KEY_PREFIX)) {

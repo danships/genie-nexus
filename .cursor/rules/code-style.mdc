@@ -1,0 +1,6 @@
+---
+description: 
+globs: *.ts,*.tsx
+alwaysApply: false
+---
+We use typescript for type definitions, and always use type, not interface. Unless we cannot avoid it, when extending an interface for example.

@@ -6,12 +6,13 @@ import { disableSSR } from '@lib/components/atoms/disable-ssr';
 import { Loader } from '@lib/components/atoms/loader';
 import { Table, Badge, Group, Text, Title, Select } from '@mantine/core';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
 
 export const ProvidersClientPage = disableSSR(function () {
+  const router = useRouter();
   const [filterType, setFilterType] = useState<string | null>(null);
-  const { data, isLoading } = useApi<Provider[]>(
-    '/collections/providers?sort=name',
-  );
+  const { data, isLoading } = useApi<Provider[]>(ENDPOINT_PROVIDERS_OVERVIEW);
 
   if (isLoading) {
     return <Loader />;
@@ -52,7 +53,11 @@ export const ProvidersClientPage = disableSSR(function () {
         </Table.Thead>
         <Table.Tbody>
           {filteredData?.map((provider) => (
-            <Table.Tr key={provider.id}>
+            <Table.Tr
+              key={provider.id}
+              onClick={() => router.push(`/app/providers/${provider.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <Table.Td>
                 <Text fw={500}>{provider.name}</Text>
               </Table.Td>
