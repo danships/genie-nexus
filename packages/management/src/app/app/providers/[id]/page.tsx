@@ -4,6 +4,9 @@ import { ProviderDetailClientPage } from './_page';
 
 async function getProvider(id: string) {
   const provider = await getEntity<Provider>('providers', id);
+  if (provider.type === 'openai') {
+    provider.apiKey = '';
+  }
   return provider;
 }
 
@@ -14,6 +17,7 @@ export async function generateMetadata({
 }) {
   const { id } = await params;
   const provider = await getProvider(id);
+
   return {
     title: `Provider ${provider.name}`,
   };
@@ -21,10 +25,13 @@ export async function generateMetadata({
 
 export default async function ComponentEditPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { id } = await params;
+  const { created } = await searchParams;
 
   const provider = await getProvider(id);
 
@@ -34,6 +41,10 @@ export default async function ComponentEditPage({
   };
 
   return (
-    <ProviderDetailClientPage provider={provider} refreshData={refreshData} />
+    <ProviderDetailClientPage
+      provider={provider}
+      refreshData={refreshData}
+      created={created === '1'}
+    />
   );
 }

@@ -13,7 +13,6 @@ import type {
   weaveHttpProxyProviderSchema,
   llmApiKeySchema,
   managementKeySchema,
-  headerDefinitionSchema,
 } from '../schemas/db';
 
 // Infer types from schemas
@@ -37,9 +36,7 @@ export type WeaveHttpStaticProvider = z.infer<
 
 export type LlmApiKey = z.infer<typeof llmApiKeySchema>;
 export function isLlmApiKey(apiKey: ApiKey): apiKey is LlmApiKey {
-  return apiKey.type === 'llm-api-key';
+  return 'type' in apiKey && apiKey.type === 'llm-api-key';
 }
 
 export type ManagementApiKey = z.infer<typeof managementKeySchema>;
-
-export type HeaderDefinition = z.infer<typeof headerDefinitionSchema>;

@@ -9,6 +9,19 @@ export const Provider: Collection = {
     name: 'string',
     tenantId: 'string',
   },
+  hooks: [
+    {
+      // @ts-expect-error - Type mismatch in entity transform function
+      entityTransform: (_collection, _req, _res, entity) => {
+        // @ts-expect-error - Type mismatch in entity transform function
+        if (entity.type === 'openai') {
+          // @ts-expect-error - Type mismatch in entity transform function, supersave issue
+          entity.apiKey = '';
+        }
+        return entity;
+      },
+    },
+  ],
 };
 
 export const Deployment: Collection = {
