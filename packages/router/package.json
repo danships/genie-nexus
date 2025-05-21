@@ -10,6 +10,20 @@
     "test": "vitest",
     "clean": "rimraf dist"
   },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --max-warnings 0 --no-ignore",
+      "prettier --check --loglevel=warn",
+      "sh -c 'tsc -p tsconfig.json --noEmit'"
+    ],
+    "!(*.config)*.(js|cjs|mjs)": [
+      "eslint --max-warnings 0 --no-ignore",
+      "prettier --check --loglevel=warn"
+    ],
+    "*.(json|md)": [
+      "prettier --check --loglevel=warn"
+    ]
+  },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^0.2.12",
     "@auth/express": "^0.10.0",

@@ -4,14 +4,26 @@ import type { Deployment } from '@genie-nexus/database';
 import { useApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';
 import { Loader } from '@lib/components/atoms/loader';
-import { Table, Badge, Group, Text, Select, Stack, Title } from '@mantine/core';
+import {
+  Table,
+  Badge,
+  Group,
+  Text,
+  Select,
+  Stack,
+  Title,
+  Button,
+} from '@mantine/core';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ENDPOINT_DEPLOYMENTS_OVERVIEW } from '@lib/api/swr-constants';
 
 export const DeploymentsClientPage = disableSSR(function () {
+  const router = useRouter();
   const [filterType, setFilterType] = useState<string | null>(null);
 
   const { data, isLoading } = useApi<Deployment[]>(
-    '/collections/deployments?sort=name',
+    ENDPOINT_DEPLOYMENTS_OVERVIEW,
   );
 
   if (isLoading) {
@@ -25,9 +37,12 @@ export const DeploymentsClientPage = disableSSR(function () {
 
   return (
     <Stack>
-      <Title order={1} mb="md">
-        Deployments
-      </Title>
+      <Group justify="space-between" align="center">
+        <Title order={1}>Deployments</Title>
+        <Button onClick={() => router.push('/app/deployments/new')}>
+          New Deployment
+        </Button>
+      </Group>
       <Select
         label="Filter by Type"
         placeholder="All Types"
@@ -51,7 +66,11 @@ export const DeploymentsClientPage = disableSSR(function () {
         </Table.Thead>
         <Table.Tbody>
           {filteredData?.map((deployment) => (
-            <Table.Tr key={deployment.id}>
+            <Table.Tr
+              key={deployment.id}
+              onClick={() => router.push(`/app/deployments/${deployment.id}`)}
+              className="is-clickable"
+            >
               <Table.Td>
                 <Text fw={500}>{deployment.name}</Text>
               </Table.Td>

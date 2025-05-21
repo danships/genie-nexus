@@ -1,0 +1,193 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Form Patterns in Genie Nexus Management
+
+This document outlines the patterns and best practices for creating forms in the Genie Nexus Management application.
+
+## Core Principles
+
+1. **Type Safety**: All forms should be fully typed using TypeScript
+2. **Form State Management**: Use `@mantine/form` for form state management
+3. **Component Structure**: Forms should be client-side components with clear separation of concerns
+4. **Validation**: Implement validation at the form level using Mantine's form validation
+
+## Form Structure
+
+### Basic Form Template
+
+```typescript
+import { useForm } from '@mantine/form';
+import { TextInput, Button, Stack } from '@mantine/core';
+
+type FormValues = {
+  // Define your form fields here
+  name: string;
+};
+
+type Properties = {
+  // Define your component props here
+  initialValue: string;
+  submit: (values: FormValues) => Promise<void>;
+};
+
+export function YourForm({ initialValue, submit }: Properties) {
+  const form = useForm<FormValues>({
+    initialValues: {
+      name: initialValue,
+    },
+    validate: {
+      name: (value) => 
+        value.trim().length < 2 ? 'Name must be at least 2 characters' : null,
+    },
+  });
+
+  const handleSubmit = (values: FormValues) => {
+    void submit(values);
+  };
+
+  return (
+    <form onSubmit={form.onSubmit(handleSubmit)}>
+      <Stack>
+        <TextInput
+          label="Name"
+          placeholder="Enter name"
+          required
+          {...form.getInputProps('name')}
+        />
+        <Button type="submit">Save</Button>
+      </Stack>
+    </form>
+  );
+}
+```
+
+## Best Practices
+
+1. **Form Component Organization**
+   - Place form components in the `components/molecules` directory
+   - Use the `-form` suffix for form components
+   - Keep form components focused on a single responsibility
+
+2. **Type Definitions**
+   - Define form values type at the top of the file
+   - Use TypeScript for all type definitions
+   - Avoid using `interface` unless extending an existing interface
+
+3. **Form Validation**
+   - Implement validation in the form configuration
+   - Use clear, user-friendly error messages
+   - Validate on both change and submit
+
+4. **Form Submission**
+   - Handle form submission asynchronously
+   - Use the `void` operator for promise handling
+   - Implement proper error handling
+
+5. **Component Props**
+   - Keep props interface minimal and focused
+   - Include necessary callbacks for form submission
+   - Provide default values where appropriate
+
+## Example Implementation
+
+The `ProviderGenericForm` component demonstrates these patterns:
+
+```typescript
+type FormValues = {
+  name: string;
+};
+
+type Properties = {
+  name: string;
+  submit: (values: FormValues) => Promise<void>;
+};
+
+export function ProviderGenericForm({ name, submit }: Properties) {
+  const form = useForm<FormValues>({
+    initialValues: { name },
+    validate: {
+      name: (value) =>
+        value.trim().length < 2 ? 'Name must be at least 2 characters' : null,
+    },
+  });
+
+  const handleSubmit = (values: FormValues) => {
+    void submit(values);
+  };
+
+  return (
+    <form onSubmit={form.onSubmit(handleSubmit)}>
+      <Stack>
+        <TextInput
+          label="Name"
+          placeholder="Enter name"
+          required
+          {...form.getInputProps('name')}
+        />
+        <Button type="submit">Save</Button>
+      </Stack>
+    </form>
+  );
+}
+```
+
+## Form Integration
+
+When integrating forms into pages:
+
+1. Create a client-side page component
+2. Handle form submission and API calls in the page component
+3. Pass necessary callbacks to the form component
+4. Implement proper loading states and error handling
+
+Example page integration:
+
+```typescript
+'use client';
+
+export default function YourPage() {
+  const handleSubmit = async (values: FormValues) => {
+    // Handle form submission
+    // Make API calls
+    // Handle navigation
+  };
+
+  return (
+    <>
+      <Title>Your Form Title</Title>
+      <YourForm
+        initialValue=""
+        submit={handleSubmit}
+      />
+    </>
+  );
+}
+```
+
+## Form Components
+
+The application uses Mantine's form components. Common components include:
+
+- `TextInput`: For text input fields
+- `Select`: For dropdown selections
+- `NumberInput`: For numeric inputs
+- `Checkbox`: For boolean inputs
+- `Stack`: For vertical form layout
+- `Group`: For horizontal form layout
+
+## Error Handling
+
+1. Implement form-level validation
+2. Handle API errors appropriately
+3. Display user-friendly error messages
+4. Maintain form state on error
+
+## Loading States
+
+1. Show loading indicators during form submission
+2. Disable form inputs while submitting
+3. Prevent multiple submissions
+4. Handle loading states in the parent component
