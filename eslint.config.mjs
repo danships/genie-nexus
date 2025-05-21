@@ -1,4 +1,3 @@
-import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import { defineConfig } from 'eslint/config';
@@ -18,14 +17,12 @@ export default defineConfig([
   {
     files: ['**/*.{ts,test.ts}'],
     ignores: ['**/dist/**', '**/node_modules/**', 'eslint.config.mjs'],
-    plugins: { js },
     languageOptions: {
       globals: {
         ...globals.node,
         ...globals.es2021,
       },
     },
-    extends: ['js/recommended'],
     rules: {
       curly: 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
