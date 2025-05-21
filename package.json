@@ -17,21 +17,8 @@
     "test": "pnpm -r test",
     "build": "pnpm -r build",
     "prepare": "husky",
-    "pre-push": "concurrently \"pnpm lint\" \"pnpm test\""
-  },
-  "lint-staged": {
-    "*.ts": [
-      "eslint --max-warnings 0 --no-ignore",
-      "prettier --check --loglevel=warn",
-      "sh -c 'tsc -p tsconfig.json --noEmit'"
-    ],
-    "!(*.config)*.(js|cjs|mjs)": [
-      "eslint --max-warnings 0 --no-ignore",
-      "prettier --check --loglevel=warn"
-    ],
-    "*.(json|md)": [
-      "prettier --check --loglevel=warn"
-    ]
+    "pre-push": "concurrently \"pnpm lint\" \"pnpm test\"",
+    "lint-staged": "pnpm -r lint-staged"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

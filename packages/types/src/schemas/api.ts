@@ -65,7 +65,6 @@ export const deploymentWeaveSchemaApi = baseDeploymentSchemaApi.extend({
   supportedMethods: z
     .array(z.enum(['get', 'post', 'put', 'delete', 'patch', 'options']))
     .optional(),
-  allowedDeployments: z.array(z.string()).optional(),
 });
 
 export const deploymentSchemaApi = z.discriminatedUnion('type', [

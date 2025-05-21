@@ -57,13 +57,6 @@ export async function processRequest(
   }
 
   const { provider } = await executeDeploymentForHttp(deployment);
-  if (
-    deployment.allowedDeployments &&
-    !deployment.allowedDeployments.includes(tenant.id)
-  ) {
-    res.status(403).json({ error: 'Deployment not allowed' });
-    return;
-  }
 
   switch (provider.type) {
     case 'http-proxy': {

@@ -7,6 +7,20 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --max-warnings 0 --no-ignore",
+      "prettier --check --loglevel=warn",
+      "sh -c 'tsc -p tsconfig.json --noEmit'"
+    ],
+    "!(*.config)*.(js|cjs|mjs)": [
+      "eslint --max-warnings 0 --no-ignore",
+      "prettier --check --loglevel=warn"
+    ],
+    "*.(json|md)": [
+      "prettier --check --loglevel=warn"
+    ]
+  },
   "dependencies": {
     "@genie-nexus/auth": "workspace:*",
     "@genie-nexus/database": "workspace:*",
@@ -14,6 +28,7 @@
     "@mantine/core": "^7.5.0",
     "@mantine/form": "^8.0.1",
     "@mantine/hooks": "^7.17.5",
+    "@mantine/notifications": "^8.0.1",
     "@tabler/icons-react": "^3.31.0",
     "argon2": "^0.41.1",
     "axios": "^1.9.0",
