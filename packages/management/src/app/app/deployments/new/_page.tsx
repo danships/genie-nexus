@@ -30,7 +30,7 @@ export const NewDeploymentPage = disableSSR(function () {
         model: 'to be filled in',
       });
       void mutate();
-      router.push(`/app/deployments/${llmDeploymentCreated.data.id}`);
+      router.push(`/app/deployments/${llmDeploymentCreated.data.id}/edit`);
     } finally {
       setCreatingType(null);
     }
@@ -44,13 +44,13 @@ export const NewDeploymentPage = disableSSR(function () {
         DeploymentWeaveApi
       >('/collections/deployments', {
         type: 'weave',
-        name: 'New Weave Deployment',
+        name: `new-weave-deployment-${Date.now() % 10000000}`,
         active: true,
         defaultProviderId: '', // we accept that it is empty for now
         requiresApiKey: true,
       });
       void mutate();
-      router.push(`/app/deployments/${weaveDeploymentCreated.data.id}`);
+      router.push(`/app/deployments/${weaveDeploymentCreated.data.id}/edit`);
     } finally {
       setCreatingType(null);
     }

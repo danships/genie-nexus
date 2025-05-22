@@ -25,7 +25,7 @@ type Properties = {
   deployment: Deployment;
 };
 
-export function DeploymentLlmDetailClientPage({ deployment }: Properties) {
+export function DeploymentLlmFormClientPage({ deployment }: Properties) {
   const [formData, setFormData] = useState<DeploymentLLMApi>({
     type: 'llm',
     name: deployment.name,

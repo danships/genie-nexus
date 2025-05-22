@@ -68,10 +68,6 @@ export async function proxyRequest(
       ...(req.method !== 'GET' && req.method !== 'HEAD' && { body: req.body }),
     });
 
-    if (!fetchResponse.ok) {
-      throw new Error(`HTTP error! status: ${fetchResponse.status}`);
-    }
-
     // Get the response body
     const body = await fetchResponse.arrayBuffer();
 

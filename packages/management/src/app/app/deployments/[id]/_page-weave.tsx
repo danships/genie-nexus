@@ -1,166 +1,131 @@
 'use client';
 
-import {
-  Card,
-  Stack,
-  Title,
-  Text,
-  TextInput,
-  Switch,
-  Button,
-  Select,
-  MultiSelect,
-} from '@mantine/core';
-import { useApi, useCudApi } from '@lib/api/use-api';
-import { useMemo, useState } from 'react';
-import {
-  ENDPOINT_DEPLOYMENTS_OVERVIEW,
-  ENDPOINT_PROVIDERS_OVERVIEW,
-} from '@lib/api/swr-constants';
-import { Deployment, Provider } from '@genie-nexus/database';
-import { DeploymentWeaveApi } from '@genie-nexus/types';
-import { notifications } from '@mantine/notifications';
+import { Provider } from '@genie-nexus/database';
+import { DeploymentWeave } from '@genie-nexus/types';
+import { useApi } from '@lib/api/use-api';
 import { Loader } from '@lib/components/atoms/loader';
+import { PageTitle } from '@lib/components/atoms/page-title';
+import { WeaveIcon } from '@lib/components/atoms/weave-icon';
+import { DeploymentDetailCard } from '@lib/components/molecules/deployment-detail-card';
+import { useServerUrl } from '@lib/hooks/use-server-url';
+import {
+  Stack,
+  Group,
+  Text,
+  Badge,
+  Grid,
+  Button,
+  Table,
+  CopyButton,
+  ActionIcon,
+} from '@mantine/core';
+import {
+  IconKey,
+  IconWorld,
+  IconApi,
+  IconEdit,
+  IconClipboard,
+  IconClipboardCheckFilled,
+} from '@tabler/icons-react';
+import Link from 'next/link';
 
 type Properties = {
-  deployment: Deployment;
+  deployment: DeploymentWeave;
 };
 
 export function DeploymentWeaveDetailClientPage({ deployment }: Properties) {
-  const [formData, setFormData] = useState<DeploymentWeaveApi>({
-    type: 'weave',
-    name: deployment.name,
-    active: deployment.active,
-    defaultProviderId: deployment.defaultProviderId,
-    requiresApiKey:
-      deployment.type === 'weave' ? deployment.requiresApiKey : false,
-    supportedMethods:
-      deployment.type === 'weave' ? deployment.supportedMethods : [],
-  });
+  const supportedMethods = deployment.supportedMethods ?? [];
 
-  const { patch, inProgress } = useCudApi();
-  const { mutate } = useApi(ENDPOINT_DEPLOYMENTS_OVERVIEW);
-
-  const { data: providers } = useApi<Provider[]>(ENDPOINT_PROVIDERS_OVERVIEW);
-  const filteredProviders = useMemo(() => {
-    return (
-      providers?.filter(
-        (provider) =>
-          provider.type === 'http-proxy' || provider.type === 'http-static',
-      ) || []
+  const { data: defaultProvider, isLoading: isLoadingDefaultProvider } =
+    useApi<Provider>(() =>
+      deployment.defaultProviderId
+        ? `/collections/providers/${deployment.defaultProviderId}`
+        : false,
     );
-  }, [providers]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await patch<{ data: Deployment }, DeploymentWeaveApi>(
-        `/collections/deployments/${deployment.id}`,
-        formData,
-      );
-      void mutate();
-      notifications.show({
-        title: 'Success',
-        message: 'Deployment updated successfully',
-        color: 'green',
-      });
-    } catch {
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to update deployment',
-        color: 'red',
-      });
-    }
-  };
+  const serverUrl = useServerUrl(`/weave/${deployment.name}`);
 
   return (
-    <Stack>
-      <Title order={1}>Weave Deployment Details</Title>
-      <Text c="dimmed" mb="lg">
-        Configure your Weave deployment settings
-      </Text>
+    <Stack gap="lg">
+      <Group justify="space-between" align="center">
+        <PageTitle>Deployment {deployment.name}</PageTitle>
+        <Badge size="md" color={deployment.active ? 'green' : 'red'}>
+          {deployment.active ? 'Active' : 'Inactive'}
+        </Badge>
+      </Group>
+      <Group>
+        <Button
+          leftSection={<IconEdit size={16} />}
+          component={Link}
+          href={`/app/deployments/${deployment.id}/edit`}
+          variant="light"
+        >
+          Edit Deployment
+        </Button>
+      </Group>
+      <Grid>
+        <Grid.Col span={12}>
+          <DeploymentDetailCard icon={WeaveIcon} title="Endpoint Details">
+            <Table>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Td>Endpoint</Table.Td>
+                  <Table.Td>
+                    {serverUrl}{' '}
+                    <CopyButton value={serverUrl}>
+                      {({ copied, copy }) => (
+                        <ActionIcon color="dimmed" onClick={copy} size="sm">
+                          {copied ? (
+                            <IconClipboardCheckFilled />
+                          ) : (
+                            <IconClipboard />
+                          )}
+                        </ActionIcon>
+                      )}
+                    </CopyButton>
+                  </Table.Td>
+                </Table.Tr>
+              </Table.Thead>
+            </Table>
+          </DeploymentDetailCard>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <DeploymentDetailCard icon={IconKey} title="API Key Requirements">
+            <Text size="sm" c="dimmed">
+              API Key Required: {deployment.requiresApiKey ? 'Yes' : 'No'}
+            </Text>
+          </DeploymentDetailCard>
+        </Grid.Col>
 
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <form onSubmit={handleSubmit}>
-          <Stack>
-            <TextInput
-              label="Name"
-              placeholder="Enter deployment name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              required
-            />
-
-            {!filteredProviders && <Loader />}
-            {Array.isArray(filteredProviders) && (
-              <Select
-                label="Default Provider"
-                placeholder="Select a provider"
-                value={formData.defaultProviderId}
-                onChange={(value) =>
-                  setFormData({ ...formData, defaultProviderId: value || '' })
-                }
-                data={
-                  filteredProviders.map((provider) => ({
-                    value: provider.id,
-                    label: provider.name,
-                  })) || []
-                }
-                required
-              />
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <DeploymentDetailCard icon={IconWorld} title="Supported Methods">
+            {supportedMethods.length > 0 ? (
+              <Group gap="xs">
+                {supportedMethods.map((method: string) => (
+                  <Badge key={method} variant="light">
+                    {method.toUpperCase()}
+                  </Badge>
+                ))}
+              </Group>
+            ) : (
+              <Text size="sm" c="dimmed">
+                All methods allowed.
+              </Text>
             )}
+          </DeploymentDetailCard>
+        </Grid.Col>
 
-            <Switch
-              label="Active"
-              checked={formData.active}
-              onChange={(e) =>
-                setFormData({ ...formData, active: e.currentTarget.checked })
-              }
-            />
-
-            <Switch
-              label="Requires API Key"
-              checked={formData.requiresApiKey}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  requiresApiKey: e.currentTarget.checked,
-                })
-              }
-            />
-
-            <MultiSelect
-              label="Supported HTTP Methods"
-              placeholder="Select supported methods"
-              value={formData.supportedMethods ?? []}
-              description="If you select no methods, all methods will be supported"
-              onChange={(value) =>
-                setFormData({
-                  ...formData,
-                  supportedMethods: (value ?? []) as Array<
-                    'get' | 'post' | 'put' | 'delete' | 'patch' | 'options'
-                  >,
-                })
-              }
-              data={[
-                { value: 'get', label: 'GET' },
-                { value: 'post', label: 'POST' },
-                { value: 'put', label: 'PUT' },
-                { value: 'delete', label: 'DELETE' },
-                { value: 'patch', label: 'PATCH' },
-                { value: 'options', label: 'OPTIONS' },
-              ]}
-            />
-
-            <Button type="submit" loading={inProgress}>
-              Save Changes
-            </Button>
-          </Stack>
-        </form>
-      </Card>
+        <Grid.Col span={12}>
+          <DeploymentDetailCard icon={IconApi} title="Default Provider">
+            <Text size="sm" c="dimmed">
+              {deployment.defaultProviderId && isLoadingDefaultProvider && (
+                <Loader />
+              )}
+              {defaultProvider && defaultProvider.name}
+            </Text>
+          </DeploymentDetailCard>
+        </Grid.Col>
+      </Grid>
     </Stack>
   );
 }

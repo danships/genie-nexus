@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import { Navbar } from '@lib/components/molecules/navbar';
 import { useDisclosure } from '@mantine/hooks';
+
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const session = useSession();
 
