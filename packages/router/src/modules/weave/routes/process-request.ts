@@ -64,7 +64,7 @@ export async function processRequest(
         provider,
         req,
         res,
-        Array.isArray(path) ? path.join('/') : path,
+        Array.isArray(path) ? path.join('/') : (path ?? ''),
       );
       return;
     }

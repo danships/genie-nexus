@@ -1,0 +1,8 @@
+### Weave root endpoint
+
+GET http://localhost:3000/weave/demo-deploy
+
+### Weave todos endpoint
+
+GET http://localhost:3000/weave/demo-deploy/todos
+

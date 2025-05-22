@@ -1,6 +1,8 @@
 import useSWR, { type SWRConfiguration } from 'swr';
 import { fetcher as defaultFetcher, getClient } from './swr-config';
 import { useEffect, useState } from 'react';
+import { isAxiosError } from 'axios';
+import { notifications } from '@mantine/notifications';
 export { useMatchMutate } from './use-match-mutate';
 export { getClient, SwrDefaultApiConfig, noUnwrapFetcher } from './swr-config';
 
@@ -13,8 +15,16 @@ export const useApi = <T = unknown>(
 
   useEffect(() => {
     // Make sure it gets caught by the error boundary
-    if (result.error) {
-      throw result.error;
+    if (
+      result.error &&
+      isAxiosError(result.error) &&
+      result.error.config?.method?.toLowerCase() === 'get'
+    ) {
+      notifications.show({
+        title: 'Error',
+        message: 'Data could not be retrieved.',
+        color: 'red',
+      });
     }
   }, [result.error]);
 
