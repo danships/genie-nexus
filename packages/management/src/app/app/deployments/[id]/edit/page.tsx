@@ -1,6 +1,7 @@
 import { Deployment } from '@genie-nexus/database';
 import { getEntity } from '@lib/api/server-api';
-import { DeploymentWeaveFormClientPage } from '../_page-weave-form';
+import { DeploymentWeaveFormClientPage } from './_page-weave-form';
+import { DeploymentLlmFormClientPage } from './_page-llm-form';
 
 async function getDeployment(id: string) {
   const deployment = await getEntity<Deployment>('deployments', id);
@@ -28,9 +29,15 @@ export default async function DeploymentDetailPage({
   const { id } = await params;
 
   const deployment = await getDeployment(id);
-  if (deployment.type !== 'weave') {
-    throw new Error('Deployment is not a weave deployment.');
-  }
 
-  return <DeploymentWeaveFormClientPage deployment={deployment} />;
+  return (
+    <>
+      {deployment.type === 'weave' && (
+        <DeploymentWeaveFormClientPage deployment={deployment} />
+      )}
+      {deployment.type === 'llm' && (
+        <DeploymentLlmFormClientPage deployment={deployment} />
+      )}
+    </>
+  );
 }

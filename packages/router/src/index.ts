@@ -1,6 +1,6 @@
 import { isProduction } from './core/utils/is-production';
 import {
-  generatePublicApiKey as generatePublicApiKeyFunction,
+  generateLlmApiKey as generatePublicApiKeyFunction,
   generateManagementApiKey as generateManagementApiKeyFunction,
 } from './modules/api-key/generate-api-key';
 import { startServer as startServerFunction } from './server';

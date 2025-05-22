@@ -4,6 +4,7 @@ import { checkApiKey } from './check-api-key';
 import { API_KEY_PREFIX } from '../constants';
 import { ApplicationError } from '../../../core/errors/application-error';
 import { getConfiguration } from '../../../core/configuration/get';
+import { logger } from '../../../core/logger';
 
 export const checkApiKeyOrUser =
   (type: ApiKey['type']) =>
@@ -27,6 +28,7 @@ export const checkApiKeyOrUser =
 
     const session = await getSession(req, res);
     if (!session?.user) {
+      logger.warn('Unauthorized, no user in session.');
       throw new ApplicationError('Unauthorized', 401);
     }
 
