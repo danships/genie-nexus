@@ -1,7 +1,7 @@
 import { Deployment } from '@genie-nexus/database';
 import { getEntity } from '@lib/api/server-api';
-import { DeploymentLlmFormClientPage } from './_page-llm-form';
 import { DeploymentWeaveDetailClientPage } from './_page-weave';
+import { DeploymentLlmDetailClientPage } from './_page-llm';
 
 async function getDeployment(id: string) {
   const deployment = await getEntity<Deployment>('deployments', id);
@@ -33,7 +33,7 @@ export default async function DeploymentDetailPage({
   return (
     <>
       {deployment.type === 'llm' && (
-        <DeploymentLlmFormClientPage deployment={deployment} />
+        <DeploymentLlmDetailClientPage deployment={deployment} />
       )}
       {deployment.type === 'weave' && (
         <DeploymentWeaveDetailClientPage deployment={deployment} />

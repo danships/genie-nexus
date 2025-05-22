@@ -9,9 +9,10 @@ import {
   Switch,
   Button,
   Select,
+  Group,
 } from '@mantine/core';
 import { useApi, useCudApi } from '@lib/api/use-api';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   ENDPOINT_DEPLOYMENTS_OVERVIEW,
   ENDPOINT_PROVIDERS_OVERVIEW,
@@ -20,18 +21,35 @@ import { Deployment, Provider } from '@genie-nexus/database';
 import { DeploymentLLMApi } from '@genie-nexus/types';
 import { notifications } from '@mantine/notifications';
 import { Loader } from '@lib/components/atoms/loader';
+import { useForm } from '@mantine/form';
+import { IconArrowLeft } from '@tabler/icons-react';
+import Link from 'next/link';
 
 type Properties = {
   deployment: Deployment;
 };
 
 export function DeploymentLlmFormClientPage({ deployment }: Properties) {
-  const [formData, setFormData] = useState<DeploymentLLMApi>({
-    type: 'llm',
-    name: deployment.name,
-    active: deployment.active,
-    defaultProviderId: deployment.defaultProviderId,
-    model: deployment.type === 'llm' ? deployment.model : '',
+  const form = useForm<DeploymentLLMApi>({
+    initialValues: {
+      type: 'llm',
+      name: deployment.name,
+      active: deployment.active,
+      defaultProviderId: deployment.defaultProviderId,
+      model: deployment.type === 'llm' ? deployment.model : '',
+    },
+    validate: {
+      name: (value) => {
+        if (!value.trim()) return 'Name is required';
+        if (!/^[a-zA-Z0-9-]+$/.test(value)) {
+          return 'Name can only contain letters, numbers, and dashes';
+        }
+        return null;
+      },
+      model: (value) => (!value.trim() ? 'Model is required' : null),
+      defaultProviderId: (value) =>
+        !value ? 'Default provider is required' : null,
+    },
   });
 
   const { patch, inProgress } = useCudApi();
@@ -47,12 +65,11 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
     );
   }, [providers]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (values: DeploymentLLMApi) => {
     try {
       await patch<{ data: Deployment }, DeploymentLLMApi>(
         `/collections/deployments/${deployment.id}`,
-        formData,
+        values,
       );
       void mutate();
       notifications.show({
@@ -72,32 +89,36 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
   return (
     <Stack>
       <Title order={1}>LLM Deployment Details</Title>
+      <Group>
+        <Button
+          leftSection={<IconArrowLeft size={16} />}
+          component={Link}
+          href={`/app/deployments/${deployment.id}`}
+          variant="subtle"
+          size="sm"
+        >
+          Back to Details
+        </Button>
+      </Group>
       <Text c="dimmed" mb="lg">
         Configure your LLM deployment settings
       </Text>
 
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <Stack>
             <TextInput
               label="Name"
               placeholder="Enter deployment name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
               required
+              {...form.getInputProps('name')}
             />
 
             <TextInput
               label="Model"
               placeholder="Enter model name"
-              value={formData.model}
-              onChange={(e) =>
-                setFormData({ ...formData, model: e.target.value })
-              }
               required
+              {...form.getInputProps('model')}
             />
 
             {!filteredProviders && <Loader />}
@@ -105,26 +126,20 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
               <Select
                 label="Default Provider"
                 placeholder="Select a provider"
-                value={formData.defaultProviderId}
-                onChange={(value) =>
-                  setFormData({ ...formData, defaultProviderId: value || '' })
-                }
+                required
+                {...form.getInputProps('defaultProviderId')}
                 data={
                   filteredProviders.map((provider) => ({
                     value: provider.id,
                     label: provider.name,
                   })) || []
                 }
-                required
               />
             )}
 
             <Switch
               label="Active"
-              checked={formData.active}
-              onChange={(e) =>
-                setFormData({ ...formData, active: e.currentTarget.checked })
-              }
+              {...form.getInputProps('active', { type: 'checkbox' })}
             />
 
             <Button type="submit" loading={inProgress}>

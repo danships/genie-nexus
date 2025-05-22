@@ -24,7 +24,7 @@ export const NewDeploymentPage = disableSSR(function () {
         DeploymentLLMApi
       >('/collections/deployments', {
         type: 'llm',
-        name: 'New LLM Deployment',
+        name: `new-llm-deployment-${Date.now() % 1000000}`,
         active: true,
         defaultProviderId: '', // we accept that it is empty for now
         model: 'to be filled in',

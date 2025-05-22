@@ -81,6 +81,7 @@ const baseApiKeySchemaApi = z.object({
   label: z.string(),
   hash: z.string(),
   active: z.boolean(),
+  createdAt: z.string().datetime(),
 });
 
 export const llmApiKeySchemaApi = baseApiKeySchemaApi.extend({

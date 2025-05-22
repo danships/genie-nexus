@@ -1,0 +1,248 @@
+'use client';
+
+import { Provider } from '@genie-nexus/database';
+import { DeploymentLLMApi } from '@genie-nexus/types';
+import { useApi } from '@lib/api/use-api';
+import { CodeHighlight } from '@lib/components/atoms/code-highlight';
+import { Loader } from '@lib/components/atoms/loader';
+import { PageTitle } from '@lib/components/atoms/page-title';
+import { DeploymentDetailCard } from '@lib/components/molecules/deployment-detail-card';
+import { useServerUrl } from '@lib/hooks/use-server-url';
+import {
+  Stack,
+  Group,
+  Text,
+  Badge,
+  Grid,
+  Button,
+  Table,
+  CopyButton,
+  ActionIcon,
+  Modal,
+  Tabs,
+} from '@mantine/core';
+import {
+  IconKey,
+  IconApi,
+  IconEdit,
+  IconClipboard,
+  IconClipboardCheckFilled,
+  IconBrain,
+  IconCode,
+} from '@tabler/icons-react';
+import Link from 'next/link';
+import { useState } from 'react';
+
+type Properties = {
+  deployment: DeploymentLLMApi & { id: string };
+};
+
+export function DeploymentLlmDetailClientPage({ deployment }: Properties) {
+  const { data: defaultProvider, isLoading: isLoadingDefaultProvider } =
+    useApi<Provider>(() =>
+      deployment.defaultProviderId
+        ? `/collections/providers/${deployment.defaultProviderId}`
+        : false,
+    );
+
+  const serverUrl = useServerUrl(`/api/v1`);
+  const [sdkModalOpen, setSdkModalOpen] = useState(false);
+
+  const jsExample = `import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  baseURL: '${serverUrl}',
+  apiKey: 'your-api-key-here'
+});
+
+const completion = await openai.chat.completions.create({
+  model: '${deployment.name}',
+  messages: [
+    { role: 'user', content: 'Hello, how are you?' }
+  ]
+});
+
+console.log(completion.choices[0].message);`;
+
+  const tsExample = `import OpenAI from 'openai';
+import { ChatCompletionMessageParam } from 'openai/resources/chat';
+
+const openai = new OpenAI({
+  baseURL: '${serverUrl}',
+  apiKey: 'your-api-key-here'
+});
+
+const messages: ChatCompletionMessageParam[] = [
+  { role: 'user', content: 'Hello, how are you?' }
+];
+
+const completion = await openai.chat.completions.create({
+  model: '${deployment.name}',
+  messages
+});
+
+console.log(completion.choices[0].message);`;
+
+  const pythonExample = `from openai import OpenAI
+
+client = OpenAI(
+    base_url='${serverUrl}',
+    api_key='your-api-key-here'
+)
+
+completion = client.chat.completions.create(
+    model='${deployment.name}',
+    messages=[
+        {'role': 'user', 'content': 'Hello, how are you?'}
+    ]
+)
+
+print(completion.choices[0].message)`;
+
+  return (
+    <Stack gap="lg">
+      <Group justify="space-between" align="center">
+        <PageTitle>Deployment {deployment.name}</PageTitle>
+        <Badge size="md" color={deployment.active ? 'green' : 'red'}>
+          {deployment.active ? 'Active' : 'Inactive'}
+        </Badge>
+      </Group>
+      <Group>
+        <Button
+          leftSection={<IconEdit size={16} />}
+          component={Link}
+          href={`/app/deployments/${deployment.id}/edit`}
+          variant="light"
+        >
+          Edit Deployment
+        </Button>
+      </Group>
+      <Grid>
+        <Grid.Col span={12}>
+          <DeploymentDetailCard icon={IconBrain} title="Endpoint Details">
+            <Table>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Td>OpenAI Base URL</Table.Td>
+                  <Table.Td>
+                    {serverUrl}{' '}
+                    <CopyButton value={serverUrl}>
+                      {({ copied, copy }) => (
+                        <ActionIcon color="dimmed" onClick={copy} size="sm">
+                          {copied ? (
+                            <IconClipboardCheckFilled />
+                          ) : (
+                            <IconClipboard />
+                          )}
+                        </ActionIcon>
+                      )}
+                    </CopyButton>
+                  </Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>Model</Table.Td>
+                  <Table.Td>{deployment.name}</Table.Td>
+                </Table.Tr>
+              </Table.Thead>
+            </Table>
+            <Button
+              leftSection={<IconCode size={16} />}
+              onClick={() => setSdkModalOpen(true)}
+              variant="light"
+              mt="md"
+            >
+              View SDK Examples
+            </Button>
+          </DeploymentDetailCard>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <DeploymentDetailCard icon={IconKey} title="Model Details">
+            <Text size="sm" c="dimmed">
+              Model: {deployment.model}
+            </Text>
+          </DeploymentDetailCard>
+        </Grid.Col>
+
+        <Grid.Col span={12}>
+          <DeploymentDetailCard icon={IconApi} title="Default Provider">
+            <Text size="sm" c="dimmed">
+              {deployment.defaultProviderId && isLoadingDefaultProvider && (
+                <Loader />
+              )}
+              {defaultProvider && defaultProvider.name}
+            </Text>
+          </DeploymentDetailCard>
+        </Grid.Col>
+      </Grid>
+
+      <Modal
+        opened={sdkModalOpen}
+        onClose={() => setSdkModalOpen(false)}
+        title="SDK Examples"
+        size="xl"
+      >
+        <Tabs defaultValue="typescript">
+          <Tabs.List>
+            <Tabs.Tab value="typescript">TypeScript</Tabs.Tab>
+            <Tabs.Tab value="javascript">JavaScript</Tabs.Tab>
+            <Tabs.Tab value="python">Python</Tabs.Tab>
+          </Tabs.List>
+
+          <Tabs.Panel value="typescript" pt="md">
+            <CodeHighlight language="typescript" code={tsExample} />
+            <CopyButton value={tsExample}>
+              {({ copied, copy }) => (
+                <Button
+                  variant="light"
+                  leftSection={
+                    copied ? <IconClipboardCheckFilled /> : <IconClipboard />
+                  }
+                  onClick={copy}
+                  mt="md"
+                >
+                  {copied ? 'Copied!' : 'Copy Code'}
+                </Button>
+              )}
+            </CopyButton>
+          </Tabs.Panel>
+
+          <Tabs.Panel value="javascript" pt="md">
+            <CodeHighlight language="js" code={jsExample} />
+            <CopyButton value={jsExample}>
+              {({ copied, copy }) => (
+                <Button
+                  variant="light"
+                  leftSection={
+                    copied ? <IconClipboardCheckFilled /> : <IconClipboard />
+                  }
+                  onClick={copy}
+                  mt="md"
+                >
+                  {copied ? 'Copied!' : 'Copy Code'}
+                </Button>
+              )}
+            </CopyButton>
+          </Tabs.Panel>
+
+          <Tabs.Panel value="python" pt="md">
+            <CodeHighlight language="python" code={pythonExample} />
+            <CopyButton value={pythonExample}>
+              {({ copied, copy }) => (
+                <Button
+                  variant="light"
+                  leftSection={
+                    copied ? <IconClipboardCheckFilled /> : <IconClipboard />
+                  }
+                  onClick={copy}
+                  mt="md"
+                >
+                  {copied ? 'Copied!' : 'Copy Code'}
+                </Button>
+              )}
+            </CopyButton>
+          </Tabs.Panel>
+        </Tabs>
+      </Modal>
+    </Stack>
+  );
+}

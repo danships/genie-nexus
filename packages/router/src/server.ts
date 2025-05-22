@@ -6,6 +6,7 @@ import express, {
 } from 'express';
 import { initialize as initializeChatCompletions } from './modules/chat-completions/routes';
 import { initialize as initializeWeave } from './modules/weave/routes';
+import { initialize as initializeApiKey } from './modules/api-key/routes';
 import { initialize as initializeDb } from './core/db';
 import { logger, setLoggerLevel } from './core/logger';
 import { isProduction } from './core/utils/is-production';
@@ -44,6 +45,7 @@ export async function startServer(
 
   app.use(initializeChatCompletions());
   app.use(initializeWeave());
+  app.use(initializeApiKey());
 
   const { initialize: initializeAuthentication } = await import(
     './modules/auth/next-auth/initialize.mjs'
@@ -56,7 +58,7 @@ export async function startServer(
   }
 
   app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-    logger.error('Error:', { err: error });
+    logger.error('Error:', { err: `${error}` });
 
     if (res.headersSent) {
       return next(error);

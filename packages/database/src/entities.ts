@@ -41,6 +41,7 @@ export const ApiKey: Collection = {
   relations: [],
   template: {},
   filterSortFields: {
+    label: 'string',
     key: 'string',
     tenantId: 'string',
   },

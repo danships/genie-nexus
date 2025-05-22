@@ -10,6 +10,9 @@ export const Navbar = () => {
       <UnstyledButton component={Link} href="/app/providers">
         <Text fw={500}>Providers</Text>
       </UnstyledButton>
+      <UnstyledButton component={Link} href="/app/api-keys">
+        <Text fw={500}>API Keys</Text>
+      </UnstyledButton>
     </Stack>
   );
 };
