@@ -1,7 +1,7 @@
 'use client';
 
 import { Provider } from '@genie-nexus/database';
-import { useApi } from '@lib/api/use-api';
+import { useApi, useCudApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';
 import { Loader } from '@lib/components/atoms/loader';
 import {
@@ -12,16 +12,25 @@ import {
   Title,
   Select,
   Button,
+  Modal,
 } from '@mantine/core';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
 import Link from 'next/link';
+import { notifications } from '@mantine/notifications';
 
 export const ProvidersClientPage = disableSSR(function () {
   const router = useRouter();
   const [filterType, setFilterType] = useState<string | null>(null);
-  const { data, isLoading } = useApi<Provider[]>(ENDPOINT_PROVIDERS_OVERVIEW);
+  const { data, isLoading, mutate } = useApi<Provider[]>(
+    ENDPOINT_PROVIDERS_OVERVIEW,
+  );
+  const { patch } = useCudApi();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [providerToDelete, setProviderToDelete] = useState<Provider | null>(
+    null,
+  );
 
   if (isLoading) {
     return <Loader />;
@@ -31,6 +40,42 @@ export const ProvidersClientPage = disableSSR(function () {
   const filteredData = filterType
     ? data?.filter((provider) => provider.type === filterType)
     : data;
+
+  const handleDelete = async () => {
+    if (!providerToDelete) return;
+
+    try {
+      await patch<{ data: Provider }>(
+        `/collections/providers/${providerToDelete.id}`,
+        {
+          isDeleted: true,
+          deletedAt: new Date().toISOString(),
+        },
+      );
+      void mutate();
+      notifications.show({
+        title: 'Success',
+        message: 'Provider deleted successfully',
+        color: 'green',
+      });
+    } catch (err) {
+      console.error('Failed to delete provider:', err);
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to delete provider',
+        color: 'red',
+      });
+    } finally {
+      setDeleteModalOpen(false);
+      setProviderToDelete(null);
+    }
+  };
+
+  const openDeleteModal = (provider: Provider, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setProviderToDelete(provider);
+    setDeleteModalOpen(true);
+  };
 
   return (
     <>
@@ -63,6 +108,7 @@ export const ProvidersClientPage = disableSSR(function () {
             <Table.Th>Name</Table.Th>
             <Table.Th>Type</Table.Th>
             <Table.Th>Details</Table.Th>
+            <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -110,10 +156,39 @@ export const ProvidersClientPage = disableSSR(function () {
                   )}
                 </Group>
               </Table.Td>
+              <Table.Td>
+                <Button
+                  variant="light"
+                  color="red"
+                  size="xs"
+                  onClick={(e) => openDeleteModal(provider, e)}
+                >
+                  Delete
+                </Button>
+              </Table.Td>
             </Table.Tr>
           ))}
         </Table.Tbody>
       </Table>
+
+      <Modal
+        opened={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setProviderToDelete(null);
+        }}
+        title="Delete Provider"
+      >
+        <Text>Are you sure you want to delete {providerToDelete?.name}?</Text>
+        <Group justify="flex-end" mt="md">
+          <Button variant="light" onClick={() => setDeleteModalOpen(false)}>
+            Cancel
+          </Button>
+          <Button color="red" size="xs" onClick={() => void handleDelete()}>
+            Delete
+          </Button>
+        </Group>
+      </Modal>
     </>
   );
 });
