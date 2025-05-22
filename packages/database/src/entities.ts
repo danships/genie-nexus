@@ -8,6 +8,7 @@ export const Provider: Collection = {
   filterSortFields: {
     name: 'string',
     tenantId: 'string',
+    isDeleted: 'boolean',
   },
   hooks: [
     {
@@ -31,6 +32,7 @@ export const Deployment: Collection = {
   filterSortFields: {
     name: 'string',
     tenantId: 'string',
+    isDeleted: 'boolean',
   },
 };
 

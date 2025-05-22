@@ -18,7 +18,7 @@ export async function getDeploymentByName(
     throw new Error('Deployment not found');
   }
 
-  if (!deployment.active) {
+  if (!deployment.active || deployment.isDeleted) {
     throw new Error('Deployment is not active');
   }
 

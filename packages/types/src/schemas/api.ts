@@ -14,6 +14,8 @@ export const headerDefinitionSchema = z.object({
 // Provider schemas
 const baseProviderSchema = z.object({
   name: z.string(),
+  isDeleted: z.boolean().optional(),
+  deletedAt: z.string().datetime().optional(),
 });
 
 export const openAIProviderSchemaApi = baseProviderSchema.extend({
@@ -52,6 +54,8 @@ const baseDeploymentSchemaApi = z.object({
   name: z.string(),
   active: z.boolean(),
   defaultProviderId: z.string(),
+  isDeleted: z.boolean().optional(),
+  deletedAt: z.string().datetime().optional(),
 });
 
 export const deploymentLLMSchemaApi = baseDeploymentSchemaApi.extend({
