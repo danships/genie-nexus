@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import { Navbar } from '@lib/components/molecules/navbar';
 import { useDisclosure } from '@mantine/hooks';
+import { AnimatedBackground } from '@lib/components/molecules/animated-background';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const session = useSession();
@@ -27,6 +28,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           baseURL: '/api/v1',
         }}
       >
+        <AnimatedBackground />
         <AppShell
           header={{ height: 60 }}
           navbar={{

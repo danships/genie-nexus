@@ -1,0 +1,99 @@
+.background {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1000;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.element {
+  position: absolute;
+  transition: all 0.5s ease;
+}
+
+/* Animation classes */
+.glow {
+  animation-name: glow;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+.move {
+  animation-name: move;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+.color {
+  animation-name: colorShift;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+.pulse {
+  animation-name: pulse;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+.rotate {
+  animation-name: rotate;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+/* Keyframe animations */
+@keyframes glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(120, 80, 255, 0));
+    transform: scale(1) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(120, 80, 255, 0.8));
+    transform: scale(1.2) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes move {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-20px) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes colorShift {
+  0%,
+  100% {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  50% {
+    filter: hue-rotate(180deg) brightness(1.5);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: scale(1.5) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(var(--rotation, 0deg));
+  }
+  to {
+    transform: rotate(calc(var(--rotation, 0deg) + 360deg));
+  }
+}
+
+/* CSS Variables for theming have been moved to main.css */
