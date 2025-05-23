@@ -1,3 +1,19 @@
+:root {
+  --icon-color: #64748b;
+  --highlight-color: #8b5cf6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --icon-color: #94a3b8;
+    --highlight-color: #a78bfa;
+  }
+}
+
 .is-clickable {
   cursor: pointer;
+}
+
+.is-transparent {
+  background-color: transparent;
 }
