@@ -46,8 +46,6 @@ export async function getEntities<T extends LocalBaseEntity>(
 export async function getConfiguration(): Promise<
   ConfigurationResponse['data']
 > {
-  'use cache';
-
   const configurationResponse = await fetch(
     `${COLLECTION_API_URL}/configuration`,
   );
