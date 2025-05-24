@@ -1,4 +1,4 @@
-import { getDeploymentRepository } from '../../core/db';
+import { getDeploymentRepository } from '../../core/db/index.js';
 import type { Deployment } from '@genie-nexus/database';
 
 export async function getDeploymentByName(

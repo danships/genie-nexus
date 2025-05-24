@@ -4,18 +4,18 @@ import express, {
   type Request,
   type Response,
 } from 'express';
-import { initialize as initializeChatCompletions } from './modules/chat-completions/routes';
-import { initialize as initializeWeave } from './modules/weave/routes';
-import { initialize as initializeApiKey } from './modules/api-key/routes';
-import { initialize as initializeConfiguration } from './modules/configuration/routes';
-import { initialize as initializeDb } from './core/db';
-import { logger, setLoggerLevel } from './core/logger';
-import { isProduction } from './core/utils/is-production';
+import { initialize as initializeChatCompletions } from './modules/chat-completions/routes/index.js';
+import { initialize as initializeWeave } from './modules/weave/routes/index.js';
+import { initialize as initializeApiKey } from './modules/api-key/routes/index.js';
+import { initialize as initializeConfiguration } from './modules/configuration/routes/index.js';
+import { initialize as initializeDb } from './core/db/index.js';
+import { logger, setLoggerLevel } from './core/logger.js';
+import { isProduction } from './core/utils/is-production.js';
 import {
   type Configuration,
   setConfiguration,
-} from './modules/configuration/get-configuration';
-import { initializeUI } from './ui/initialize';
+} from './modules/configuration/get-configuration.js';
+import { initializeUI } from './ui/initialize.cjs';
 
 export type StartServerOptions = {
   port: number;
@@ -53,7 +53,7 @@ export async function startServer(
   app.use(initializeConfiguration());
 
   const { initialize: initializeAuthentication } = await import(
-    './modules/auth/next-auth/initialize.mjs'
+    './modules/auth/next-auth/initialize.js'
   );
   await initializeAuthentication();
 
@@ -102,7 +102,7 @@ export async function startServer(
 // This checks if this file is being run directly (e.g. with `node server.ts`)
 // rather than being imported as a module by another file.
 // If true, it means this is the entry point of the application.
-if (require.main === module) {
+if (import.meta.url === new URL(process.argv[1] ?? '', 'file:').href) {
   void (async function () {
     const { environment } = await import('./core/environment.js');
     await startServer({

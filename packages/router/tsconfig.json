@@ -7,10 +7,11 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/modules/auth/next-auth/initialize.mts",
-    "src/modules/auth/next-auth/get-credentials-provider.mts",
-    "src/modules/auth/next-auth/get-next-auth-config.mts",
-    "src/modules/auth/next-auth/types.mts",
-    "src/modules/auth/next-auth/get-session.mts"
+    "src/modules/auth/next-auth/initialize.ts",
+    "src/modules/auth/next-auth/get-credentials-provider.ts",
+    "src/modules/auth/next-auth/get-next-auth-config.ts",
+    "src/modules/auth/next-auth/types.ts",
+    "src/modules/auth/next-auth/get-session.ts",
+    "src/ui/initialize.cts"
   ]
 }

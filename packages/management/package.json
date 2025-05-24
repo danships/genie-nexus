@@ -2,11 +2,12 @@
   "name": "@genie-nexus/management",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "PORT=3001 next dev",
     "build": "AUTH_SECRET=\"\" next build",
     "start": "next start",
     "lint": "next lint"
   },
+  "type": "module",
   "lint-staged": {
     "*.ts": [
       "eslint --max-warnings 0 --no-ignore",
@@ -28,7 +29,7 @@
     "@mantine/core": "^7.5.0",
     "@mantine/form": "^8.0.1",
     "@mantine/hooks": "^7.17.5",
-    "@mantine/notifications": "^8.0.1",
+    "@mantine/notifications": "^7.17.7",
     "@tabler/icons-react": "^3.31.0",
     "argon2": "^0.41.1",
     "axios": "^1.9.0",

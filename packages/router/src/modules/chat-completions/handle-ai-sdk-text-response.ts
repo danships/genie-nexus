@@ -1,5 +1,5 @@
 import type { GenerateTextResult } from 'ai';
-import type { OpenAIChatCompletionResponse } from './types/openai';
+import type { OpenAIChatCompletionResponse } from './types/openai.js';
 import type { Response } from 'express';
 
 export function handleAiSdkTextResponse(

@@ -1,4 +1,4 @@
-import { logger } from '../logger';
+import { logger } from '../logger.js';
 import { promises as dns } from 'dns';
 
 // List of private IP ranges

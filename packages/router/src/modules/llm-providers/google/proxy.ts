@@ -1,5 +1,5 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import type { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai';
+import type { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai.js';
 
 import type { GenerateTextResult } from 'ai';
 import { generateText, streamText } from 'ai';

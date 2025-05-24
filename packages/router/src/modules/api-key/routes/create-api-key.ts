@@ -4,8 +4,8 @@ import {
   generateLlmApiKey,
   generateManagementApiKey,
   generateWeaveApiKey,
-} from '../generate-api-key';
-import { getTenantFromResponse } from '../../tenants/get-tenant-from-response';
+} from '../generate-api-key.js';
+import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
 
 const requestSchema = z.object({
   label: z.string(),

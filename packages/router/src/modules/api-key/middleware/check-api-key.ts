@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
 import type { ApiKey } from '@genie-nexus/database';
-import { ApiKeyValidationError } from '../errors/api-key-validation-error';
-import { ApiKeyNotPresentError } from '../errors/api-key-not-present-error';
-import { checkApiKeyInRequest } from '../check-api-key-in-request';
+import { ApiKeyValidationError } from '../errors/api-key-validation-error.js';
+import { ApiKeyNotPresentError } from '../errors/api-key-not-present-error.js';
+import { checkApiKeyInRequest } from '../check-api-key-in-request.js';
 
 export const checkApiKey =
   (type: ApiKey['type']) =>

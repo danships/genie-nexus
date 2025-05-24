@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from 'express';
 import type { ApiKey } from '@genie-nexus/database';
-import { checkApiKey } from './check-api-key';
-import { API_KEY_PREFIX } from '../constants';
-import { ApplicationError } from '../../../core/errors/application-error';
-import { getConfiguration } from '../../configuration/get-configuration';
-import { logger } from '../../../core/logger';
+import { checkApiKey } from './check-api-key.js';
+import { API_KEY_PREFIX } from '../constants.js';
+import { ApplicationError } from '../../../core/errors/application-error.js';
+import { getConfiguration } from '../../configuration/get-configuration.js';
+import { logger } from '../../../core/logger.js';
 
 export const checkApiKeyOrUser =
   (type: ApiKey['type']) =>
@@ -24,7 +24,7 @@ export const checkApiKeyOrUser =
       return checkApiKey(type)(req, res, next);
     }
 
-    const { getSession } = await import('../../auth/next-auth/get-session.mjs');
+    const { getSession } = await import('../../auth/next-auth/get-session.js');
 
     const session = await getSession(req, res);
     if (!session?.user) {

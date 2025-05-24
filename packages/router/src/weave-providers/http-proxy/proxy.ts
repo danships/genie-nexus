@@ -3,8 +3,8 @@ import type {
   Response as ExpressResponse,
 } from 'express';
 import type { WeaveHttpProxyProvider } from '@genie-nexus/types';
-import { logger } from '../../core/logger';
-import { validateUrlDestination } from '../../core/utils/validate-url-destination';
+import { logger } from '../../core/logger.js';
+import { validateUrlDestination } from '../../core/utils/validate-url-destination.js';
 
 export const NOT_ALLOWED_REQUEST_HEADERS = ['host', 'authorization'];
 

@@ -1,13 +1,13 @@
 import type { Request, Response } from 'express';
-import { getDeploymentByName } from '../../deployments/get-deployment-by-name';
-import { executeForHttp as executeDeploymentForHttp } from '../../deployments/execute';
-import { generateStaticResponse } from '../../../weave-providers/static/generate-static-response';
-import { checkApiKeyInRequest } from '../../api-key/check-api-key-in-request';
-import { ApiKeyNotPresentError } from '../../api-key/errors/api-key-not-present-error';
-import { ApiKeyValidationError } from '../../api-key/errors/api-key-validation-error';
-import { proxyRequest } from '../../../weave-providers/http-proxy/proxy';
-import type { ResponseLocalsTenant } from '../../tenants/middleware/types';
-import { getTenantFromResponse } from '../../tenants/get-tenant-from-response';
+import { getDeploymentByName } from '../../deployments/get-deployment-by-name.js';
+import { executeForHttp as executeDeploymentForHttp } from '../../deployments/execute.js';
+import { generateStaticResponse } from '../../../weave-providers/static/generate-static-response.js';
+import { checkApiKeyInRequest } from '../../api-key/check-api-key-in-request.js';
+import { ApiKeyNotPresentError } from '../../api-key/errors/api-key-not-present-error.js';
+import { ApiKeyValidationError } from '../../api-key/errors/api-key-validation-error.js';
+import { proxyRequest } from '../../../weave-providers/http-proxy/proxy.js';
+import type { ResponseLocalsTenant } from '../../tenants/middleware/types.js';
+import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
 
 export async function processRequest(
   req: Request<{

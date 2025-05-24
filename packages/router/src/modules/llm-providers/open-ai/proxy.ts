@@ -1,7 +1,7 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import type { GenerateTextResult, StreamTextResult } from 'ai';
 import { generateText, streamText } from 'ai';
-import type { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai';
+import type { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai.js';
 
 // TODO: Make this configurable
 const ENDPOINT = 'https://openrouter.ai/api/v1';

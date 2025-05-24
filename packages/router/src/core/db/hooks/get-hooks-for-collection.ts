@@ -1,10 +1,10 @@
 import type { Hooks } from 'supersave';
-import get from './implementations/get';
-import getById from './implementations/get-by-id';
-import entityTransform from './implementations/entity-transform';
-import updateBefore from './implementations/update-before';
-import createBefore from './implementations/create-before';
-import deleteBefore from './implementations/delete-before';
+import get from './implementations/get.js';
+import getById from './implementations/get-by-id.js';
+import entityTransform from './implementations/entity-transform.js';
+import updateBefore from './implementations/update-before.js';
+import createBefore from './implementations/create-before.js';
+import deleteBefore from './implementations/delete-before.js';
 
 export function getHooksForCollection(): Hooks {
   return {

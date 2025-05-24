@@ -1,16 +1,16 @@
-import { getApiKeyRepository } from '../../core/db';
+import { getApiKeyRepository } from '../../core/db/index.js';
 import type { ApiKey } from '@genie-nexus/database';
 import {
   API_KEY_PREFIX,
   API_KEY_SILENT_LLM_PREFIX,
   ID_SEPARATOR,
-} from './constants';
-import { generateApiKey } from './secrets/generate-api-key';
+} from './constants.js';
+import { generateApiKey } from './secrets/generate-api-key.js';
 import type {
   LlmApiKey,
   ManagementApiKey,
   WeaveApiKey,
-} from '../../../../types/dist';
+} from '@genie-nexus/types';
 
 const KEY_PREVIEW_LENGTH = 12;
 

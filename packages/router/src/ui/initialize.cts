@@ -3,6 +3,11 @@ import next from 'next';
 import { parse } from 'url';
 import path from 'path';
 
+/**
+ * This file is a .ctj file on purpose, as a .(m)ts the
+ * next import was not working correctly.
+ */
+
 const managementPath = path.dirname(
   require.resolve('@genie-nexus/management/package.json'),
 );
