@@ -25,13 +25,14 @@ import { Loader } from '@lib/components/atoms/loader';
 import Link from 'next/link';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
+import { useSWRConfig } from 'swr';
 
 type Properties = {
   deployment: Deployment;
 };
 
 export function DeploymentWeaveFormClientPage({ deployment }: Properties) {
-  const form = useForm<DeploymentWeaveApi>({
+  const form = useForm<Omit<DeploymentWeaveApi, 'id'>>({
     initialValues: {
       type: 'weave',
       name: deployment.name,
@@ -56,7 +57,7 @@ export function DeploymentWeaveFormClientPage({ deployment }: Properties) {
   });
 
   const { patch, inProgress } = useCudApi();
-  const { mutate } = useApi(ENDPOINT_DEPLOYMENTS_OVERVIEW);
+  const { mutate } = useSWRConfig();
 
   const { data: providers } = useApi<Provider[]>(ENDPOINT_PROVIDERS_OVERVIEW);
   const filteredProviders = useMemo(() => {
@@ -68,13 +69,13 @@ export function DeploymentWeaveFormClientPage({ deployment }: Properties) {
     );
   }, [providers]);
 
-  const handleSubmit = async (values: DeploymentWeaveApi) => {
+  const handleSubmit = async (values: Omit<DeploymentWeaveApi, 'id'>) => {
     try {
-      await patch<{ data: Deployment }, DeploymentWeaveApi>(
+      await patch<{ data: Deployment }, Omit<DeploymentWeaveApi, 'id'>>(
         `/collections/deployments/${deployment.id}`,
         values,
       );
-      void mutate();
+      void mutate(ENDPOINT_DEPLOYMENTS_OVERVIEW);
       notifications.show({
         title: 'Success',
         message: 'Deployment updated successfully',

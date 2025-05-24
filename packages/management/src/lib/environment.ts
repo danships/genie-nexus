@@ -15,4 +15,8 @@ export const environment = cleanEnv(process.env, {
     choices: ['none', 'next-auth'],
     default: 'next-auth',
   }),
+  LOG_LEVEL: str({
+    choices: ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'],
+    default: 'INFO',
+  }),
 });

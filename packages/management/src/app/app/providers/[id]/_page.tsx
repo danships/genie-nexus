@@ -25,7 +25,6 @@ const TAB_OPENAI = 'openai';
 
 type Properties = {
   provider: Provider;
-  refreshData: () => Promise<void>;
   created?: boolean;
 };
 

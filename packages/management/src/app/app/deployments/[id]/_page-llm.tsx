@@ -6,7 +6,7 @@ import { useApi } from '@lib/api/use-api';
 import { CodeHighlight } from '@lib/components/atoms/code-highlight';
 import { Loader } from '@lib/components/atoms/loader';
 import { PageTitle } from '@lib/components/atoms/page-title';
-import { DeploymentDetailCard } from '@lib/components/molecules/deployment-detail-card';
+import { DetailCard } from '@lib/components/molecules/detail-card';
 import { useServerUrl } from '@lib/hooks/use-server-url';
 import {
   Stack,
@@ -119,7 +119,7 @@ print(completion.choices[0].message)`;
       </Group>
       <Grid>
         <Grid.Col span={12}>
-          <DeploymentDetailCard icon={IconBrain} title="Endpoint Details">
+          <DetailCard icon={IconBrain} title="Endpoint Details">
             <Table>
               <Table.Thead>
                 <Table.Tr>
@@ -153,25 +153,25 @@ print(completion.choices[0].message)`;
             >
               View SDK Examples
             </Button>
-          </DeploymentDetailCard>
+          </DetailCard>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
-          <DeploymentDetailCard icon={IconKey} title="Model Details">
+          <DetailCard icon={IconKey} title="Model Details">
             <Text size="sm" c="dimmed">
               Model: {deployment.model}
             </Text>
-          </DeploymentDetailCard>
+          </DetailCard>
         </Grid.Col>
 
         <Grid.Col span={12}>
-          <DeploymentDetailCard icon={IconApi} title="Default Provider">
+          <DetailCard icon={IconApi} title="Default Provider">
             <Text size="sm" c="dimmed">
               {deployment.defaultProviderId && isLoadingDefaultProvider && (
                 <Loader />
               )}
               {defaultProvider && defaultProvider.name}
             </Text>
-          </DeploymentDetailCard>
+          </DetailCard>
         </Grid.Col>
       </Grid>
 

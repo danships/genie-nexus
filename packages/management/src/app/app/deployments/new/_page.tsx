@@ -2,18 +2,22 @@
 
 import { Card, Group, Stack, Title, Text, Button } from '@mantine/core';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';
-import { useApi, useCudApi } from '@lib/api/use-api';
+import { useCudApi } from '@lib/api/use-api';
 import { useState } from 'react';
-import { ENDPOINT_DEPLOYMENTS_OVERVIEW } from '@lib/api/swr-constants';
 import { Deployment } from '@genie-nexus/database';
-import { DeploymentLLMApi, DeploymentWeaveApi } from '@genie-nexus/types';
+import {
+  DeploymentLLMApiCreate,
+  DeploymentWeaveApiCreate,
+} from '@genie-nexus/types';
 import { useRouter } from 'next/navigation';
+import { useSWRConfig } from 'swr';
+import { ENDPOINT_DEPLOYMENTS_OVERVIEW } from '@lib/api/swr-constants';
 
 export const NewDeploymentPage = disableSSR(function () {
   const [creatingType, setCreatingType] = useState<'llm' | 'http' | null>(null);
   const { post, inProgress } = useCudApi();
 
-  const { mutate } = useApi(ENDPOINT_DEPLOYMENTS_OVERVIEW);
+  const { mutate } = useSWRConfig();
   const router = useRouter();
 
   const createLlmDeployment = async () => {
@@ -21,7 +25,7 @@ export const NewDeploymentPage = disableSSR(function () {
       setCreatingType('llm');
       const llmDeploymentCreated = await post<
         { data: Deployment },
-        DeploymentLLMApi
+        DeploymentLLMApiCreate
       >('/collections/deployments', {
         type: 'llm',
         name: `new-llm-deployment-${Date.now() % 1000000}`,
@@ -29,7 +33,7 @@ export const NewDeploymentPage = disableSSR(function () {
         defaultProviderId: '', // we accept that it is empty for now
         model: 'to be filled in',
       });
-      void mutate();
+      void mutate(ENDPOINT_DEPLOYMENTS_OVERVIEW);
       router.push(`/app/deployments/${llmDeploymentCreated.data.id}/edit`);
     } finally {
       setCreatingType(null);
@@ -41,7 +45,7 @@ export const NewDeploymentPage = disableSSR(function () {
       setCreatingType('http');
       const weaveDeploymentCreated = await post<
         { data: Deployment },
-        DeploymentWeaveApi
+        DeploymentWeaveApiCreate
       >('/collections/deployments', {
         type: 'weave',
         name: `new-weave-deployment-${Date.now() % 10000000}`,
@@ -49,7 +53,7 @@ export const NewDeploymentPage = disableSSR(function () {
         defaultProviderId: '', // we accept that it is empty for now
         requiresApiKey: true,
       });
-      void mutate();
+      void mutate(ENDPOINT_DEPLOYMENTS_OVERVIEW);
       router.push(`/app/deployments/${weaveDeploymentCreated.data.id}/edit`);
     } finally {
       setCreatingType(null);

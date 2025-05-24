@@ -6,3 +6,7 @@ GET http://localhost:3000/weave/demo-deploy
 
 GET http://localhost:3000/weave/demo-deploy/todos
 
+
+### Weave with api key
+GET http://localhost:3000/weave/demo-deploy/todos
+Authorization: Bearer gn1-gt9fjQ53czuALvzbDkasoF-a92d7df5497df109043816951ff4024b80208785c3dcc5863dee2502f0e4850b

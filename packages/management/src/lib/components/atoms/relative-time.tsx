@@ -1,18 +1,28 @@
 import { formatRelative } from 'date-fns';
+import { disableSSR } from './disable-ssr';
 
 type Properties = {
   date: Date | string;
   relativeTo?: Date;
 };
 
-export function RelativeTime({ date, relativeTo }: Properties) {
+function parseDate(date: Date | string) {
+  if (typeof date === 'string') {
+    return new Date(date);
+  }
+  return date;
+}
+
+function RelativeTimeComponent({ date, relativeTo = new Date() }: Properties) {
   if (!date) {
     return;
   }
 
-  const dateToUse = relativeTo ? new Date(relativeTo) : new Date();
-  const dateAsDate = typeof date === 'string' ? new Date(date) : date;
-  const formattedDate = formatRelative(dateToUse, dateAsDate);
+  const dateToCompareTo = parseDate(relativeTo);
+  const dateAsDate = parseDate(date);
+  const formattedDate = formatRelative(dateAsDate, dateToCompareTo);
 
   return <span title={dateAsDate.toLocaleString()}>{formattedDate}</span>;
 }
+
+export const RelativeTime = disableSSR(RelativeTimeComponent);

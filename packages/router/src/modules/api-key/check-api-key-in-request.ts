@@ -6,6 +6,7 @@ import { getApiKeyRepository } from '../../core/db';
 import { validateApiKey } from './secrets/validate-api-key';
 import { ApiKeyNotPresentError } from './errors/api-key-not-present-error';
 import { ApiKeyValidationError } from './errors/api-key-validation-error';
+import { API_KEY_SILENT_LLM_PREFIX } from './constants';
 
 export async function checkApiKeyInRequest(
   req: Request<unknown, unknown>,
@@ -16,7 +17,10 @@ export async function checkApiKeyInRequest(
     throw new ApiKeyNotPresentError('Missing or invalid Authorization header');
   }
 
-  const apiKey = authHeader.substring('Bearer '.length);
+  let apiKey = authHeader.substring('Bearer '.length);
+  if (apiKey.startsWith(API_KEY_SILENT_LLM_PREFIX)) {
+    apiKey = apiKey.substring(API_KEY_SILENT_LLM_PREFIX.length);
+  }
 
   try {
     const { keyId, keySecret } = breakDownApiKey(apiKey);

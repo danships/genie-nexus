@@ -35,16 +35,7 @@ export default async function ComponentEditPage({
 
   const provider = await getProvider(id);
 
-  const refreshData = async () => {
-    'use server';
-    await getProvider(id);
-  };
-
   return (
-    <ProviderDetailClientPage
-      provider={provider}
-      refreshData={refreshData}
-      created={created === '1'}
-    />
+    <ProviderDetailClientPage provider={provider} created={created === '1'} />
   );
 }

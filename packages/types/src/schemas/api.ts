@@ -81,6 +81,7 @@ const baseApiKeySchemaApi = z.object({
   label: z.string(),
   hash: z.string(),
   active: z.boolean(),
+  keyPreview: z.string(),
   createdAt: z.string().datetime(),
 });
 

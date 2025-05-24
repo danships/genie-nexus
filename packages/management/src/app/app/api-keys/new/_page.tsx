@@ -1,6 +1,6 @@
 'use client';
 
-import { useApi, useCudApi } from '@lib/api/use-api';
+import { useCudApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';
 import { Loader } from '@lib/components/atoms/loader';
 import {
@@ -23,6 +23,7 @@ import { ApiKey } from '@genie-nexus/database';
 import { useForm } from '@mantine/form';
 import { IconClipboard, IconClipboardCheckFilled } from '@tabler/icons-react';
 import { useState } from 'react';
+import { useSWRConfig } from 'swr';
 
 type ApiKeyFormValues = {
   label: string;
@@ -32,9 +33,10 @@ type ApiKeyFormValues = {
 export const NewApiKeyPage = disableSSR(function () {
   const router = useRouter();
   const { post, inProgress } = useCudApi();
-  const { mutate } = useApi(ENDPOINT_APIKEYS_OVERVIEW);
+
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [createdKey, setCreatedKey] = useState<string | null>(null);
+  const { mutate } = useSWRConfig();
 
   const form = useForm<ApiKeyFormValues>({
     initialValues: {
@@ -54,7 +56,7 @@ export const NewApiKeyPage = disableSSR(function () {
         label: values.label,
         type: values.type,
       });
-      void mutate();
+      void mutate(ENDPOINT_APIKEYS_OVERVIEW);
       setCreatedKey(response.data.apiKey);
       setShowKeyModal(true);
     } catch {

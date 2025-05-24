@@ -3,19 +3,15 @@
 import { Card, Stack, Group, Title, Paper } from '@mantine/core';
 import { ReactNode, ComponentType } from 'react';
 
-type DeploymentDetailCardProps = {
+type Properties = {
   icon: ComponentType<{ size: number }>;
   title: string;
   children: ReactNode;
 };
 
-export function DeploymentDetailCard({
-  icon: Icon,
-  title,
-  children,
-}: DeploymentDetailCardProps) {
+export function DetailCard({ icon: Icon, title, children }: Properties) {
   return (
-    <Card withBorder>
+    <Card withBorder className="is-transparent">
       <Stack gap="md">
         <Group>
           <Icon size={24} />

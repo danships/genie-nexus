@@ -6,7 +6,7 @@ import { useApi } from '@lib/api/use-api';
 import { Loader } from '@lib/components/atoms/loader';
 import { PageTitle } from '@lib/components/atoms/page-title';
 import { WeaveIcon } from '@lib/components/atoms/weave-icon';
-import { DeploymentDetailCard } from '@lib/components/molecules/deployment-detail-card';
+import { DetailCard } from '@lib/components/molecules/detail-card';
 import { useServerUrl } from '@lib/hooks/use-server-url';
 import {
   Stack,
@@ -65,7 +65,7 @@ export function DeploymentWeaveDetailClientPage({ deployment }: Properties) {
       </Group>
       <Grid>
         <Grid.Col span={12}>
-          <DeploymentDetailCard icon={WeaveIcon} title="Endpoint Details">
+          <DetailCard icon={WeaveIcon} title="Endpoint Details">
             <Table>
               <Table.Thead>
                 <Table.Tr>
@@ -87,18 +87,18 @@ export function DeploymentWeaveDetailClientPage({ deployment }: Properties) {
                 </Table.Tr>
               </Table.Thead>
             </Table>
-          </DeploymentDetailCard>
+          </DetailCard>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
-          <DeploymentDetailCard icon={IconKey} title="API Key Requirements">
+          <DetailCard icon={IconKey} title="API Key Requirements">
             <Text size="sm" c="dimmed">
               API Key Required: {deployment.requiresApiKey ? 'Yes' : 'No'}
             </Text>
-          </DeploymentDetailCard>
+          </DetailCard>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, md: 6 }}>
-          <DeploymentDetailCard icon={IconWorld} title="Supported Methods">
+          <DetailCard icon={IconWorld} title="Supported Methods">
             {supportedMethods.length > 0 ? (
               <Group gap="xs">
                 {supportedMethods.map((method: string) => (
@@ -112,18 +112,18 @@ export function DeploymentWeaveDetailClientPage({ deployment }: Properties) {
                 All methods allowed.
               </Text>
             )}
-          </DeploymentDetailCard>
+          </DetailCard>
         </Grid.Col>
 
         <Grid.Col span={12}>
-          <DeploymentDetailCard icon={IconApi} title="Default Provider">
+          <DetailCard icon={IconApi} title="Default Provider">
             <Text size="sm" c="dimmed">
               {deployment.defaultProviderId && isLoadingDefaultProvider && (
                 <Loader />
               )}
               {defaultProvider && defaultProvider.name}
             </Text>
-          </DeploymentDetailCard>
+          </DetailCard>
         </Grid.Col>
       </Grid>
     </Stack>
