@@ -1,5 +1,5 @@
 import { z, ZodError } from 'zod';
-import { logger, verifyUsingHashedPassword } from './utils';
+import { logger, verifyUsingHashedPassword } from './utils.js';
 import type { NextAuthUser } from '@genie-nexus/database';
 import type { Repository } from 'supersave';
 

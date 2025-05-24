@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateExpression } from './validate-expression';
+import { validateExpression } from './validate-expression.js';
 
 describe('validateExpression', () => {
   describe('Basic Validation', () => {

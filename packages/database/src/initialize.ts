@@ -7,9 +7,9 @@ import {
   NextAuthUser,
   Provider,
   Tenant,
-} from './entities';
+} from './entities.js';
 import type { Application, Router } from 'express';
-import { migrate } from './migrate';
+import { migrate } from './migrate/index.js';
 
 let superSavePromise: Promise<SuperSave> | undefined;
 let superSave!: SuperSave;

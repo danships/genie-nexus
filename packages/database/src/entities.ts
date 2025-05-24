@@ -1,5 +1,5 @@
 import type { Collection, EntityDefinition } from 'supersave';
-import type { ApiKey as ApiKeyType } from './types';
+import type { ApiKey as ApiKeyType } from './types.js';
 
 export const Provider: Collection = {
   name: 'provider',

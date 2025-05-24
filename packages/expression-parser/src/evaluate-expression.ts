@@ -3,7 +3,7 @@ import {
   checkForDangerousOperations,
   expressionRegex,
   validateTemplateStructure,
-} from './expression-utils';
+} from './expression-utils.js';
 
 /**
  * Configuration options for expression evaluation

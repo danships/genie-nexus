@@ -5,12 +5,18 @@ import type {
   Tenant as TenantType,
   Deployment as DeploymentType,
   NextAuthUser as NextAuthUserType,
-} from './types';
-import { Provider, ApiKey, Tenant, Deployment, NextAuthUser } from './entities';
-import { getDB } from './initialize';
+} from './types.js';
+import {
+  Provider,
+  ApiKey,
+  Tenant,
+  Deployment,
+  NextAuthUser,
+} from './entities.js';
+import { getDB } from './initialize.js';
 
-export * from './initialize';
-export * from './types';
+export * from './initialize.js';
+export * from './types.js';
 
 export async function getProviderRepository(): Promise<
   Repository<ProviderType>
