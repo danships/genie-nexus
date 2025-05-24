@@ -1,0 +1,189 @@
+---
+description: 
+globs: packages/router/**/*.ts
+alwaysApply: false
+---
+# Genie Nexus Router Coding Style Guide
+
+## Overview
+
+This document outlines the coding standards and best practices for the Genie Nexus Router package. The router is built using TypeScript, Express.js, and follows a modular architecture.
+
+## Project Structure
+
+```
+src/
+├── core/         # Core functionality and utilities
+├── modules/      # Feature-specific modules
+├── ui/          # UI-related code
+├── weave-providers/ # Weave integration providers
+├── server.ts    # Main server entry point
+└── index.ts     # Package exports
+```
+
+## TypeScript Standards
+
+### Type Definitions
+
+- Use explicit type annotations for function parameters and return types
+- Prefer interfaces over type aliases for object definitions
+- Export types that are used across module boundaries
+- Use type imports for better tree-shaking: `import type { Request } from 'express'`
+
+### Code Organization
+
+- One class/interface per file
+- Group related functionality in modules
+- Use barrel exports (index.ts) for public APIs
+- Keep files focused and maintainable (under 300 lines when possible)
+
+## Express.js Patterns
+
+### Route Organization
+
+- Group related routes in separate modules
+- Use middleware for cross-cutting concerns
+- Implement proper error handling middleware
+- Use async/await with proper error handling
+
+### Middleware Guidelines
+
+- Keep middleware functions focused and single-purpose
+- Use type-safe middleware with proper Request/Response types
+- Implement proper error handling in middleware
+- Use middleware for logging, authentication, and validation
+
+## Error Handling
+
+### Best Practices
+
+- Use custom error classes for different error types
+- Implement proper error boundaries
+- Log errors with appropriate context
+- Return user-friendly error messages in production
+- Include detailed error information in development
+
+### Error Response Format
+
+```typescript
+{
+  error: string;  // User-friendly message in production
+  details?: any;  // Additional error details in development
+}
+```
+
+## Logging
+
+### Guidelines
+
+- Use the Winston logger for all logging
+- Include relevant context in log messages
+- Use appropriate log levels:
+  - ERROR: For errors that need immediate attention
+  - WARN: For potentially harmful situations
+  - INFO: For general operational information
+  - DEBUG: For detailed debugging information
+
+### Log Format
+
+```typescript
+logger.info('message', { context: 'additional data' });
+```
+
+## Security
+
+### Best Practices
+
+- Disable x-powered-by header
+- Implement proper CORS policies
+- Use environment variables for sensitive configuration
+- Implement proper authentication and authorization
+- Validate all user input
+- Use parameterized queries for database operations
+
+## Testing
+
+### Guidelines
+
+- Write unit tests for all business logic
+- Use Vitest for testing
+- Mock external dependencies
+- Test error cases and edge conditions
+- Maintain good test coverage
+
+## Code Style
+
+### General
+
+- Use 2 spaces for indentation
+- Use semicolons
+- Use single quotes for strings
+- Use template literals for string interpolation
+- Keep line length under 100 characters
+
+### Naming Conventions
+
+- Use PascalCase for classes and interfaces
+- Use camelCase for variables and functions
+- Use UPPER_SNAKE_CASE for constants
+- Use descriptive names that indicate purpose
+
+### Comments
+
+- Use JSDoc comments for public APIs
+- Keep comments focused on why, not what
+- Remove commented-out code
+- Use TODO comments for future improvements
+
+## Dependencies
+
+### Guidelines
+
+- Keep dependencies up to date
+- Use workspace dependencies for internal packages
+- Minimize external dependencies
+- Use specific versions for stability
+- Document dependency requirements
+
+## Performance
+
+### Best Practices
+
+- Implement proper connection pooling
+- Use appropriate caching strategies
+- Optimize database queries
+- Implement proper request timeouts
+- Use compression where appropriate
+
+## Do's and Don'ts
+
+### Do's
+
+- ✅ Use TypeScript's strict mode
+- ✅ Implement proper error handling
+- ✅ Write comprehensive tests
+- ✅ Document public APIs
+- ✅ Use environment variables for configuration
+- ✅ Follow the single responsibility principle
+- ✅ Use async/await for asynchronous operations
+- ✅ Implement proper logging
+
+### Don'ts
+
+- ❌ Don't use any type unless absolutely necessary
+- ❌ Don't commit sensitive information
+- ❌ Don't use console.log in production code
+- ❌ Don't ignore TypeScript errors
+- ❌ Don't use magic numbers or strings
+- ❌ Don't implement business logic in routes
+- ❌ Don't use synchronous operations in request handlers
+- ❌ Don't expose internal implementation details
+
+## Version Control
+
+### Guidelines
+
+- Write clear commit messages
+- Use feature branches
+- Keep commits focused and atomic
+- Review code before merging

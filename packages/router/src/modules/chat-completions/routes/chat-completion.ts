@@ -11,10 +11,17 @@ import {
   createChatCompletion as staticCreateChatCompletion,
   createStreamingChatCompletion as staticCreateStreamingChatCompletion,
 } from '../../llm-providers/static/proxy';
+import {
+  createChatCompletion as googleCreateChatCompletion,
+  createStreamingChatCompletion as googleCreateStreamingChatCompletion,
+} from '../../llm-providers/google/proxy';
+
 import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response';
 import { getDeploymentByName } from '../../deployments/get-deployment-by-name';
 import { executeForLlm } from '../../deployments/execute';
 import { isLlmApiKey } from '@genie-nexus/types';
+import { handleAiSdkStreamResponse } from '../handle-ai-sdk-stream-response';
+import { handleAiSdkTextResponse } from '../handle-ai-sdk-text-response';
 
 export const handler: RequestHandler<
   object,
@@ -73,49 +80,21 @@ export const handler: RequestHandler<
 
       switch (provider.type) {
         case 'openai': {
-          const { textStream, response: responsePromise } =
-            openAICreateStreamingChatCompletion(
-              transformedRequest,
-              provider.apiKey,
-            );
+          const aiResponse = openAICreateStreamingChatCompletion(
+            transformedRequest,
+            provider.apiKey,
+          );
 
-          const index = 0;
-          for await (const textPart of textStream) {
-            // Format each chunk according to OpenAI's streaming format
-            const chunk = {
-              id: `chatcmpl-${Date.now()}`,
-              object: 'chat.completion.chunk',
-              created: Math.floor(Date.now() / 1000),
-              model: request.model,
-              choices: [
-                {
-                  index,
-                  delta: { content: textPart },
-                  finish_reason: null,
-                },
-              ],
-            };
-            res.write(`data: ${JSON.stringify(chunk)}\n\n`);
-          }
+          await handleAiSdkStreamResponse(request.model, res, aiResponse);
+          break;
+        }
 
-          // Send the final chunk with finish_reason
-          const finalResponse = await responsePromise;
-          const finalChunk = {
-            id: finalResponse.id,
-            object: 'chat.completion.chunk',
-            created: Math.floor(Date.now() / 1000),
-            model: request.model,
-            choices: [
-              {
-                index: 0,
-                delta: {},
-                finish_reason: 'stop',
-              },
-            ],
-          };
-          res.write(`data: ${JSON.stringify(finalChunk)}\n\n`);
-          res.write('data: [DONE]\n\n');
-          res.end();
+        case 'google': {
+          const aiResponse = googleCreateStreamingChatCompletion(
+            transformedRequest,
+            { apiKey: provider.apiKey },
+          );
+          await handleAiSdkStreamResponse(request.model, res, aiResponse);
           break;
         }
 
@@ -168,36 +147,21 @@ export const handler: RequestHandler<
     } else {
       switch (provider.type) {
         case 'openai': {
-          // Forward the non-streaming request to OpenAI
           const response = await openAICreateChatCompletion(
             transformedRequest,
             provider.apiKey,
           );
 
-          // Transform the response to match OpenAI's format
-          const openAIResponse: OpenAIChatCompletionResponse = {
-            id: `chatcmpl-${Date.now()}`,
-            object: 'chat.completion',
-            created: Math.floor(Date.now() / 1000),
-            model: request.model,
-            choices: [
-              {
-                index: 0,
-                message: {
-                  role: 'assistant',
-                  content: response.text,
-                },
-                finish_reason: 'stop',
-              },
-            ],
-            usage: {
-              prompt_tokens: response.usage.promptTokens,
-              completion_tokens: response.usage.completionTokens,
-              total_tokens: response.usage.totalTokens,
-            },
-          };
+          handleAiSdkTextResponse(request.model, res, response);
+          break;
+        }
 
-          res.json(openAIResponse);
+        case 'google': {
+          const response = await googleCreateChatCompletion(
+            transformedRequest,
+            { apiKey: provider.apiKey },
+          );
+          handleAiSdkTextResponse(request.model, res, response);
           break;
         }
 

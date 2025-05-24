@@ -3,6 +3,7 @@ import type {
   deploymentLLMSchemaApi,
   deploymentSchemaApi,
   deploymentWeaveSchemaApi,
+  googleProviderSchemaApi,
   headerDefinitionSchema,
   llmApiKeySchemaApi,
   openAIProviderSchemaApi,
@@ -28,6 +29,7 @@ export type DeploymentWeaveApiCreate = z.infer<typeof deploymentWeaveSchemaApi>;
 export type DeploymentApi = WithId<z.infer<typeof deploymentSchemaApi>>;
 
 export type OpenAIProviderApi = z.infer<typeof openAIProviderSchemaApi>;
+export type GoogleProviderApi = z.infer<typeof googleProviderSchemaApi>;
 export type StaticLlmProviderApi = z.infer<typeof staticLlmProviderSchemaApi>;
 export type WeaveHttpProxyProviderApi = z.infer<
   typeof weaveHttpProxyProviderSchemaApi

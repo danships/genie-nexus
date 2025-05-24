@@ -12,6 +12,9 @@ const entityWithTenantIdSchema = baseEntitySchema.extend({
 export const openAIProviderSchema = apiSchemas.openAIProviderSchemaApi.and(
   entityWithTenantIdSchema,
 );
+export const googleProviderSchema = apiSchemas.googleProviderSchemaApi.and(
+  entityWithTenantIdSchema,
+);
 
 export const staticLlmProviderSchema =
   apiSchemas.staticLlmProviderSchemaApi.and(entityWithTenantIdSchema);

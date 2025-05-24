@@ -91,6 +91,7 @@ export const ProvidersClientPage = disableSSR(function () {
             { value: 'static', label: 'Static' },
             { value: 'http-proxy', label: 'HTTP Proxy' },
             { value: 'http-static', label: 'HTTP Static' },
+            { value: 'google', label: 'Google Generative AI' },
           ]}
           clearable
           value={filterType}
@@ -153,6 +154,11 @@ export const ProvidersClientPage = disableSSR(function () {
                       Body: {provider.body.slice(0, 30)}
                       {provider.body.length > 30 ? '...' : ''}
                     </Text>
+                  )}
+                  {provider.type === 'google' && provider.apiKey && (
+                    <Badge variant="light" color="orange">
+                      API Key Set
+                    </Badge>
                   )}
                 </Group>
               </Table.Td>

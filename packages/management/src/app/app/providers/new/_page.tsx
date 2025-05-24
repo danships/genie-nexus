@@ -6,6 +6,7 @@ import {
   StaticLlmProviderApi,
   WeaveHttpProxyProviderApi,
   WeaveHttpStaticProviderApi,
+  GoogleProviderApi,
 } from '@genie-nexus/types';
 import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
 import { useApi, useCudApi } from '@lib/api/use-api';
@@ -78,6 +79,18 @@ export default function NewProviderClientPage() {
             WeaveHttpStaticProviderApi
           >(ENDPOINT_PROVIDERS_OVERVIEW, httpStaticProvider);
           createdProvider = httpStaticCreateResponse.data;
+          break;
+        case 'google':
+          const googleProvider: GoogleProviderApi = {
+            type: 'google',
+            name: values.name,
+            apiKey: '',
+          };
+          const googleCreateResponse = await post<
+            { data: Provider },
+            GoogleProviderApi
+          >(ENDPOINT_PROVIDERS_OVERVIEW, googleProvider);
+          createdProvider = googleCreateResponse.data;
           break;
       }
 

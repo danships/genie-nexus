@@ -12,6 +12,7 @@ import { ProviderGenericForm } from '@lib/components/molecules/provider-generic-
 import { ProviderHttpProxyForm } from '@lib/components/molecules/provider-http-proxy-form';
 import { ProviderHttpStaticForm } from '@lib/components/molecules/provider-http-static-form';
 import { ProviderOpenAIForm } from '@lib/components/molecules/provider-openai-form';
+import { ProviderGoogleForm } from '@lib/components/molecules/provider-google-form';
 import { PROVIDER_TYPES_SUMMARY } from '@lib/constants/providers';
 import { Notification, Tabs, Text, Title } from '@mantine/core';
 import { useRouter } from 'next/navigation';
@@ -22,6 +23,7 @@ const TAB_STATIC_LLM = 'static-llm';
 const TAB_HTTP_STATIC = 'http-static';
 const TAB_HTTP_PROXY = 'http-proxy';
 const TAB_OPENAI = 'openai';
+const TAB_GOOGLE = 'google';
 
 type Properties = {
   provider: Provider;
@@ -43,7 +45,12 @@ export function ProviderDetailClientPage({
   const router = useRouter();
 
   const [selectedTab, setSelectedTab] = useState<
-    typeof TAB_DETAILS | typeof TAB_STATIC_LLM | typeof TAB_HTTP_STATIC
+    | typeof TAB_DETAILS
+    | typeof TAB_STATIC_LLM
+    | typeof TAB_HTTP_STATIC
+    | typeof TAB_HTTP_PROXY
+    | typeof TAB_OPENAI
+    | typeof TAB_GOOGLE
   >(TAB_DETAILS);
 
   const handleGenericSubmit = async (values: { name: string }) => {
@@ -96,6 +103,14 @@ export function ProviderDetailClientPage({
     setProvider({ ...updatedProviderResponse.data, apiKey: '' });
   };
 
+  const handleGoogleSubmit = async (values: { apiKey: string }) => {
+    const updatedProviderResponse = await patch<{ data: Provider }>(
+      `/collections/providers/${provider.id}`,
+      values,
+    );
+    setProvider(updatedProviderResponse.data);
+  };
+
   return (
     <>
       <Title order={1}>Viewing {provider.name}</Title>
@@ -118,7 +133,10 @@ export function ProviderDetailClientPage({
               (tab as
                 | typeof TAB_DETAILS
                 | typeof TAB_STATIC_LLM
-                | typeof TAB_HTTP_STATIC) ?? TAB_DETAILS,
+                | typeof TAB_HTTP_STATIC
+                | typeof TAB_HTTP_PROXY
+                | typeof TAB_OPENAI
+                | typeof TAB_GOOGLE) ?? TAB_DETAILS,
             )
           }
         >
@@ -137,6 +155,9 @@ export function ProviderDetailClientPage({
             )}
             {provider.type === 'openai' && (
               <Tabs.Tab value={TAB_OPENAI}>OpenAI API details</Tabs.Tab>
+            )}
+            {provider.type === 'google' && (
+              <Tabs.Tab value={TAB_GOOGLE}>Google AI details</Tabs.Tab>
             )}
           </Tabs.List>
 
@@ -189,6 +210,17 @@ export function ProviderDetailClientPage({
               <ProviderOpenAIForm
                 provider={provider}
                 submit={handleOpenAISubmit}
+              />
+            )}
+          </Tabs.Panel>
+
+          <Tabs.Panel value={TAB_GOOGLE}>
+            <Text>Configure the Google AI API details for this provider.</Text>
+            <hr />
+            {provider.type === 'google' && (
+              <ProviderGoogleForm
+                provider={provider}
+                submit={handleGoogleSubmit}
               />
             )}
           </Tabs.Panel>
