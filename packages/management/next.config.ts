@@ -3,6 +3,9 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   serverExternalPackages: ['argon2', 'sqlite3', 'sqlite', 'argon2'],
   // eslint-disable-next-line @typescript-eslint/require-await
+  experimental: {
+    useCache: true,
+  },
   async rewrites() {
     return process.env['NODE_ENV'] === 'development'
       ? [

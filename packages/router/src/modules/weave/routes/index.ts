@@ -1,15 +1,12 @@
 import express from 'express';
 import { processRequest } from './process-request';
 import { getTenant } from '../../tenants/middleware/get-tenant';
-import { getConfiguration } from '../../../core/configuration/get';
-import { URL_PARAM_TENANT_ID } from '../../tenants/constants';
+import { getTenantPath } from '../../tenants/get-tentant-path';
 
 export function initialize(): express.Router {
   const router = express.Router();
 
-  const tenantPath = getConfiguration().multiTenant
-    ? `:${URL_PARAM_TENANT_ID}/`
-    : '';
+  const tenantPath = getTenantPath();
 
   router.all(
     `/weave/${tenantPath}:deploymentName/*path`,

@@ -1,5 +1,5 @@
 import { getNextAuthUserRepository } from '@genie-nexus/database';
-import { getConfiguration } from '../../../core/configuration/get.js';
+import { getConfiguration } from '../../configuration/get-configuration.js';
 import { logger } from '../../../core/logger.js';
 import { saltAndHashPassword } from '@genie-nexus/auth';
 import { generatePassword } from './generate-password.js';

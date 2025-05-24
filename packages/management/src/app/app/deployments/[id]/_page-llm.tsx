@@ -1,7 +1,7 @@
 'use client';
 
 import { Provider } from '@genie-nexus/database';
-import { DeploymentLLMApi } from '@genie-nexus/types';
+import { DeploymentLLMApi, TenantApi } from '@genie-nexus/types';
 import { useApi } from '@lib/api/use-api';
 import { CodeHighlight } from '@lib/components/atoms/code-highlight';
 import { Loader } from '@lib/components/atoms/loader';
@@ -35,9 +35,13 @@ import { useState } from 'react';
 
 type Properties = {
   deployment: DeploymentLLMApi & { id: string };
+  tenant: TenantApi | null;
 };
 
-export function DeploymentLlmDetailClientPage({ deployment }: Properties) {
+export function DeploymentLlmDetailClientPage({
+  deployment,
+  tenant,
+}: Properties) {
   const { data: defaultProvider, isLoading: isLoadingDefaultProvider } =
     useApi<Provider>(() =>
       deployment.defaultProviderId
@@ -45,7 +49,9 @@ export function DeploymentLlmDetailClientPage({ deployment }: Properties) {
         : false,
     );
 
-  const serverUrl = useServerUrl(`/api/v1`);
+  const serverUrl = useServerUrl(
+    `/api/v1/${tenant ? `${tenant.id}/` : ''}${deployment.name}`,
+  );
   const [sdkModalOpen, setSdkModalOpen] = useState(false);
 
   const jsExample = `import OpenAI from 'openai';
@@ -140,8 +146,8 @@ print(completion.choices[0].message)`;
                   </Table.Td>
                 </Table.Tr>
                 <Table.Tr>
-                  <Table.Td>Model</Table.Td>
-                  <Table.Td>{deployment.name}</Table.Td>
+                  <Table.Td>Default Model</Table.Td>
+                  <Table.Td>{deployment.model}</Table.Td>
                 </Table.Tr>
               </Table.Thead>
             </Table>

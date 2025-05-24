@@ -1,4 +1,5 @@
 import type { LocalBaseEntity } from '@genie-nexus/database';
+import type { ConfigurationResponse } from '@genie-nexus/types';
 import { serverLogger } from '@lib/core/server-logger';
 import 'server-only';
 
@@ -39,5 +40,22 @@ export async function getEntities<T extends LocalBaseEntity>(
   }
   const data = (await response.json()) as { data: T[] };
 
+  return data.data;
+}
+
+export async function getConfiguration(): Promise<
+  ConfigurationResponse['data']
+> {
+  'use cache';
+
+  const configurationResponse = await fetch(
+    `${COLLECTION_API_URL}/configuration`,
+  );
+  if (!configurationResponse.ok) {
+    serverLogger.warn('Could not retrieve server configuration.');
+    throw new Error('Failed to fetch server configuration.');
+  }
+
+  const data = (await configurationResponse.json()) as ConfigurationResponse;
   return data.data;
 }

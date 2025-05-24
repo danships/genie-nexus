@@ -1,5 +1,5 @@
 import { Deployment } from '@genie-nexus/database';
-import { getEntity } from '@lib/api/server-api';
+import { getConfiguration, getEntity } from '@lib/api/server-api';
 import { DeploymentWeaveDetailClientPage } from './_page-weave';
 import { DeploymentLlmDetailClientPage } from './_page-llm';
 
@@ -28,12 +28,18 @@ export default async function DeploymentDetailPage({
 }) {
   const { id } = await params;
 
-  const deployment = await getDeployment(id);
+  const [deployment, configuration] = await Promise.all([
+    getDeployment(id),
+    getConfiguration(),
+  ]);
 
   return (
     <>
       {deployment.type === 'llm' && (
-        <DeploymentLlmDetailClientPage deployment={deployment} />
+        <DeploymentLlmDetailClientPage
+          tenant={configuration.defaultTenant ? null : configuration.tenant}
+          deployment={deployment}
+        />
       )}
       {deployment.type === 'weave' && (
         <DeploymentWeaveDetailClientPage deployment={deployment} />

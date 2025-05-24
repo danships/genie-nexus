@@ -44,7 +44,7 @@ describe('OpenAI Compatibility', () => {
   it('should be able to use the OpenAI API', async () => {
     const openai = new OpenAI({
       apiKey: publicApiKey,
-      baseURL: `http://localhost:${OPTIONS.port}/api/v1`,
+      baseURL: `http://localhost:${OPTIONS.port}/api/v1/static-echo`,
     });
 
     const response = await openai.chat.completions.create({
@@ -58,7 +58,7 @@ describe('OpenAI Compatibility', () => {
   it('should be able to stream responses from the OpenAI API', async () => {
     const openai = new OpenAI({
       apiKey: publicApiKey,
-      baseURL: `http://localhost:${OPTIONS.port}/api/v1`,
+      baseURL: `http://localhost:${OPTIONS.port}/api/v1/static-echo`,
     });
 
     const stream = await openai.chat.completions.create({
