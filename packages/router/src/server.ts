@@ -7,10 +7,14 @@ import express, {
 import { initialize as initializeChatCompletions } from './modules/chat-completions/routes';
 import { initialize as initializeWeave } from './modules/weave/routes';
 import { initialize as initializeApiKey } from './modules/api-key/routes';
+import { initialize as initializeConfiguration } from './modules/configuration/routes';
 import { initialize as initializeDb } from './core/db';
 import { logger, setLoggerLevel } from './core/logger';
 import { isProduction } from './core/utils/is-production';
-import { type Configuration, setConfiguration } from './core/configuration/get';
+import {
+  type Configuration,
+  setConfiguration,
+} from './modules/configuration/get-configuration';
 import { initializeUI } from './ui/initialize';
 
 export type StartServerOptions = {
@@ -46,6 +50,7 @@ export async function startServer(
   app.use(initializeChatCompletions());
   app.use(initializeWeave());
   app.use(initializeApiKey());
+  app.use(initializeConfiguration());
 
   const { initialize: initializeAuthentication } = await import(
     './modules/auth/next-auth/initialize.mjs'

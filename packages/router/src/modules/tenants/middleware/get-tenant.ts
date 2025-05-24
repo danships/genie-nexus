@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { getConfiguration } from '../../../core/configuration/get';
+import { getConfiguration } from '../../configuration/get-configuration';
 import { generateDefaultTenant } from '../generate-default-tenant';
 import { requestHasParamTenantId } from './types';
 import { TenantMissingError } from '../errors/tenant-missing-error';

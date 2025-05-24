@@ -9,6 +9,7 @@ import type {
   openAIProviderSchemaApi,
   providerSchemaApi,
   staticLlmProviderSchemaApi,
+  tenantSchemaApi,
   weaveApiKeySchemaApi,
   weaveHttpProxyProviderSchemaApi,
   weaveHttpStaticProviderSchemaApi,
@@ -16,6 +17,7 @@ import type {
 import type { z } from 'zod';
 
 type WithId<T> = T & { id: string };
+type DataWrapper<T> = { data: T };
 
 export type HeaderDefinition = z.infer<typeof headerDefinitionSchema>;
 
@@ -42,3 +44,11 @@ export type ApiKeyApi = WithId<z.infer<typeof apiKeySchemaApi>>;
 
 export type LlmApiKeyApi = WithId<z.infer<typeof llmApiKeySchemaApi>>;
 export type WeaveApiKeyApi = WithId<z.infer<typeof weaveApiKeySchemaApi>>;
+
+export type TenantApi = WithId<z.infer<typeof tenantSchemaApi>>;
+
+export type ConfigurationResponse = DataWrapper<{
+  tenant: TenantApi;
+  defaultTenant: boolean;
+  authentication: 'none' | 'credentials';
+}>;

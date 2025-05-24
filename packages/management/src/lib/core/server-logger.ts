@@ -30,7 +30,8 @@ const shouldLog = (level: LogLevel) => {
 };
 
 const createLogMessage =
-  (level: LogLevel) => (message: string, attrs: Record<string, unknown>) => {
+  (level: LogLevel) =>
+  (message: string, attrs: Record<string, unknown> = {}) => {
     if (!shouldLog(level)) {
       return;
     }

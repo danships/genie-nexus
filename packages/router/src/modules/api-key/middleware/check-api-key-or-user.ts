@@ -3,7 +3,7 @@ import type { ApiKey } from '@genie-nexus/database';
 import { checkApiKey } from './check-api-key';
 import { API_KEY_PREFIX } from '../constants';
 import { ApplicationError } from '../../../core/errors/application-error';
-import { getConfiguration } from '../../../core/configuration/get';
+import { getConfiguration } from '../../configuration/get-configuration';
 import { logger } from '../../../core/logger';
 
 export const checkApiKeyOrUser =
