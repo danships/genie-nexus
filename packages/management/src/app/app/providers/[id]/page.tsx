@@ -4,7 +4,7 @@ import { ProviderDetailClientPage } from './_page';
 
 async function getProvider(id: string) {
   const provider = await getEntity<Provider>('providers', id);
-  if (provider.type === 'openai') {
+  if ('apiKey' in provider) {
     provider.apiKey = '';
   }
   return provider;

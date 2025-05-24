@@ -24,6 +24,11 @@ export const openAIProviderSchemaApi = baseProviderSchema.extend({
   baseURL: z.string().url(),
 });
 
+export const googleProviderSchemaApi = baseProviderSchema.extend({
+  type: z.literal('google'),
+  apiKey: z.string(),
+});
+
 export const staticLlmProviderSchemaApi = baseProviderSchema.extend({
   type: z.literal('static'),
 });
@@ -45,6 +50,7 @@ export const weaveHttpStaticProviderSchemaApi = baseProviderSchema.extend({
 export const providerSchemaApi = z.discriminatedUnion('type', [
   openAIProviderSchemaApi,
   staticLlmProviderSchemaApi,
+  googleProviderSchemaApi,
   weaveHttpProxyProviderSchemaApi,
   weaveHttpStaticProviderSchemaApi,
 ]);

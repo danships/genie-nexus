@@ -15,8 +15,7 @@ export const Provider: Collection = {
       // @ts-expect-error - Type mismatch in entity transform function
       entityTransform: (_collection, _req, _res, entity) => {
         // @ts-expect-error - Type mismatch in entity transform function
-        if (entity.type === 'openai') {
-          // @ts-expect-error - Type mismatch in entity transform function, supersave issue
+        if ('apiKey' in entity) {
           entity.apiKey = '';
         }
         return entity;

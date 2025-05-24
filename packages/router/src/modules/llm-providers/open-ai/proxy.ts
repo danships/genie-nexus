@@ -1,4 +1,5 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+import type { GenerateTextResult, StreamTextResult } from 'ai';
 import { generateText, streamText } from 'ai';
 import type { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai';
 
@@ -8,7 +9,7 @@ const ENDPOINT = 'https://openrouter.ai/api/v1';
 export async function createChatCompletion(
   request: OpenAIChatCompletionRequest,
   apiKey: string,
-) {
+): Promise<GenerateTextResult<never, never>> {
   if (!apiKey) {
     throw new Error('OpenAI API key is required');
   }
@@ -35,7 +36,7 @@ export async function createChatCompletion(
 export function createStreamingChatCompletion(
   request: OpenAIChatCompletionRequest,
   apiKey: string,
-) {
+): StreamTextResult<never, never> {
   if (!apiKey) {
     throw new Error('OpenAI API key is required');
   }

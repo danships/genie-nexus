@@ -7,6 +7,7 @@ import { validateApiKey } from './secrets/validate-api-key';
 import { ApiKeyNotPresentError } from './errors/api-key-not-present-error';
 import { ApiKeyValidationError } from './errors/api-key-validation-error';
 import { API_KEY_SILENT_LLM_PREFIX } from './constants';
+import { logger } from '../../core/logger';
 
 export async function checkApiKeyInRequest(
   req: Request<unknown, unknown>,
@@ -28,6 +29,10 @@ export async function checkApiKeyInRequest(
     const apiKeyRepository = await getApiKeyRepository();
     const storedApiKey = await apiKeyRepository.getById(keyId);
     if (!storedApiKey || storedApiKey.type !== type) {
+      logger.warn('Stored api key not found, or no matching type.', {
+        type: storedApiKey?.type,
+        expected: type,
+      });
       throw new ApiKeyValidationError('Invalid API key');
     }
 
@@ -37,6 +42,7 @@ export async function checkApiKeyInRequest(
       keySecret,
     );
     if (!validApiKey) {
+      logger.warn('API Key validation failed.');
       throw new ApiKeyValidationError('Invalid API key');
     }
 
@@ -45,6 +51,10 @@ export async function checkApiKeyInRequest(
     if (error instanceof ValidationError) {
       throw new ApiKeyValidationError('Invalid API key');
     }
+    logger.warn('API Key validation failed because of an unknown error.', {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      error: error instanceof Error ? error.message : `${error}`,
+    });
     throw error;
   }
 }

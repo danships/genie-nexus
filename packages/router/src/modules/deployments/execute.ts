@@ -18,7 +18,14 @@ export async function executeForLlm(
     throw new Error('Provider not found');
   }
 
-  return { transformedRequest: request, provider };
+  if (deployment.type !== 'llm') {
+    throw new Error('Deployment is not a llm deployment');
+  }
+
+  return {
+    transformedRequest: { ...request, model: deployment.model },
+    provider,
+  };
 }
 
 export async function executeForHttp(deployment: Deployment): Promise<{

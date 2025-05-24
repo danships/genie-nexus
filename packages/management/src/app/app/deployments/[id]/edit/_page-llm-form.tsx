@@ -61,7 +61,10 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
     // Supersave does not allow yet to filter with an OR on a attribute
     return (
       providers?.filter(
-        (provider) => provider.type === 'openai' || provider.type === 'static',
+        (provider) =>
+          provider.type === 'openai' ||
+          provider.type === 'static' ||
+          provider.type === 'google',
       ) || []
     );
   }, [providers]);

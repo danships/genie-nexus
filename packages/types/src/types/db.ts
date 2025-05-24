@@ -14,6 +14,7 @@ import type {
   llmApiKeySchema,
   managementKeySchema,
   weaveApiKeySchema,
+  googleProviderSchema,
 } from '../schemas/db';
 
 // Infer types from schemas
@@ -27,6 +28,7 @@ export type DeploymentLLM = z.infer<typeof deploymentLLMSchema>;
 export type DeploymentWeave = z.infer<typeof deploymentWeaveSchema>;
 
 export type OpenAIProvider = z.infer<typeof openAIProviderSchema>;
+export type GoogleProvider = z.infer<typeof googleProviderSchema>;
 export type StaticLlmProvider = z.infer<typeof staticLlmProviderSchema>;
 export type WeaveHttpProxyProvider = z.infer<
   typeof weaveHttpProxyProviderSchema
