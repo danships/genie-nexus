@@ -2,7 +2,7 @@ import {
   checkForDangerousOperations,
   expressionRegex,
   validateTemplateStructure,
-} from './expression-utils';
+} from './expression-utils.js';
 import { Script } from 'vm';
 import * as acorn from 'acorn';
 import { simple } from 'acorn-walk';

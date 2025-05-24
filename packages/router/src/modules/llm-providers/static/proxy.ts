@@ -1,8 +1,8 @@
-import type { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai';
+import type { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai.js';
 import type {
   ChatCompletionResponse,
   ChatCompletionStreamResponse,
-} from './types';
+} from './types.js';
 
 export function createChatCompletion(
   request: OpenAIChatCompletionRequest,

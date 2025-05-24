@@ -1,27 +1,27 @@
 import type {
   OpenAIChatCompletionRequest,
   OpenAIChatCompletionResponse,
-} from '../types/openai';
+} from '../types/openai.js';
 import type { Request, Response, RequestHandler } from 'express';
 import {
   createChatCompletion as openAICreateChatCompletion,
   createStreamingChatCompletion as openAICreateStreamingChatCompletion,
-} from '../../llm-providers/open-ai/proxy';
+} from '../../llm-providers/open-ai/proxy.js';
 import {
   createChatCompletion as staticCreateChatCompletion,
   createStreamingChatCompletion as staticCreateStreamingChatCompletion,
-} from '../../llm-providers/static/proxy';
+} from '../../llm-providers/static/proxy.js';
 import {
   createChatCompletion as googleCreateChatCompletion,
   createStreamingChatCompletion as googleCreateStreamingChatCompletion,
-} from '../../llm-providers/google/proxy';
+} from '../../llm-providers/google/proxy.js';
 
-import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response';
-import { getDeploymentByName } from '../../deployments/get-deployment-by-name';
-import { executeForLlm } from '../../deployments/execute';
+import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response.js';
+import { getDeploymentByName } from '../../deployments/get-deployment-by-name.js';
+import { executeForLlm } from '../../deployments/execute.js';
 import { isLlmApiKey } from '@genie-nexus/types';
-import { handleAiSdkStreamResponse } from '../handle-ai-sdk-stream-response';
-import { handleAiSdkTextResponse } from '../handle-ai-sdk-text-response';
+import { handleAiSdkStreamResponse } from '../handle-ai-sdk-stream-response.js';
+import { handleAiSdkTextResponse } from '../handle-ai-sdk-text-response.js';
 
 export const handler: RequestHandler<
   object,

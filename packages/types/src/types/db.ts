@@ -15,7 +15,7 @@ import type {
   managementKeySchema,
   weaveApiKeySchema,
   googleProviderSchema,
-} from '../schemas/db';
+} from '../schemas/db.js';
 
 // Infer types from schemas
 export type Provider = z.infer<typeof providerSchema>;

@@ -1,10 +1,10 @@
 import express from 'express';
-import { getTenant } from '../../tenants/middleware/get-tenant';
-import { getTenantFromResponse } from '../../tenants/get-tenant-from-response';
-import { checkApiKeyOrUser } from '../../api-key/middleware/check-api-key-or-user';
-import { getConfiguration } from '../get-configuration';
+import { getTenant } from '../../tenants/middleware/get-tenant.js';
+import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
+import { checkApiKeyOrUser } from '../../api-key/middleware/check-api-key-or-user.js';
+import { getConfiguration } from '../get-configuration.js';
 import type { ConfigurationResponse } from '@genie-nexus/types';
-import { DEFAULT_TENANT_ID } from '../../tenants/constants';
+import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
 
 export function initialize(): express.Router {
   const router = express.Router();

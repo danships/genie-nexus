@@ -1,8 +1,8 @@
 import type { SuperSave } from 'supersave';
-import { Migration } from '../entities';
-import { tenantAndSampleData } from './migrations/0001_tenant-and-sample-data';
-import type { MigrationDefinition } from './types';
-import type { Migration as MigrationType } from '../types';
+import { Migration } from '../entities.js';
+import { tenantAndSampleData } from './migrations/0001_tenant-and-sample-data.js';
+import type { MigrationDefinition } from './types.js';
+import type { Migration as MigrationType } from '../types.js';
 import Debug from 'debug';
 
 const logger = Debug('genie-nexus:db:migrate');

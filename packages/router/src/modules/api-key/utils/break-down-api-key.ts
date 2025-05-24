@@ -1,4 +1,4 @@
-import { API_KEY_PREFIX, ID_SEPARATOR } from '../constants';
+import { API_KEY_PREFIX, ID_SEPARATOR } from '../constants.js';
 
 export function breakDownApiKey(apiKey: string): {
   keyId: string;

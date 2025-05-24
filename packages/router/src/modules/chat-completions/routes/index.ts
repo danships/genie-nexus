@@ -1,9 +1,9 @@
 import express from 'express';
-import { handler } from './chat-completion';
+import { handler } from './chat-completion.js';
 import cors from 'cors';
-import { checkApiKey } from '../../api-key/middleware/check-api-key';
-import { getTenantPath } from '../../tenants/get-tentant-path';
-import { URL_PARAM_DEPLOYMENT_NAME } from '../../deployments/constants';
+import { checkApiKey } from '../../api-key/middleware/check-api-key.js';
+import { getTenantPath } from '../../tenants/get-tentant-path.js';
+import { URL_PARAM_DEPLOYMENT_NAME } from '../../deployments/constants.js';
 
 export function initialize(): express.Router {
   const router = express.Router();

@@ -1,7 +1,7 @@
-import { isResponseLocalsNextAuthSession } from './types.mjs';
+import { isResponseLocalsNextAuthSession } from './types.js';
 import type { Response, Request } from 'express';
 import { type Session, getSession as getSessionAuth } from '@auth/express';
-import { getNextAuthConfig } from './get-next-auth-config.mjs';
+import { getNextAuthConfig } from './get-next-auth-config.js';
 import { getNextAuthUserRepository } from '@genie-nexus/database';
 import { logger } from '../../../core/logger.js';
 

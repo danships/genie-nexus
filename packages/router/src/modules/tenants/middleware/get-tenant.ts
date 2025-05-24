@@ -1,10 +1,10 @@
 import type { Request, Response, NextFunction } from 'express';
-import { getConfiguration } from '../../configuration/get-configuration';
-import { generateDefaultTenant } from '../generate-default-tenant';
-import { requestHasParamTenantId } from './types';
-import { TenantMissingError } from '../errors/tenant-missing-error';
-import { getTenantRepository } from '../../../core/db';
-import { RESPONSE_LOCALS_TENANT } from '../constants';
+import { getConfiguration } from '../../configuration/get-configuration.js';
+import { generateDefaultTenant } from '../generate-default-tenant.js';
+import { requestHasParamTenantId } from './types.js';
+import { TenantMissingError } from '../errors/tenant-missing-error.js';
+import { getTenantRepository } from '../../../core/db/index.js';
+import { RESPONSE_LOCALS_TENANT } from '../constants.js';
 
 export async function getTenant(
   // We explicitly do unknown so that it does not clash with other handlers in a route.

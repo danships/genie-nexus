@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import * as apiSchemas from './api';
+import * as apiSchemas from './api.js';
 
 const baseEntitySchema = z.object({
   id: z.string(),

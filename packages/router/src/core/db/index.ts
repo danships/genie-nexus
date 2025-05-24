@@ -1,10 +1,10 @@
 import type { Application } from 'express';
-import { getHooksForCollection } from './hooks/get-hooks-for-collection';
+import { getHooksForCollection } from './hooks/get-hooks-for-collection.js';
 import { initialize as initializeDB } from '@genie-nexus/database';
 import express from 'express';
 import cors from 'cors';
-import { getTenant } from '../../modules/tenants/middleware/get-tenant';
-import { checkApiKeyOrUser } from '../../modules/api-key/middleware/check-api-key-or-user';
+import { getTenant } from '../../modules/tenants/middleware/get-tenant.js';
+import { checkApiKeyOrUser } from '../../modules/api-key/middleware/check-api-key-or-user.js';
 import type { SuperSave } from 'supersave';
 
 export {

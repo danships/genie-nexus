@@ -4,6 +4,7 @@
   "private": true,
   "main": "dist/server.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "dev": "tsc-watch --onSuccess \"node --enable-source-maps dist/server.js --config config.example.json\"",

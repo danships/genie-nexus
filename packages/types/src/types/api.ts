@@ -13,7 +13,7 @@ import type {
   weaveApiKeySchemaApi,
   weaveHttpProxyProviderSchemaApi,
   weaveHttpStaticProviderSchemaApi,
-} from '../schemas/api';
+} from '../schemas/api.js';
 import type { z } from 'zod';
 
 type WithId<T> = T & { id: string };

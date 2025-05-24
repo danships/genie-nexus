@@ -1,13 +1,13 @@
 import type { Request } from 'express';
-import { ValidationError } from './errors/validation-error';
+import { ValidationError } from './errors/validation-error.js';
 import type { ApiKey } from '@genie-nexus/database';
-import { breakDownApiKey } from './utils/break-down-api-key';
-import { getApiKeyRepository } from '../../core/db';
-import { validateApiKey } from './secrets/validate-api-key';
-import { ApiKeyNotPresentError } from './errors/api-key-not-present-error';
-import { ApiKeyValidationError } from './errors/api-key-validation-error';
-import { API_KEY_SILENT_LLM_PREFIX } from './constants';
-import { logger } from '../../core/logger';
+import { breakDownApiKey } from './utils/break-down-api-key.js';
+import { getApiKeyRepository } from '../../core/db/index.js';
+import { validateApiKey } from './secrets/validate-api-key.js';
+import { ApiKeyNotPresentError } from './errors/api-key-not-present-error.js';
+import { ApiKeyValidationError } from './errors/api-key-validation-error.js';
+import { API_KEY_SILENT_LLM_PREFIX } from './constants.js';
+import { logger } from '../../core/logger.js';
 
 export async function checkApiKeyInRequest(
   req: Request<unknown, unknown>,

@@ -1,11 +1,11 @@
 import type { SuperSave } from 'supersave';
-import type { MigrationDefinition } from '../types';
+import type { MigrationDefinition } from '../types.js';
 import type {
   Tenant as TenantType,
   Provider as ProviderType,
   Deployment as DeploymentType,
-} from '../../types';
-import { Provider, Tenant, Deployment } from '../../entities';
+} from '../../types.js';
+import { Provider, Tenant, Deployment } from '../../entities.js';
 import type {
   DeploymentLLM,
   DeploymentWeave,

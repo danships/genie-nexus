@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2';
-import { logger } from '../../../core/logger';
+import { logger } from '../../../core/logger.js';
 
 /**
  * Validates if a provided secret matches the stored hash for a given ID
