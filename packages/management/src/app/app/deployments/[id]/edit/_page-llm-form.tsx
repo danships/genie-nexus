@@ -24,13 +24,14 @@ import { Loader } from '@lib/components/atoms/loader';
 import { useForm } from '@mantine/form';
 import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useSWRConfig } from 'swr';
 
 type Properties = {
   deployment: Deployment;
 };
 
 export function DeploymentLlmFormClientPage({ deployment }: Properties) {
-  const form = useForm<DeploymentLLMApi>({
+  const form = useForm<Omit<DeploymentLLMApi, 'id'>>({
     initialValues: {
       type: 'llm',
       name: deployment.name,
@@ -53,7 +54,7 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
   });
 
   const { patch, inProgress } = useCudApi();
-  const { mutate } = useApi(ENDPOINT_DEPLOYMENTS_OVERVIEW);
+  const { mutate } = useSWRConfig();
 
   const { data: providers } = useApi<Provider[]>(ENDPOINT_PROVIDERS_OVERVIEW);
   const filteredProviders = useMemo(() => {
@@ -65,13 +66,13 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
     );
   }, [providers]);
 
-  const handleSubmit = async (values: DeploymentLLMApi) => {
+  const handleSubmit = async (values: Omit<DeploymentLLMApi, 'id'>) => {
     try {
-      await patch<{ data: Deployment }, DeploymentLLMApi>(
+      await patch<{ data: Deployment }, Omit<DeploymentLLMApi, 'id'>>(
         `/collections/deployments/${deployment.id}`,
         values,
       );
-      void mutate();
+      void mutate(ENDPOINT_DEPLOYMENTS_OVERVIEW);
       notifications.show({
         title: 'Success',
         message: 'Deployment updated successfully',

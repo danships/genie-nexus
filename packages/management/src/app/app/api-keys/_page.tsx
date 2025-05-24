@@ -14,6 +14,7 @@ import {
   Stack,
   Notification,
   Badge,
+  Code,
 } from '@mantine/core';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -86,6 +87,7 @@ export const ApiKeysClientPage = disableSSR(function () {
           <Table.Tr>
             <Table.Th>Label</Table.Th>
             <Table.Th>Type</Table.Th>
+            <Table.Th>Key</Table.Th>
             <Table.Th>Created</Table.Th>
             <Table.Th>Active</Table.Th>
             <Table.Th>Actions</Table.Th>
@@ -108,6 +110,9 @@ export const ApiKeysClientPage = disableSSR(function () {
                 >
                   {TYPE_LABELS[apiKey.type]}
                 </Badge>
+              </Table.Td>
+              <Table.Td>
+                <Code>{apiKey.keyPreview}...</Code>
               </Table.Td>
               <Table.Td>
                 <Text size="sm" c="dimmed">

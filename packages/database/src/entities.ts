@@ -33,6 +33,7 @@ export const Deployment: Collection = {
     name: 'string',
     tenantId: 'string',
     isDeleted: 'boolean',
+    type: 'string',
   },
 };
 
