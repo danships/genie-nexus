@@ -6,14 +6,14 @@ export const environment = cleanEnv(process.env, {
     choices: ['development', 'production', 'test'],
     default: 'development',
   }),
-  AUTH_SECRET: str(),
+  BETTER_AUTH_SECRET: str({ default: '' }),
   DB: str({ default: 'sqlite://db.sqlite' }),
   MULTI_TENANT: bool({
     default: false,
   }),
   AUTH_METHOD: str({
-    choices: ['none', 'next-auth'],
-    default: 'next-auth',
+    choices: ['none', 'credentials'],
+    default: 'credentials',
   }),
   LOG_LEVEL: str({
     choices: ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'],

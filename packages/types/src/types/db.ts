@@ -4,7 +4,6 @@ import type {
   deploymentSchema,
   apiKeySchema,
   tenantSchema,
-  nextAuthUserSchema,
   weaveHttpStaticProviderSchema,
   deploymentLLMSchema,
   deploymentWeaveSchema,
@@ -15,6 +14,7 @@ import type {
   managementKeySchema,
   weaveApiKeySchema,
   googleProviderSchema,
+  authUserSchema,
 } from '../schemas/db.js';
 
 // Infer types from schemas
@@ -22,7 +22,7 @@ export type Provider = z.infer<typeof providerSchema>;
 export type Deployment = z.infer<typeof deploymentSchema>;
 export type ApiKey = z.infer<typeof apiKeySchema>;
 export type Tenant = z.infer<typeof tenantSchema>;
-export type NextAuthUser = z.infer<typeof nextAuthUserSchema>;
+export type AuthUser = z.infer<typeof authUserSchema>;
 
 export type DeploymentLLM = z.infer<typeof deploymentLLMSchema>;
 export type DeploymentWeave = z.infer<typeof deploymentWeaveSchema>;

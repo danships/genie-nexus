@@ -26,4 +26,4 @@ export interface Migration extends BaseEntity {
   version: string;
 }
 
-export type NextAuthUser = dbTypes.NextAuthUser;
+export type AuthUser = dbTypes.AuthUser;

@@ -9,6 +9,7 @@ import { initialize as initializeWeave } from './modules/weave/routes/index.js';
 import { initialize as initializeApiKey } from './modules/api-key/routes/index.js';
 import { initialize as initializeConfiguration } from './modules/configuration/routes/index.js';
 import { initialize as initializeDb } from './core/db/index.js';
+import { initialize as initializeAuthentication } from './modules/auth/better-auth/initialize.js';
 import { logger, setLoggerLevel } from './core/logger.js';
 import { isProduction } from './core/utils/is-production.js';
 import {
@@ -35,6 +36,7 @@ export async function startServer(
     multiTenant: options.multiTenant,
     devMode: options.devMode,
     authentication: options.authentication,
+    dbConnectionString: options.dbConnectionString,
   });
 
   const app = express();
@@ -51,10 +53,6 @@ export async function startServer(
   app.use(initializeWeave());
   app.use(initializeApiKey());
   app.use(initializeConfiguration());
-
-  const { initialize: initializeAuthentication } = await import(
-    './modules/auth/next-auth/initialize.js'
-  );
   await initializeAuthentication();
 
   // Link the next app

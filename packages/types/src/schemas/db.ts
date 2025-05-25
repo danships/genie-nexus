@@ -66,8 +66,8 @@ export const tenantSchema = baseEntitySchema.extend({
   name: z.string(),
 });
 
-// NextAuth User schema
-export const nextAuthUserSchema = entityWithTenantIdSchema.extend({
+// Auth
+export const authUserSchema = entityWithTenantIdSchema.extend({
   email: z.string().email(),
   password: z.string(),
   name: z.string().optional().nullable(),

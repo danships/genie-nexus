@@ -15,7 +15,7 @@ export {
   getTenantRepository,
 } from '@genie-nexus/database';
 
-export async function initialize(
+export function initialize(
   connectionString: string,
   app: Application,
 ): Promise<SuperSave> {
@@ -38,5 +38,5 @@ export async function initialize(
     hooks: getHooksForCollection(),
     app: router,
     // We force the return type to this package its SuperSave, because of the separate packages the typings get mixed up.
-  }) as unknown as SuperSave;
+  }) as unknown as Promise<SuperSave>;
 }

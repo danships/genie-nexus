@@ -81,9 +81,9 @@ export const Migration: EntityDefinition = {
   },
 };
 
-export const NextAuthUser: EntityDefinition = {
+export const AuthUser: EntityDefinition = {
   name: 'user',
-  namespace: 'nextauth',
+  namespace: 'auth',
   relations: [],
   template: {},
   filterSortFields: {

@@ -4,15 +4,9 @@ import type {
   ApiKey as ApiKeyType,
   Tenant as TenantType,
   Deployment as DeploymentType,
-  NextAuthUser as NextAuthUserType,
+  AuthUser as AuthUserType,
 } from './types.js';
-import {
-  Provider,
-  ApiKey,
-  Tenant,
-  Deployment,
-  NextAuthUser,
-} from './entities.js';
+import { Provider, ApiKey, Tenant, Deployment, AuthUser } from './entities.js';
 import { getDB } from './initialize.js';
 
 export * from './initialize.js';
@@ -42,12 +36,9 @@ export async function getTenantRepository(): Promise<Repository<TenantType>> {
   return db.getRepository<TenantType>(Tenant.name);
 }
 
-export async function getNextAuthUserRepository(): Promise<
-  Repository<NextAuthUserType>
+export async function getAuthUserRepository(): Promise<
+  Repository<AuthUserType>
 > {
   const db = await getDB();
-  return db.getRepository<NextAuthUserType>(
-    NextAuthUser.name,
-    NextAuthUser.namespace,
-  );
+  return db.getRepository<AuthUserType>(AuthUser.name, AuthUser.namespace);
 }

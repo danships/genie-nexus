@@ -6,16 +6,19 @@
   "type": "module",
   "scripts": {
     "dev": "tsc -w",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "vitest"
   },
   "devDependencies": {
-    "next-auth": "5.0.0-beta.27",
+    "@types/better-sqlite3": "^7.6.13",
     "supersave": "^0.16.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.2"
   },
   "dependencies": {
     "@genie-nexus/database": "workspace:*",
-    "argon2": "^0.41.1",
-    "zod": "^3.24.3"
+    "better-auth": "^1.2.8",
+    "better-sqlite3": "^11.10.0",
+    "mysql2": "^3.14.0"
   }
 }

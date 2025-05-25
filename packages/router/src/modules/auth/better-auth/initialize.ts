@@ -1,15 +1,12 @@
-import { getNextAuthUserRepository } from '@genie-nexus/database';
+import { getAuthUserRepository } from '@genie-nexus/database';
 import { getConfiguration } from '../../configuration/get-configuration.js';
 import { logger } from '../../../core/logger.js';
-import { saltAndHashPassword } from '@genie-nexus/auth';
-import { generatePassword } from './generate-password.js';
 import { DEFAULT_USER_EMAIL, DEFAULT_USER_ID } from '../constants.js';
 import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
-
-const DEV_PASSWORD = 'Tester01';
+import { getAuth } from '@genie-nexus/auth';
 
 export async function initialize() {
-  const userRepository = await getNextAuthUserRepository();
+  const userRepository = await getAuthUserRepository();
   const users = await userRepository.getByQuery(
     userRepository.createQuery().limit(1),
   );
@@ -29,21 +26,11 @@ export async function initialize() {
     return;
   }
 
-  if (users.length === 0 && !getConfiguration().multiTenant) {
-    logger.info('No users found, creating default user');
-    const password = getConfiguration().devMode
-      ? DEV_PASSWORD
-      : generatePassword();
-    await userRepository.create({
-      email: DEFAULT_USER_EMAIL,
-      password: await saltAndHashPassword(password),
-      created: new Date().toISOString(),
-      lastLogin: null,
-      tenantId: DEFAULT_TENANT_ID,
-    });
-    logger.info('Default user created', {
-      email: DEFAULT_USER_EMAIL,
-      password,
-    });
-  }
+  logger.info('Initializing auth');
+  getAuth({
+    connectionString: getConfiguration().dbConnectionString,
+    authenticationMethod: 'credentials',
+    defaultTenantId: DEFAULT_TENANT_ID,
+    debug: getConfiguration().devMode,
+  });
 }

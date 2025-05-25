@@ -5,6 +5,7 @@ import { API_KEY_PREFIX } from '../constants.js';
 import { ApplicationError } from '../../../core/errors/application-error.js';
 import { getConfiguration } from '../../configuration/get-configuration.js';
 import { logger } from '../../../core/logger.js';
+import { getSession } from '../../auth/better-auth/get-session.js';
 
 export const checkApiKeyOrUser =
   (type: ApiKey['type']) =>
@@ -24,10 +25,8 @@ export const checkApiKeyOrUser =
       return checkApiKey(type)(req, res, next);
     }
 
-    const { getSession } = await import('../../auth/next-auth/get-session.js');
-
     const session = await getSession(req, res);
-    if (!session?.user) {
+    if (session === null || !('userId' in session) || !session?.userId) {
       logger.warn('Unauthorized, no user in session.');
       throw new ApplicationError('Unauthorized', 401);
     }
