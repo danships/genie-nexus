@@ -4,7 +4,7 @@ import {
   ApiKey,
   Deployment,
   Migration,
-  NextAuthUser,
+  AuthUser,
   Provider,
   Tenant,
 } from './entities.js';
@@ -46,7 +46,7 @@ export async function initialize({
   await db.addCollection(addHooksToCollection(ApiKey, hooks));
   await db.addCollection(addHooksToCollection(Tenant, hooks));
   await db.addCollection(addHooksToCollection(Migration, hooks));
-  await db.addEntity(NextAuthUser);
+  await db.addEntity(AuthUser);
 
   if (executeMigrations) {
     await migrate(db);
@@ -64,5 +64,8 @@ export async function initialize({
 
 export async function getDB() {
   await superSavePromise;
+  if (!superSave) {
+    throw new Error('Database not initialized.');
+  }
   return superSave;
 }

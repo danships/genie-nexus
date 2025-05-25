@@ -10,6 +10,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "better-auth": "^1.2.8",
     "debug": "^4.4.0",
     "mysql2": "^3.14.0",
     "sqlite": "^5.1.1",

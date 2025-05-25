@@ -6,6 +6,7 @@ export type Configuration = {
         type: 'none';
       }
     | { type: 'credentials' };
+  dbConnectionString: string;
 };
 
 let configuration: Configuration | null = null;
