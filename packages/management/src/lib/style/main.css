@@ -17,3 +17,13 @@
 .is-transparent {
   background-color: transparent;
 }
+
+.is-half-size {
+  width: 50%;
+}
+
+@media (max-width: 768px) {
+  .is-half-size {
+    width: 100%;
+  }
+}

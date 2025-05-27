@@ -2,6 +2,7 @@ import { getEntities, getEntity } from '@lib/api/server-api';
 import { ApiKeyLlmDetailClientPage } from './_page-llm';
 import { ApiKeyApi, DeploymentApi } from '@genie-nexus/types';
 import { ApiKeyWeaveDetailClientPage } from './_page-weave';
+import { UserRequired } from '@lib/components/molecules/user-required';
 
 async function getApiKey(id: string) {
   const apiKey = await getEntity<ApiKeyApi>('apikeys', id);
@@ -37,7 +38,7 @@ export default async function ApiKeyDetailsPage({
   ]);
 
   return (
-    <>
+    <UserRequired>
       {apiKey.type === 'llm-api-key' && (
         <ApiKeyLlmDetailClientPage
           apiKey={apiKey}
@@ -54,6 +55,6 @@ export default async function ApiKeyDetailsPage({
           )}
         />
       )}
-    </>
+    </UserRequired>
   );
 }

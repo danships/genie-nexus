@@ -2,6 +2,7 @@ import { Deployment } from '@genie-nexus/database';
 import { getConfiguration, getEntity } from '@lib/api/server-api';
 import { DeploymentWeaveDetailClientPage } from './_page-weave';
 import { DeploymentLlmDetailClientPage } from './_page-llm';
+import { UserRequired } from '@lib/components/molecules/user-required';
 
 async function getDeployment(id: string) {
   const deployment = await getEntity<Deployment>('deployments', id);
@@ -34,7 +35,7 @@ export default async function DeploymentDetailPage({
   ]);
 
   return (
-    <>
+    <UserRequired>
       {deployment.type === 'llm' && (
         <DeploymentLlmDetailClientPage
           tenant={configuration.defaultTenant ? null : configuration.tenant}
@@ -44,6 +45,6 @@ export default async function DeploymentDetailPage({
       {deployment.type === 'weave' && (
         <DeploymentWeaveDetailClientPage deployment={deployment} />
       )}
-    </>
+    </UserRequired>
   );
 }

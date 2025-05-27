@@ -1,14 +1,14 @@
 import { UserRequired } from '@lib/components/molecules/user-required';
-import { NewDeploymentPage } from './_page';
+import { SettingsClientPage } from './_page';
 
 export const metadata = {
-  title: 'Create a New Deployment',
+  title: 'Settings',
 };
 
-export default function DeploymentsPage() {
+export default function SettingsPage() {
   return (
     <UserRequired>
-      <NewDeploymentPage />
+      <SettingsClientPage />
     </UserRequired>
   );
 }
