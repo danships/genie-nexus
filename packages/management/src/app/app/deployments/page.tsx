@@ -1,3 +1,4 @@
+import { UserRequired } from '@lib/components/molecules/user-required';
 import { DeploymentsClientPage } from './_page';
 
 export const metadata = {
@@ -5,5 +6,9 @@ export const metadata = {
 };
 
 export default function DeploymentsPage() {
-  return <DeploymentsClientPage />;
+  return (
+    <UserRequired>
+      <DeploymentsClientPage />
+    </UserRequired>
+  );
 }

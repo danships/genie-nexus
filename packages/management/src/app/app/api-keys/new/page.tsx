@@ -1,3 +1,4 @@
+import { UserRequired } from '@lib/components/molecules/user-required';
 import { NewApiKeyPage } from './_page';
 import { Metadata } from 'next';
 
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <NewApiKeyPage />;
+  return (
+    <UserRequired>
+      <NewApiKeyPage />
+    </UserRequired>
+  );
 }

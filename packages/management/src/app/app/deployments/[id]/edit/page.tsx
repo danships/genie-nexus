@@ -2,6 +2,7 @@ import { Deployment } from '@genie-nexus/database';
 import { getEntity } from '@lib/api/server-api';
 import { DeploymentWeaveFormClientPage } from './_page-weave-form';
 import { DeploymentLlmFormClientPage } from './_page-llm-form';
+import { UserRequired } from '@lib/components/molecules/user-required';
 
 async function getDeployment(id: string) {
   const deployment = await getEntity<Deployment>('deployments', id);
@@ -31,13 +32,13 @@ export default async function DeploymentDetailPage({
   const deployment = await getDeployment(id);
 
   return (
-    <>
+    <UserRequired>
       {deployment.type === 'weave' && (
         <DeploymentWeaveFormClientPage deployment={deployment} />
       )}
       {deployment.type === 'llm' && (
         <DeploymentLlmFormClientPage deployment={deployment} />
       )}
-    </>
+    </UserRequired>
   );
 }

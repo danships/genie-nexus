@@ -1,13 +1,12 @@
 import type { DefaultSession, NextAuthConfig } from 'next-auth';
-import {
-  type NextAuthUser,
-  getNextAuthUserRepository,
-} from '@genie-nexus/database';
+import { type NextAuthUser } from '@genie-nexus/database';
 import NextAuth from 'next-auth';
 import { environment } from '@lib/environment';
 import { createCredentialsProvider } from './create-credentials-provider';
 import { initialize } from '@genie-nexus/database';
 import { COOKIE_NAME } from '@genie-nexus/auth';
+import { getNextAuthUserRepository } from '@lib/core/db';
+import 'server-only';
 
 declare module 'next-auth' {
   /**
@@ -20,7 +19,6 @@ declare module 'next-auth' {
   interface User extends NextAuthUser {}
 }
 
-// TODO: move this to the auth package
 async function createConfig(): Promise<NextAuthConfig> {
   return {
     cookies: {
@@ -54,6 +52,10 @@ async function createConfig(): Promise<NextAuthConfig> {
           lastLogin: new Date().toISOString(),
         });
       },
+    },
+    pages: {
+      newUser: '/sign-up',
+      signIn: '/sign-in',
     },
   };
 }

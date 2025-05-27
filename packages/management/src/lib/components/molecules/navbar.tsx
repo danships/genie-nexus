@@ -5,13 +5,15 @@ import {
   UnstyledButton,
   ActionIcon,
   Group,
+  Avatar,
 } from '@mantine/core';
 import Link from 'next/link';
 import { useMantineColorScheme } from '@mantine/core';
-import { IconSun, IconMoon } from '@tabler/icons-react';
+import { IconSun, IconMoon, IconSettings } from '@tabler/icons-react';
 import { useCallback } from 'react';
+import type { AuthMethod } from '@lib/auth/types';
 
-export const Navbar = () => {
+export const Navbar = ({ authMethod }: { authMethod: AuthMethod }) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   const changeColorScheme = useCallback(() => {
@@ -35,20 +37,38 @@ export const Navbar = () => {
           </UnstyledButton>
         </Stack>
       </ScrollAreaAutosize>
-      <Group justify="center" p="md">
-        <ActionIcon
-          variant="default"
-          onClick={changeColorScheme}
-          size="lg"
-          aria-label="Toggle color scheme"
-        >
-          {colorScheme === 'dark' ? (
-            <IconSun size={18} />
-          ) : (
-            <IconMoon size={18} />
-          )}
-        </ActionIcon>
-      </Group>
+
+      {authMethod === 'none' && (
+        <Group justify="center" p="md">
+          <ActionIcon
+            variant="default"
+            onClick={changeColorScheme}
+            size="lg"
+            aria-label="Toggle color scheme"
+          >
+            {colorScheme === 'dark' ? (
+              <IconSun size={18} />
+            ) : (
+              <IconMoon size={18} />
+            )}
+          </ActionIcon>
+        </Group>
+      )}
+      {authMethod === 'credentials' && (
+        <Group p="md">
+          <Link href="/app/user">
+            <Avatar td="none" />
+          </Link>
+          <ActionIcon
+            variant="default"
+            size="lg"
+            component={Link}
+            href="/app/settings"
+          >
+            <IconSettings />
+          </ActionIcon>
+        </Group>
+      )}
     </Stack>
   );
 };
