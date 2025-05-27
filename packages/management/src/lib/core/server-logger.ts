@@ -35,7 +35,8 @@ const createLogMessage =
     if (!shouldLog(level)) {
       return;
     }
-    // eslint-disable-next-line no-console
+
+    // biome-ignore lint/suspicious/noConsole: Allowed for the logger.
     console.log(level, message, attrs);
   };
 

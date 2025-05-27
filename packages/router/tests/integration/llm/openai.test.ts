@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { OpenAI } from 'openai';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
-  startServer,
+  DEFAULT_TENANT_ID,
   type StartServerOptions,
   generateManagementApiKey,
-  DEFAULT_TENANT_ID,
   generatePublicApiKey,
+  startServer,
 } from '../../../dist/index.js';
-import { OpenAI } from 'openai';
 
 const OPTIONS: StartServerOptions = {
   port: 3030,
@@ -20,16 +20,10 @@ const OPTIONS: StartServerOptions = {
 
 describe('OpenAI Compatibility', () => {
   let endServer: (() => void) | undefined;
-  let managementApiKey: string = '';
   let publicApiKey: string = '';
 
   beforeAll(async () => {
     endServer = await startServer(OPTIONS);
-    managementApiKey = await generateManagementApiKey(
-      DEFAULT_TENANT_ID,
-      'test',
-      ['admin'],
-    );
     publicApiKey = await generatePublicApiKey(DEFAULT_TENANT_ID, 'test');
   });
 

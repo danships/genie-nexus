@@ -1,27 +1,27 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
+import { ApiKey } from '@genie-nexus/database';
+import { ENDPOINT_APIKEYS_OVERVIEW } from '@lib/api/swr-constants';
 import { useApi, useCudApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';
 import { Loader } from '@lib/components/atoms/loader';
+import { RelativeTime } from '@lib/components/atoms/relative-time';
 import {
-  Table,
+  Badge,
+  Button,
+  Code,
   Group,
+  Modal,
+  Notification,
+  Stack,
+  Table,
   Text,
   Title,
-  Button,
-  Modal,
-  Stack,
-  Notification,
-  Badge,
-  Code,
 } from '@mantine/core';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { notifications } from '@mantine/notifications';
-import { ENDPOINT_APIKEYS_OVERVIEW } from '@lib/api/swr-constants';
-import { ApiKey } from '@genie-nexus/database';
-import { RelativeTime } from '@lib/components/atoms/relative-time';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const TYPE_LABELS: Record<ApiKey['type'], string> = {
   'management-key': 'Management',
@@ -32,7 +32,7 @@ const TYPE_LABELS: Record<ApiKey['type'], string> = {
 export const ApiKeysClientPage = disableSSR(function () {
   const router = useRouter();
   const { data, isLoading, mutate } = useApi<ApiKey[]>(
-    ENDPOINT_APIKEYS_OVERVIEW,
+    ENDPOINT_APIKEYS_OVERVIEW
   );
   const { delete: deleteApiKey } = useCudApi();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -47,7 +47,7 @@ export const ApiKeysClientPage = disableSSR(function () {
 
     try {
       await deleteApiKey<{ data: ApiKey }>(
-        `/collections/apikeys/${apiKeyToDelete.id}`,
+        `/collections/apikeys/${apiKeyToDelete.id}`
       );
       void mutate();
       notifications.show({

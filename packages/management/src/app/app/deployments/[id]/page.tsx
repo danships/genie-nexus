@@ -1,8 +1,8 @@
 import { Deployment } from '@genie-nexus/database';
 import { getConfiguration, getEntity } from '@lib/api/server-api';
-import { DeploymentWeaveDetailClientPage } from './_page-weave';
-import { DeploymentLlmDetailClientPage } from './_page-llm';
 import { UserRequired } from '@lib/components/molecules/user-required';
+import { DeploymentLlmDetailClientPage } from './_page-llm';
+import { DeploymentWeaveDetailClientPage } from './_page-weave';
 
 async function getDeployment(id: string) {
   const deployment = await getEntity<Deployment>('deployments', id);

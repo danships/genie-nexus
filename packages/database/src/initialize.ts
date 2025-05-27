@@ -1,3 +1,4 @@
+import type { Application, Router } from 'express';
 import type { Collection, Hooks } from 'supersave';
 import { SuperSave } from 'supersave';
 import {
@@ -8,7 +9,6 @@ import {
   Provider,
   Tenant,
 } from './entities.js';
-import type { Application, Router } from 'express';
 import { migrate } from './migrate/index.js';
 
 let superSavePromise: Promise<SuperSave> | undefined;
@@ -23,7 +23,7 @@ type Options = {
 
 function addHooksToCollection(
   collection: Collection,
-  hooks: Hooks | undefined,
+  hooks: Hooks | undefined
 ) {
   if (!hooks) {
     return collection;

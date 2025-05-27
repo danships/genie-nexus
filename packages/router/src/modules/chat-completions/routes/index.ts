@@ -1,9 +1,9 @@
-import express from 'express';
-import { handler } from './chat-completion.js';
 import cors from 'cors';
+import express from 'express';
 import { checkApiKey } from '../../api-key/middleware/check-api-key.js';
-import { getTenantPath } from '../../tenants/get-tentant-path.js';
 import { URL_PARAM_DEPLOYMENT_NAME } from '../../deployments/constants.js';
+import { getTenantPath } from '../../tenants/get-tentant-path.js';
+import { handler } from './chat-completion.js';
 
 export function initialize(): express.Router {
   const router = express.Router();
@@ -17,7 +17,7 @@ export function initialize(): express.Router {
     cors(),
     checkApiKey('llm-api-key'),
     express.json(),
-    handler,
+    handler
   );
 
   return router;

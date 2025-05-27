@@ -5,7 +5,7 @@ import { type SignInResponse, getCsrfToken } from 'next-auth/react';
 async function doRequest<T>(
   url: string,
   method: string,
-  body?: string | FormData,
+  body?: string | FormData
 ): Promise<T> {
   const request: RequestInit = {
     method,
@@ -33,7 +33,7 @@ export const credentialsClient = {
     const response = await doRequest<SignInResponse>(
       '/api/auth/callback/credentials',
       'POST',
-      data,
+      data
     );
     return response;
   },

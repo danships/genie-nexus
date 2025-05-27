@@ -30,11 +30,11 @@ async function getCookieHeaders() {
 
 export async function getEntity<T extends LocalBaseEntity>(
   collection: string,
-  id: string,
+  id: string
 ) {
   const response = await fetch(
     `${COLLECTION_API_URL}/collections/${collection}/${id}`,
-    await getCookieHeaders(),
+    await getCookieHeaders()
   );
   if (!response.ok) {
     serverLogger.error(`Failed to fetch entities: ${response.statusText}`, {
@@ -49,11 +49,11 @@ export async function getEntity<T extends LocalBaseEntity>(
 
 export async function getEntities<T extends LocalBaseEntity>(
   collection: string,
-  query: string,
+  query: string
 ) {
   const response = await fetch(
     `${COLLECTION_API_URL}/collections/${collection}?${query}`,
-    await getCookieHeaders(),
+    await getCookieHeaders()
   );
   if (!response.ok) {
     serverLogger.error(`Failed to fetch entities: ${response.statusText}`, {
@@ -72,7 +72,7 @@ export async function getConfiguration(): Promise<
 > {
   const configurationResponse = await fetch(
     `${COLLECTION_API_URL}/configuration`,
-    await getCookieHeaders(),
+    await getCookieHeaders()
   );
   if (!configurationResponse.ok) {
     if (configurationResponse.status === 401) {

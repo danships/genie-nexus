@@ -1,9 +1,9 @@
 'use client'; // Error boundaries must be Client Components
 
 import { debugLogger } from '@lib/core/debug-logger';
-import { useEffect } from 'react';
-import { isAxiosError } from 'axios';
 import { Notification, Stack, Text } from '@mantine/core';
+import { isAxiosError } from 'axios';
+import { useEffect } from 'react';
 
 export default function Error({
   error,

@@ -1,17 +1,17 @@
+import type { AuthMethod } from '@lib/auth/types';
 import {
+  ActionIcon,
+  Avatar,
+  Group,
   ScrollAreaAutosize,
   Stack,
   Text,
   UnstyledButton,
-  ActionIcon,
-  Group,
-  Avatar,
 } from '@mantine/core';
-import Link from 'next/link';
 import { useMantineColorScheme } from '@mantine/core';
-import { IconSun, IconMoon, IconSettings } from '@tabler/icons-react';
+import { IconMoon, IconSettings, IconSun } from '@tabler/icons-react';
+import Link from 'next/link';
 import { useCallback } from 'react';
-import type { AuthMethod } from '@lib/auth/types';
 
 export const Navbar = ({ authMethod }: { authMethod: AuthMethod }) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();

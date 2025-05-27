@@ -1,5 +1,5 @@
-import type { BaseEntity } from 'supersave';
 import type * as dbTypes from '@genie-nexus/types';
+import type { BaseEntity } from 'supersave';
 
 export interface LocalBaseEntity extends BaseEntity {
   id: string;
@@ -13,7 +13,7 @@ export type Provider = dbTypes.Provider;
 
 export type Deployment = dbTypes.Deployment;
 export function isDeploymentLLM(
-  deployment: Deployment,
+  deployment: Deployment
 ): deployment is dbTypes.DeploymentLLM {
   return deployment.type === 'llm';
 }

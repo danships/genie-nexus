@@ -1,11 +1,11 @@
 import type { Request, Response } from 'express';
 import z from 'zod';
+import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
 import {
   generateLlmApiKey,
   generateManagementApiKey,
   generateWeaveApiKey,
 } from '../generate-api-key.js';
-import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
 
 const requestSchema = z.object({
   label: z.string(),

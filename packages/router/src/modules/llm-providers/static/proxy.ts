@@ -5,7 +5,7 @@ import type {
 } from './types.js';
 
 export function createChatCompletion(
-  request: OpenAIChatCompletionRequest,
+  request: OpenAIChatCompletionRequest
 ): ChatCompletionResponse {
   // get the list user message from request
   const userMessage = request.messages
@@ -24,7 +24,7 @@ export function createChatCompletion(
 }
 
 export function createStreamingChatCompletion(
-  request: OpenAIChatCompletionRequest,
+  request: OpenAIChatCompletionRequest
 ): ChatCompletionStreamResponse {
   // get the list user message from request
   const userMessage = request.messages

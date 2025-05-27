@@ -1,15 +1,15 @@
-import type { NextFunction, Request, Response } from 'express';
 import type { ApiKey } from '@genie-nexus/database';
-import { ApiKeyValidationError } from '../errors/api-key-validation-error.js';
-import { ApiKeyNotPresentError } from '../errors/api-key-not-present-error.js';
+import type { NextFunction, Request, Response } from 'express';
 import { checkApiKeyInRequest } from '../check-api-key-in-request.js';
+import { ApiKeyNotPresentError } from '../errors/api-key-not-present-error.js';
+import { ApiKeyValidationError } from '../errors/api-key-validation-error.js';
 
 export const checkApiKey =
   (type: ApiKey['type']) =>
   async (
     req: Request,
     res: Response<unknown, { apiKey: ApiKey }>,
-    next: NextFunction,
+    next: NextFunction
   ) => {
     try {
       const apiKey = await checkApiKeyInRequest(req, type);

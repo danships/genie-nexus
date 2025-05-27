@@ -1,11 +1,11 @@
-import type { DefaultSession, NextAuthConfig } from 'next-auth';
-import { type NextAuthUser } from '@genie-nexus/database';
-import NextAuth from 'next-auth';
-import { environment } from '@lib/environment';
-import { createCredentialsProvider } from './create-credentials-provider';
-import { initialize } from '@genie-nexus/database';
 import { COOKIE_NAME } from '@genie-nexus/auth';
+import { type NextAuthUser } from '@genie-nexus/database';
+import { initialize } from '@genie-nexus/database';
 import { getNextAuthUserRepository } from '@lib/core/db';
+import { environment } from '@lib/environment';
+import type { DefaultSession, NextAuthConfig } from 'next-auth';
+import NextAuth from 'next-auth';
+import { createCredentialsProvider } from './create-credentials-provider';
 import 'server-only';
 
 declare module 'next-auth' {
@@ -15,7 +15,7 @@ declare module 'next-auth' {
   interface Session {
     user: Omit<NextAuthUser, 'password'> & DefaultSession['user'];
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+
   interface User extends NextAuthUser {}
 }
 

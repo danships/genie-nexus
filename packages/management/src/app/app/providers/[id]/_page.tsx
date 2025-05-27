@@ -9,10 +9,10 @@ import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
 import { useApi, useCudApi } from '@lib/api/use-api';
 import { Loader } from '@lib/components/atoms/loader';
 import { ProviderGenericForm } from '@lib/components/molecules/provider-generic-form';
+import { ProviderGoogleForm } from '@lib/components/molecules/provider-google-form';
 import { ProviderHttpProxyForm } from '@lib/components/molecules/provider-http-proxy-form';
 import { ProviderHttpStaticForm } from '@lib/components/molecules/provider-http-static-form';
 import { ProviderOpenAIForm } from '@lib/components/molecules/provider-openai-form';
-import { ProviderGoogleForm } from '@lib/components/molecules/provider-google-form';
 import { PROVIDER_TYPES_SUMMARY } from '@lib/constants/providers';
 import { Notification, Tabs, Text, Title } from '@mantine/core';
 import { useRouter } from 'next/navigation';
@@ -56,7 +56,7 @@ export function ProviderDetailClientPage({
   const handleGenericSubmit = async (values: { name: string }) => {
     const updatedProviderResponse = await patch<{ data: Provider }>(
       `/collections/providers/${provider.id}`,
-      values,
+      values
     );
     setProvider(updatedProviderResponse.data);
     void mutate(); // Make sure the overview list is updated
@@ -66,11 +66,11 @@ export function ProviderDetailClientPage({
     values: Pick<
       WeaveHttpStaticProvider,
       'statusCode' | 'body' | 'responseHeaders'
-    >,
+    >
   ) => {
     const updatedProviderResponse = await patch<{ data: Provider }>(
       `/collections/providers/${provider.id}`,
-      values,
+      values
     );
     setProvider(updatedProviderResponse.data);
   };
@@ -79,11 +79,11 @@ export function ProviderDetailClientPage({
     values: Pick<
       WeaveHttpProxyProvider,
       'baseUrl' | 'requestHeaders' | 'responseHeaders'
-    >,
+    >
   ) => {
     const updatedProviderResponse = await patch<{ data: Provider }>(
       `/collections/providers/${provider.id}`,
-      values,
+      values
     );
     setProvider(updatedProviderResponse.data);
   };
@@ -98,7 +98,7 @@ export function ProviderDetailClientPage({
   }) => {
     const updatedProviderResponse = await patch<{ data: OpenAIProvider }>(
       `/collections/providers/${provider.id}`,
-      values,
+      values
     );
     setProvider({ ...updatedProviderResponse.data, apiKey: '' });
   };
@@ -106,7 +106,7 @@ export function ProviderDetailClientPage({
   const handleGoogleSubmit = async (values: { apiKey: string }) => {
     const updatedProviderResponse = await patch<{ data: Provider }>(
       `/collections/providers/${provider.id}`,
-      values,
+      values
     );
     setProvider(updatedProviderResponse.data);
   };
@@ -136,7 +136,7 @@ export function ProviderDetailClientPage({
                 | typeof TAB_HTTP_STATIC
                 | typeof TAB_HTTP_PROXY
                 | typeof TAB_OPENAI
-                | typeof TAB_GOOGLE) ?? TAB_DETAILS,
+                | typeof TAB_GOOGLE) ?? TAB_DETAILS
             )
           }
         >

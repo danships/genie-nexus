@@ -1,7 +1,7 @@
 'use client';
 
+import { ErrorNotification } from '@lib/components/atoms/error-notification';
 import { PageTitle } from '@lib/components/atoms/page-title';
-import { useState } from 'react';
 import {
   Button,
   Container,
@@ -10,9 +10,9 @@ import {
   Stack,
   TextInput,
 } from '@mantine/core';
-import { useEffect } from 'react';
 import { getCsrfToken } from 'next-auth/react';
-import { ErrorNotification } from '@lib/components/atoms/error-notification';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 export function LoginClientPage({ error }: { error?: string }) {
   const [csrfToken, setCsrfToken] = useState('');

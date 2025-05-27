@@ -1,4 +1,4 @@
-import { createContext, Script } from 'node:vm';
+import { Script, createContext } from 'node:vm';
 import {
   checkForDangerousOperations,
   expressionRegex,
@@ -37,7 +37,7 @@ const DEFAULT_CONFIG: EvaluationConfig = {
  */
 function evaluateSingleExpression(
   expression: string,
-  config: EvaluationConfig = DEFAULT_CONFIG,
+  config: EvaluationConfig = DEFAULT_CONFIG
 ): number | string | boolean | object | null {
   // Create a secure context with limited access
   const context = createContext({
@@ -73,7 +73,7 @@ function evaluateSingleExpression(
     if (error instanceof Error) {
       if (error.message.includes('Script execution timed out')) {
         throw new Error(
-          `Expression evaluation timed out after ${config.timeout}ms`,
+          `Expression evaluation timed out after ${config.timeout}ms`
         );
       }
       throw new Error(`Expression evaluation failed: ${error.message}`);
@@ -88,7 +88,7 @@ function evaluateSingleExpression(
  * @returns String representation of the value
  */
 function valueToString(
-  value: number | string | boolean | object | null,
+  value: number | string | boolean | object | null
 ): string {
   if (value === null) {
     return 'null';
@@ -107,7 +107,7 @@ function valueToString(
  */
 export function evaluateExpression(
   template: string,
-  config: EvaluationConfig = DEFAULT_CONFIG,
+  config: EvaluationConfig = DEFAULT_CONFIG
 ): string {
   // Validate template structure
   const structureResult = validateTemplateStructure(template);
@@ -142,11 +142,11 @@ export function evaluateExpression(
       } catch (error) {
         if (error instanceof Error) {
           throw new Error(
-            `Failed to evaluate expression "${expression}": ${error.message}`,
+            `Failed to evaluate expression "${expression}": ${error.message}`
           );
         }
         throw error;
       }
-    },
+    }
   );
 }

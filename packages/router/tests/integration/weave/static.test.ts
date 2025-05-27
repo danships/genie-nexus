@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
-  startServer,
+  DEFAULT_TENANT_ID,
   type StartServerOptions,
   generateManagementApiKey,
-  DEFAULT_TENANT_ID,
   generatePublicApiKey,
+  startServer,
 } from '../../../dist/index.js';
 
 const OPTIONS: StartServerOptions = {
@@ -21,17 +21,9 @@ const OPTIONS: StartServerOptions = {
 
 describe('Static HTTP Provider', () => {
   let endServer: (() => void) | undefined;
-  let managementApiKey: string = '';
-  let publicApiKey: string = '';
 
   beforeAll(async () => {
     endServer = await startServer(OPTIONS);
-    managementApiKey = await generateManagementApiKey(
-      DEFAULT_TENANT_ID,
-      'test',
-      ['admin'],
-    );
-    publicApiKey = await generatePublicApiKey(DEFAULT_TENANT_ID, 'test');
   });
 
   afterAll(() => {

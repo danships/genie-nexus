@@ -8,7 +8,7 @@ export async function saltAndHashPassword(password: string): Promise<string> {
 
 export async function verifyUsingHashedPassword(
   password: string,
-  hash: string,
+  hash: string
 ): Promise<boolean> {
   // Verify the password against the hash
   return await argon2.verify(hash, password);
@@ -16,5 +16,4 @@ export async function verifyUsingHashedPassword(
 
 export const isDev = () => process.env['NODE_ENV'] === 'development';
 
-// eslint-disable-next-line no-console
 export const logger = isDev() ? console.log : () => {};

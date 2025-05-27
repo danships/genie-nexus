@@ -1,7 +1,7 @@
 import { isProduction } from './core/utils/is-production.js';
 import {
-  generateLlmApiKey as generatePublicApiKeyFunction,
   generateManagementApiKey as generateManagementApiKeyFunction,
+  generateLlmApiKey as generatePublicApiKeyFunction,
 } from './modules/api-key/generate-api-key.js';
 import { startServer as startServerFunction } from './server.js';
 

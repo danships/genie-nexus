@@ -1,17 +1,17 @@
+import { WeaveHttpStaticProvider } from '@genie-nexus/types';
 import {
-  TextInput,
-  Button,
-  Stack,
-  NumberInput,
-  Textarea,
-  Select,
-  Group,
   ActionIcon,
+  Button,
+  Group,
+  NumberInput,
   Paper,
+  Select,
+  Stack,
+  TextInput,
+  Textarea,
   Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { WeaveHttpStaticProvider } from '@genie-nexus/types';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 
 type FormValues = Pick<
@@ -51,7 +51,7 @@ export function ProviderHttpStaticForm({ provider, submit }: Properties) {
   const removeHeader = (index: number) => {
     form.setFieldValue(
       'responseHeaders',
-      (form.values.responseHeaders ?? []).filter((_, i) => i !== index),
+      (form.values.responseHeaders ?? []).filter((_, i) => i !== index)
     );
   };
 

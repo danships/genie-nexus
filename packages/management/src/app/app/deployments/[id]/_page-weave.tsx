@@ -9,23 +9,23 @@ import { WeaveIcon } from '@lib/components/atoms/weave-icon';
 import { DetailCard } from '@lib/components/molecules/detail-card';
 import { useServerUrl } from '@lib/hooks/use-server-url';
 import {
-  Stack,
-  Group,
-  Text,
-  Badge,
-  Grid,
-  Button,
-  Table,
-  CopyButton,
   ActionIcon,
+  Badge,
+  Button,
+  CopyButton,
+  Grid,
+  Group,
+  Stack,
+  Table,
+  Text,
 } from '@mantine/core';
 import {
-  IconKey,
-  IconWorld,
   IconApi,
-  IconEdit,
   IconClipboard,
   IconClipboardCheckFilled,
+  IconEdit,
+  IconKey,
+  IconWorld,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -40,7 +40,7 @@ export function DeploymentWeaveDetailClientPage({ deployment }: Properties) {
     useApi<Provider>(() =>
       deployment.defaultProviderId
         ? `/collections/providers/${deployment.defaultProviderId}`
-        : false,
+        : false
     );
 
   const serverUrl = useServerUrl(`/weave/${deployment.name}`);

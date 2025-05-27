@@ -10,7 +10,7 @@ export type RequestParamTenantId = {
 };
 
 export function requestHasParamTenantId(
-  req: Request<unknown, unknown>,
+  req: Request<unknown, unknown>
 ): req is Request<RequestParamTenantId> {
   return (
     req.params !== null &&

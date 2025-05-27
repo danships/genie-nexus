@@ -1,30 +1,30 @@
 'use client';
 
 import type { Deployment } from '@genie-nexus/database';
+import { ENDPOINT_DEPLOYMENTS_OVERVIEW } from '@lib/api/swr-constants';
 import { useApi, useCudApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';
 import { Loader } from '@lib/components/atoms/loader';
 import {
-  Table,
   Badge,
+  Button,
   Group,
-  Text,
+  Modal,
   Select,
   Stack,
+  Table,
+  Text,
   Title,
-  Button,
-  Modal,
 } from '@mantine/core';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ENDPOINT_DEPLOYMENTS_OVERVIEW } from '@lib/api/swr-constants';
 import { notifications } from '@mantine/notifications';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export const DeploymentsClientPage = disableSSR(function () {
   const router = useRouter();
   const [filterType, setFilterType] = useState<string | null>(null);
   const { data, isLoading, mutate } = useApi<Deployment[]>(
-    ENDPOINT_DEPLOYMENTS_OVERVIEW,
+    ENDPOINT_DEPLOYMENTS_OVERVIEW
   );
   const { patch } = useCudApi();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -49,7 +49,7 @@ export const DeploymentsClientPage = disableSSR(function () {
         {
           isDeleted: true,
           deletedAt: new Date().toISOString(),
-        },
+        }
       );
       void mutate();
       notifications.show({

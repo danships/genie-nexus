@@ -1,8 +1,8 @@
 'use client';
 
+import { debugLogger } from '@lib/core/debug-logger';
 import { Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { debugLogger } from '@lib/core/debug-logger';
 
 type BaseApiKey = {
   id: string;

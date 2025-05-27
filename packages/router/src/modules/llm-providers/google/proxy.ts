@@ -10,7 +10,7 @@ type GoogleProviderConfig = {
 
 export async function createChatCompletion(
   request: OpenAIChatCompletionRequest,
-  config: GoogleProviderConfig,
+  config: GoogleProviderConfig
 ): Promise<GenerateTextResult<never, never>> {
   try {
     const google = createGoogleGenerativeAI({ apiKey: config.apiKey });
@@ -19,14 +19,14 @@ export async function createChatCompletion(
     return await generateText({ model, messages: request.messages });
   } catch (error) {
     throw new Error(
-      `Google AI completion failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      `Google AI completion failed: ${error instanceof Error ? error.message : 'Unknown error'}`
     );
   }
 }
 
 export function createStreamingChatCompletion(
   request: OpenAIChatCompletionRequest,
-  config: GoogleProviderConfig,
+  config: GoogleProviderConfig
 ) {
   try {
     const google = createGoogleGenerativeAI({ apiKey: config.apiKey });
@@ -38,7 +38,7 @@ export function createStreamingChatCompletion(
     });
   } catch (error) {
     throw new Error(
-      `Google AI streaming failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      `Google AI streaming failed: ${error instanceof Error ? error.message : 'Unknown error'}`
     );
   }
 }

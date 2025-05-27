@@ -1,29 +1,29 @@
 'use client';
 
-import {
-  Card,
-  Stack,
-  Title,
-  Text,
-  TextInput,
-  Switch,
-  Button,
-  Select,
-  Group,
-} from '@mantine/core';
-import { useApi, useCudApi } from '@lib/api/use-api';
-import { useMemo } from 'react';
+import { Deployment, Provider } from '@genie-nexus/database';
+import { DeploymentLLMApi } from '@genie-nexus/types';
 import {
   ENDPOINT_DEPLOYMENTS_OVERVIEW,
   ENDPOINT_PROVIDERS_OVERVIEW,
 } from '@lib/api/swr-constants';
-import { Deployment, Provider } from '@genie-nexus/database';
-import { DeploymentLLMApi } from '@genie-nexus/types';
-import { notifications } from '@mantine/notifications';
+import { useApi, useCudApi } from '@lib/api/use-api';
 import { Loader } from '@lib/components/atoms/loader';
+import {
+  Button,
+  Card,
+  Group,
+  Select,
+  Stack,
+  Switch,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { useSWRConfig } from 'swr';
 
 type Properties = {
@@ -64,7 +64,7 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
         (provider) =>
           provider.type === 'openai' ||
           provider.type === 'static' ||
-          provider.type === 'google',
+          provider.type === 'google'
       ) || []
     );
   }, [providers]);
@@ -73,7 +73,7 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
     try {
       await patch<{ data: Deployment }, Omit<DeploymentLLMApi, 'id'>>(
         `/collections/deployments/${deployment.id}`,
-        values,
+        values
       );
       void mutate(ENDPOINT_DEPLOYMENTS_OVERVIEW);
       notifications.show({

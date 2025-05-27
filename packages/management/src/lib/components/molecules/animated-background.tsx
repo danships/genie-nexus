@@ -1,19 +1,19 @@
 'use client';
 
-import type React from 'react';
-import { useEffect, useState, useRef, ComponentType } from 'react';
 import {
+  IconBinary,
   IconBrain,
+  IconCircuitDiode,
+  IconCode,
   IconCpu,
   IconDatabase,
-  IconWorld,
-  IconCode,
-  IconSparkles,
-  IconRobot,
   IconGitBranch,
-  IconCircuitDiode,
-  IconBinary,
+  IconRobot,
+  IconSparkles,
+  IconWorld,
 } from '@tabler/icons-react';
+import type React from 'react';
+import { ComponentType, useEffect, useRef, useState } from 'react';
 import styles from './animated-background.module.css';
 
 // Animation types
@@ -115,7 +115,7 @@ export function AnimatedBackground() {
 
       // Select a random element that's not currently animating
       const availableElements = elements.filter(
-        (el) => el.currentAnimation === null,
+        (el) => el.currentAnimation === null
       );
 
       if (availableElements.length === 0) return;
@@ -131,16 +131,16 @@ export function AnimatedBackground() {
         prev.map((el) =>
           el.id === elementId
             ? { ...el, currentAnimation: animationType ?? null }
-            : el,
-        ),
+            : el
+        )
       );
 
       // Clear the animation after it completes
       const timerId = window.setTimeout(() => {
         setElements((prev) =>
           prev.map((el) =>
-            el.id === elementId ? { ...el, currentAnimation: null } : el,
-          ),
+            el.id === elementId ? { ...el, currentAnimation: null } : el
+          )
         );
       }, duration);
 

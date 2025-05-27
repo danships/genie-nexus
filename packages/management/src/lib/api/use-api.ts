@@ -1,14 +1,14 @@
+import { notifications } from '@mantine/notifications';
+import { isAxiosError } from 'axios';
+import { useEffect, useState } from 'react';
 import useSWR, { type SWRConfiguration } from 'swr';
 import { fetcher as defaultFetcher, getClient } from './swr-config';
-import { useEffect, useState } from 'react';
-import { isAxiosError } from 'axios';
-import { notifications } from '@mantine/notifications';
 export { useMatchMutate } from './use-match-mutate';
 export { getClient, SwrDefaultApiConfig, noUnwrapFetcher } from './swr-config';
 
 export const useApi = <T = unknown>(
   url: string | (() => string | false),
-  options: Partial<SWRConfiguration> = {},
+  options: Partial<SWRConfiguration> = {}
 ) => {
   const fetcher = options.fetcher || defaultFetcher;
   const result = useSWR<T>(url, fetcher, options);
@@ -40,7 +40,7 @@ export const useCudApi = () => {
   async function request<T, D>(
     method: 'post' | 'patch' | 'delete',
     path: string,
-    data?: D,
+    data?: D
   ): Promise<T> {
     setInProgress(true);
     try {

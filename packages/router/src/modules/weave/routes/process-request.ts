@@ -1,20 +1,20 @@
 import type { Request, Response } from 'express';
-import { getDeploymentByName } from '../../deployments/get-deployment-by-name.js';
-import { executeForHttp as executeDeploymentForHttp } from '../../deployments/execute.js';
+import { proxyRequest } from '../../../weave-providers/http-proxy/proxy.js';
 import { generateStaticResponse } from '../../../weave-providers/static/generate-static-response.js';
 import { checkApiKeyInRequest } from '../../api-key/check-api-key-in-request.js';
 import { ApiKeyNotPresentError } from '../../api-key/errors/api-key-not-present-error.js';
 import { ApiKeyValidationError } from '../../api-key/errors/api-key-validation-error.js';
-import { proxyRequest } from '../../../weave-providers/http-proxy/proxy.js';
-import type { ResponseLocalsTenant } from '../../tenants/middleware/types.js';
+import { executeForHttp as executeDeploymentForHttp } from '../../deployments/execute.js';
+import { getDeploymentByName } from '../../deployments/get-deployment-by-name.js';
 import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
+import type { ResponseLocalsTenant } from '../../tenants/middleware/types.js';
 
 export async function processRequest(
   req: Request<{
     path: string | string[];
     deploymentName: string;
   }>,
-  res: Response<unknown, ResponseLocalsTenant>,
+  res: Response<unknown, ResponseLocalsTenant>
 ) {
   const { deploymentName, path } = req.params;
   const tenant = getTenantFromResponse(res);
@@ -22,7 +22,7 @@ export async function processRequest(
   const deployment = await getDeploymentByName(
     tenant.id,
     deploymentName ?? '',
-    'weave',
+    'weave'
   );
   if (!deployment) {
     res.status(404).json({ error: 'Deployment not found' });
@@ -64,7 +64,7 @@ export async function processRequest(
         provider,
         req,
         res,
-        Array.isArray(path) ? path.join('/') : (path ?? ''),
+        Array.isArray(path) ? path.join('/') : (path ?? '')
       );
       return;
     }

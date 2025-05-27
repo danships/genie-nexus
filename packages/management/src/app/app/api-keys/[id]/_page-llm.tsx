@@ -1,13 +1,13 @@
 'use client';
 
 import type { DeploymentLLMApi, LlmApiKeyApi } from '@genie-nexus/types';
-import { PageTitle } from '@lib/components/atoms/page-title';
-import { useCudApi } from '@lib/api/use-api';
-import { notifications } from '@mantine/notifications';
 import { ENDPOINT_APIKEYS_OVERVIEW } from '@lib/api/swr-constants';
-import { useState } from 'react';
+import { useCudApi } from '@lib/api/use-api';
+import { PageTitle } from '@lib/components/atoms/page-title';
 import { ApiKeyToggle } from '@lib/components/molecules/api-key-toggle';
 import { DeploymentsList } from '@lib/components/molecules/deployments-list';
+import { notifications } from '@mantine/notifications';
+import { useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 type Properties = {
@@ -70,7 +70,6 @@ export function ApiKeyLlmDetailClientPage({
 
       <ApiKeyToggle
         apiKey={apiKey}
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onToggle={handleToggleActive}
         inProgress={inProgressActive}
       />
@@ -78,7 +77,6 @@ export function ApiKeyLlmDetailClientPage({
       <DeploymentsList
         deployments={deployments}
         allowedDeployments={apiKey.allowedDeployments || []}
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onDeploymentsChange={handleDeploymentsChange}
         inProgress={inProgress}
       />

@@ -1,9 +1,9 @@
+import Debug from 'debug';
 import type { SuperSave } from 'supersave';
 import { Migration } from '../entities.js';
-import { tenantAndSampleData } from './migrations/0001_tenant-and-sample-data.js';
-import type { MigrationDefinition } from './types.js';
 import type { Migration as MigrationType } from '../types.js';
-import Debug from 'debug';
+import { tenantAndSampleData } from './migrations/0001-tenant-and-sample-data.js';
+import type { MigrationDefinition } from './types.js';
 
 const logger = Debug('genie-nexus:db:migrate');
 
@@ -14,11 +14,11 @@ const MIGRATIONS: Record<string, MigrationDefinition> = {
 export async function migrate(superSave: SuperSave) {
   const migrationRepository = superSave.getRepository<MigrationType>(
     Migration.name,
-    Migration.namespace,
+    Migration.namespace
   );
 
   const lastMigration = await migrationRepository.getOneByQuery(
-    migrationRepository.createQuery().sort('version', 'desc'),
+    migrationRepository.createQuery().sort('version', 'desc')
   );
   logger('Last ran migration', { last: lastMigration });
 
@@ -26,7 +26,7 @@ export async function migrate(superSave: SuperSave) {
     lastMigration === null
       ? Object.keys(MIGRATIONS)
       : Object.keys(MIGRATIONS).filter(
-          (migration) => migration > lastMigration['version'],
+          (migration) => migration > lastMigration['version']
         );
 
   logger('Migrations to run', { count: migrationsToRun.length });

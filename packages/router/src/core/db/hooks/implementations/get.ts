@@ -5,7 +5,7 @@ import { getTenantFromResponse } from '../../../../modules/tenants/get-tenant-fr
 export default function get(
   _collection: Collection,
   req: Request,
-  res: Response,
+  res: Response
 ): void {
   const tenant = getTenantFromResponse(res);
 

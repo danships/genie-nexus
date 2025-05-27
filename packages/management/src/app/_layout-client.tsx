@@ -2,7 +2,7 @@
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@lib/style/main.css';
-import { MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
 
@@ -12,7 +12,7 @@ const theme = createTheme({
 
 export function LayoutClient({ children }: { children: React.ReactNode }) {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark' | 'auto'>(
-    'auto',
+    'auto'
   );
 
   useEffect(() => {

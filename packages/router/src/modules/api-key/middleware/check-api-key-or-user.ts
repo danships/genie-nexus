@@ -1,17 +1,17 @@
-import type { NextFunction, Request, Response } from 'express';
 import type { ApiKey } from '@genie-nexus/database';
-import { checkApiKey } from './check-api-key.js';
-import { API_KEY_PREFIX } from '../constants.js';
+import type { NextFunction, Request, Response } from 'express';
 import { ApplicationError } from '../../../core/errors/application-error.js';
-import { getConfiguration } from '../../configuration/get-configuration.js';
 import { logger } from '../../../core/logger.js';
+import { getConfiguration } from '../../configuration/get-configuration.js';
+import { API_KEY_PREFIX } from '../constants.js';
+import { checkApiKey } from './check-api-key.js';
 
 export const checkApiKeyOrUser =
   (type: ApiKey['type']) =>
   async (
     req: Request,
     res: Response<unknown, { apiKey: ApiKey }>,
-    next: NextFunction,
+    next: NextFunction
   ) => {
     if (getConfiguration().authentication.type === 'none') {
       return next();

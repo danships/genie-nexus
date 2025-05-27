@@ -1,22 +1,22 @@
-import { getApiKeyRepository } from '../../core/db/index.js';
 import type { ApiKey } from '@genie-nexus/database';
+import type {
+  LlmApiKey,
+  ManagementApiKey,
+  WeaveApiKey,
+} from '@genie-nexus/types';
+import { getApiKeyRepository } from '../../core/db/index.js';
 import {
   API_KEY_PREFIX,
   API_KEY_SILENT_LLM_PREFIX,
   ID_SEPARATOR,
 } from './constants.js';
 import { generateApiKey } from './secrets/generate-api-key.js';
-import type {
-  LlmApiKey,
-  ManagementApiKey,
-  WeaveApiKey,
-} from '@genie-nexus/types';
 
 const KEY_PREVIEW_LENGTH = 12;
 
 async function generateApiKeyHelper(
   apiKeyToCreate: Omit<ApiKey, 'id'>,
-  keyPrefix: string = '',
+  keyPrefix: string = ''
 ): Promise<string> {
   const apiKeyRepository = await getApiKeyRepository();
 
@@ -34,10 +34,10 @@ async function generateApiKeyHelper(
   return generatedApiKey;
 }
 
-export async function generateLlmApiKey(
+export function generateLlmApiKey(
   tenantId: string,
   label: string,
-  allowedDeployments?: string[],
+  allowedDeployments?: string[]
 ) {
   const apiKeyToCreate: Omit<LlmApiKey, 'id'> = {
     tenantId,
@@ -55,10 +55,10 @@ export async function generateLlmApiKey(
   return generateApiKeyHelper(apiKeyToCreate, API_KEY_SILENT_LLM_PREFIX);
 }
 
-export async function generateWeaveApiKey(
+export function generateWeaveApiKey(
   tenantId: string,
   label: string,
-  allowedDeployments?: string[],
+  allowedDeployments?: string[]
 ) {
   const apiKeyToCreate: Omit<WeaveApiKey, 'id'> = {
     tenantId,
@@ -76,10 +76,10 @@ export async function generateWeaveApiKey(
   return generateApiKeyHelper(apiKeyToCreate);
 }
 
-export async function generateManagementApiKey(
+export function generateManagementApiKey(
   tenantId: string,
   label: string,
-  scopes: string[],
+  scopes: string[]
 ): Promise<string> {
   const apiKeyToCreate: Omit<ManagementApiKey, 'id'> = {
     tenantId,

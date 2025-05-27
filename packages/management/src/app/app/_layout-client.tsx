@@ -1,12 +1,12 @@
 'use client';
 import { SwrDefaultApiConfig } from '@lib/api/swr-config';
+import type { AuthMethod } from '@lib/auth/types';
+import { AnimatedBackground } from '@lib/components/molecules/animated-background';
+import { Navbar } from '@lib/components/molecules/navbar';
 import { AppShell, Burger, Group } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { SessionProvider } from 'next-auth/react';
 import Image from 'next/image';
-import { Navbar } from '@lib/components/molecules/navbar';
-import { useDisclosure } from '@mantine/hooks';
-import { AnimatedBackground } from '@lib/components/molecules/animated-background';
-import type { AuthMethod } from '@lib/auth/types';
 
 const AppLayoutClient = ({
   children,

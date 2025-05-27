@@ -1,27 +1,27 @@
 'use client';
 
+import { ApiKey } from '@genie-nexus/database';
+import { ENDPOINT_APIKEYS_OVERVIEW } from '@lib/api/swr-constants';
 import { useCudApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';
 import { Loader } from '@lib/components/atoms/loader';
 import {
+  ActionIcon,
+  Button,
+  Code,
+  CopyButton,
+  Group,
+  Modal,
+  Select,
   Stack,
-  Title,
   Text,
   TextInput,
-  Button,
-  Select,
-  Modal,
-  Group,
-  CopyButton,
-  ActionIcon,
-  Code,
+  Title,
 } from '@mantine/core';
-import { useRouter } from 'next/navigation';
-import { notifications } from '@mantine/notifications';
-import { ENDPOINT_APIKEYS_OVERVIEW } from '@lib/api/swr-constants';
-import { ApiKey } from '@genie-nexus/database';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { IconClipboard, IconClipboardCheckFilled } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useSWRConfig } from 'swr';
 

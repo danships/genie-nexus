@@ -1,20 +1,20 @@
 import type { z } from 'zod';
 import type {
-  providerSchema,
-  deploymentSchema,
   apiKeySchema,
-  tenantSchema,
-  nextAuthUserSchema,
-  weaveHttpStaticProviderSchema,
   deploymentLLMSchema,
+  deploymentSchema,
   deploymentWeaveSchema,
-  openAIProviderSchema,
-  staticLlmProviderSchema,
-  weaveHttpProxyProviderSchema,
+  googleProviderSchema,
   llmApiKeySchema,
   managementKeySchema,
+  nextAuthUserSchema,
+  openAIProviderSchema,
+  providerSchema,
+  staticLlmProviderSchema,
+  tenantSchema,
   weaveApiKeySchema,
-  googleProviderSchema,
+  weaveHttpProxyProviderSchema,
+  weaveHttpStaticProviderSchema,
 } from '../schemas/db.js';
 
 // Infer types from schemas

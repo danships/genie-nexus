@@ -1,7 +1,7 @@
 import { getNextAuth } from '@lib/auth/next-auth';
+import { UserRequired } from '@lib/components/molecules/user-required';
 import type { Metadata } from 'next';
 import { UserClientPage } from './_page';
-import { UserRequired } from '@lib/components/molecules/user-required';
 
 export const metadata: Metadata = {
   title: 'User Details',

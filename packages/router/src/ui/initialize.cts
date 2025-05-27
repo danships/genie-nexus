@@ -1,7 +1,7 @@
+import path from 'path';
+import { parse } from 'url';
 import type { Application } from 'express';
 import next from 'next';
-import { parse } from 'url';
-import path from 'path';
 
 /**
  * This file is a .ctj file on purpose, as a .(m)ts the
@@ -9,7 +9,7 @@ import path from 'path';
  */
 
 const managementPath = path.dirname(
-  require.resolve('@genie-nexus/management/package.json'),
+  require.resolve('@genie-nexus/management/package.json')
 );
 
 export async function initializeUI(app: Application) {

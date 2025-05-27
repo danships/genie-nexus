@@ -8,7 +8,7 @@ export async function doSignUp(name: string, email: string, password: string) {
   const userRepository = await getNextAuthUserRepository();
 
   const existingUser = await userRepository.getOneByQuery(
-    userRepository.createQuery().eq('email', email),
+    userRepository.createQuery().eq('email', email)
   );
 
   if (existingUser) {

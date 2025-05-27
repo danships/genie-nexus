@@ -2,11 +2,11 @@
 
 import { Provider } from '@genie-nexus/database';
 import {
+  GoogleProviderApi,
   OpenAIProviderApi,
   StaticLlmProviderApi,
   WeaveHttpProxyProviderApi,
   WeaveHttpStaticProviderApi,
-  GoogleProviderApi,
 } from '@genie-nexus/types';
 import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
 import { useApi, useCudApi } from '@lib/api/use-api';
@@ -16,13 +16,13 @@ import {
   PROVIDER_TYPES_SUMMARY,
   PROVIDER_TYPES_TITLES,
 } from '@lib/constants/providers';
-import { Card, Grid, Title, Text, Group } from '@mantine/core';
+import { Card, Grid, Group, Text, Title } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 
 export default function NewProviderClientPage() {
   const [selectedType, setSelectedType] = useState<Provider['type'] | null>(
-    null,
+    null
   );
   const { post, inProgress } = useCudApi();
   const router = useRouter();
@@ -53,7 +53,7 @@ export default function NewProviderClientPage() {
           };
           const response = await post<{ data: Provider }, StaticLlmProviderApi>(
             ENDPOINT_PROVIDERS_OVERVIEW,
-            staticProvider,
+            staticProvider
           );
           createdProvider = response.data;
           break;
@@ -99,7 +99,7 @@ export default function NewProviderClientPage() {
       }
       await mutate();
     },
-    [selectedType],
+    [selectedType]
   );
 
   return (

@@ -13,7 +13,7 @@ export type ApiKeyGenerationResult = {
  * @returns An object containing the secret API key and its hash
  */
 export async function generateApiKey(
-  id: string,
+  id: string
 ): Promise<ApiKeyGenerationResult> {
   // Generate a random 32-byte secret
   const secret = crypto.randomBytes(32).toString('hex');

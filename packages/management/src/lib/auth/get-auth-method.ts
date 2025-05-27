@@ -1,13 +1,10 @@
 import { environment } from '@lib/environment';
-import type { AuthMethod } from './types';
 import { connection } from 'next/server';
+import type { AuthMethod } from './types';
 
 export async function getAuthMethod(): Promise<AuthMethod> {
   await connection();
-  if (
-    environment.AUTH_METHOD === 'none' ||
-    process.env['IS_BUILD'] === 'true'
-  ) {
+  if (environment.AUTH_METHOD === 'none') {
     return 'none';
   }
   return 'credentials';

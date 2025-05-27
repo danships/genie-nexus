@@ -1,8 +1,8 @@
-import { getEntities, getEntity } from '@lib/api/server-api';
-import { ApiKeyLlmDetailClientPage } from './_page-llm';
 import { ApiKeyApi, DeploymentApi } from '@genie-nexus/types';
-import { ApiKeyWeaveDetailClientPage } from './_page-weave';
+import { getEntities, getEntity } from '@lib/api/server-api';
 import { UserRequired } from '@lib/components/molecules/user-required';
+import { ApiKeyLlmDetailClientPage } from './_page-llm';
+import { ApiKeyWeaveDetailClientPage } from './_page-weave';
 
 async function getApiKey(id: string) {
   const apiKey = await getEntity<ApiKeyApi>('apikeys', id);
@@ -33,7 +33,7 @@ export default async function ApiKeyDetailsPage({
     getApiKey(id),
     getEntities<DeploymentApi>(
       'deployments',
-      `limit=-1&sort=name&isDeleted=false`,
+      `limit=-1&sort=name&isDeleted=false`
     ),
   ]);
 
@@ -43,7 +43,7 @@ export default async function ApiKeyDetailsPage({
         <ApiKeyLlmDetailClientPage
           apiKey={apiKey}
           deployments={deployments.filter(
-            (deployment) => deployment.type === 'llm',
+            (deployment) => deployment.type === 'llm'
           )}
         />
       )}
@@ -51,7 +51,7 @@ export default async function ApiKeyDetailsPage({
         <ApiKeyWeaveDetailClientPage
           apiKey={apiKey}
           deployments={deployments.filter(
-            (deployment) => deployment.type === 'weave',
+            (deployment) => deployment.type === 'weave'
           )}
         />
       )}

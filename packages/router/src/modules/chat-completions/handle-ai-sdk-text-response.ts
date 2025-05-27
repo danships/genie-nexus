@@ -1,11 +1,11 @@
 import type { GenerateTextResult } from 'ai';
-import type { OpenAIChatCompletionResponse } from './types/openai.js';
 import type { Response } from 'express';
+import type { OpenAIChatCompletionResponse } from './types/openai.js';
 
 export function handleAiSdkTextResponse(
   model: string,
   expressResponse: Response,
-  aiResponse: GenerateTextResult<never, never>,
+  aiResponse: GenerateTextResult<never, never>
 ) {
   // Transform the response to match OpenAI's format
   const openAIResponse: OpenAIChatCompletionResponse = {

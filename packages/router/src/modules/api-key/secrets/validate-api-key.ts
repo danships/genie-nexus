@@ -11,7 +11,7 @@ import { logger } from '../../../core/logger.js';
 export async function validateApiKey(
   id: string,
   hash: string,
-  secret: string,
+  secret: string
 ): Promise<boolean> {
   try {
     // Verify the hash using Argon2

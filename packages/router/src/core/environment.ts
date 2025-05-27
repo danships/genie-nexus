@@ -1,4 +1,4 @@
-import { str, cleanEnv, num, bool } from 'envalid';
+import { bool, cleanEnv, num, str } from 'envalid';
 
 export const environment = cleanEnv(process.env, {
   PORT: num({ default: 3000 }),

@@ -1,6 +1,6 @@
 import { getAuthMethod } from '@lib/auth/get-auth-method';
-import AppLayoutClient from './_layout-client';
 import { UserRequired } from '@lib/components/molecules/user-required';
+import AppLayoutClient from './_layout-client';
 
 export default async function Layout({
   children,

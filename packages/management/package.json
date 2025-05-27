@@ -3,25 +3,11 @@
   "private": true,
   "scripts": {
     "dev": "PORT=3001 next dev",
-    "build": "IS_BUILD=true AUTH_SECRET=\"\" next build",
+    "build": "AUTH_SECRET=\"\" next build",
     "start": "next start",
     "lint": "next lint"
   },
   "type": "module",
-  "lint-staged": {
-    "*.ts": [
-      "eslint --max-warnings 0 --no-ignore",
-      "prettier --check --loglevel=warn",
-      "sh -c 'tsc -p tsconfig.json --noEmit'"
-    ],
-    "!(*.config)*.(js|cjs|mjs)": [
-      "eslint --max-warnings 0 --no-ignore",
-      "prettier --check --loglevel=warn"
-    ],
-    "*.(json|md)": [
-      "prettier --check --loglevel=warn"
-    ]
-  },
   "dependencies": {
     "@genie-nexus/auth": "workspace:*",
     "@genie-nexus/database": "workspace:*",
