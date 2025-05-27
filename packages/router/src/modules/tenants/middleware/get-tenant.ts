@@ -1,16 +1,16 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { NextFunction, Request, Response } from 'express';
+import { getTenantRepository } from '../../../core/db/index.js';
 import { getConfiguration } from '../../configuration/get-configuration.js';
+import { RESPONSE_LOCALS_TENANT } from '../constants.js';
+import { TenantMissingError } from '../errors/tenant-missing-error.js';
 import { generateDefaultTenant } from '../generate-default-tenant.js';
 import { requestHasParamTenantId } from './types.js';
-import { TenantMissingError } from '../errors/tenant-missing-error.js';
-import { getTenantRepository } from '../../../core/db/index.js';
-import { RESPONSE_LOCALS_TENANT } from '../constants.js';
 
 export async function getTenant(
   // We explicitly do unknown so that it does not clash with other handlers in a route.
   req: Request<unknown, unknown>,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   if (!getConfiguration().multiTenant) {
     res.locals[RESPONSE_LOCALS_TENANT] = generateDefaultTenant();

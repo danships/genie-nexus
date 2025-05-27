@@ -1,7 +1,7 @@
 import { type ExpressAuthConfig } from '@auth/express';
 import { COOKIE_NAME } from '@genie-nexus/auth';
-import { getCredentialsProvider } from './get-credentials-provider.js';
 import { getNextAuthUserRepository } from '@genie-nexus/database';
+import { getCredentialsProvider } from './get-credentials-provider.js';
 
 let nextAuthConfig: ExpressAuthConfig;
 

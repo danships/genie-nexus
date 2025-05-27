@@ -1,35 +1,36 @@
 'use client';
 
 import { Provider } from '@genie-nexus/database';
+import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
 import { useApi, useCudApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';
 import { Loader } from '@lib/components/atoms/loader';
+import { debugLogger } from '@lib/core/debug-logger';
 import {
-  Table,
   Badge,
+  Button,
   Group,
+  Modal,
+  Select,
+  Table,
   Text,
   Title,
-  Select,
-  Button,
-  Modal,
 } from '@mantine/core';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
-import Link from 'next/link';
 import { notifications } from '@mantine/notifications';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export const ProvidersClientPage = disableSSR(function () {
   const router = useRouter();
   const [filterType, setFilterType] = useState<string | null>(null);
   const { data, isLoading, mutate } = useApi<Provider[]>(
-    ENDPOINT_PROVIDERS_OVERVIEW,
+    ENDPOINT_PROVIDERS_OVERVIEW
   );
   const { patch } = useCudApi();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [providerToDelete, setProviderToDelete] = useState<Provider | null>(
-    null,
+    null
   );
 
   if (isLoading) {
@@ -50,7 +51,7 @@ export const ProvidersClientPage = disableSSR(function () {
         {
           isDeleted: true,
           deletedAt: new Date().toISOString(),
-        },
+        }
       );
       void mutate();
       notifications.show({
@@ -59,7 +60,7 @@ export const ProvidersClientPage = disableSSR(function () {
         color: 'green',
       });
     } catch (err) {
-      console.error('Failed to delete provider:', err);
+      debugLogger('Failed to delete provider:', err);
       notifications.show({
         title: 'Error',
         message: 'Failed to delete provider',

@@ -1,7 +1,7 @@
 import { environment } from '@lib/environment';
-import { SignUpClientPage } from './_page';
 import type { Metadata } from 'next';
 import { connection } from 'next/server';
+import { SignUpClientPage } from './_page';
 
 export const metadata: Metadata = {
   title: 'Sign Up',

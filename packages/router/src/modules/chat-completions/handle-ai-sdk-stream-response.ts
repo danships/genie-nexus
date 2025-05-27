@@ -4,7 +4,7 @@ import type { Response } from 'express';
 export async function handleAiSdkStreamResponse(
   model: string,
   expressResponse: Response,
-  aiResponse: StreamTextResult<never, never>,
+  aiResponse: StreamTextResult<never, never>
 ) {
   const { textStream, response: responsePromise } = aiResponse;
 

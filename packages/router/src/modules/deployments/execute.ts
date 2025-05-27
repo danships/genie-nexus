@@ -1,17 +1,17 @@
-import type { OpenAIChatCompletionRequest } from '../chat-completions/types/openai.js';
 import type { Deployment, Provider } from '@genie-nexus/database';
 import { getProviderRepository } from '../../core/db/index.js';
+import type { OpenAIChatCompletionRequest } from '../chat-completions/types/openai.js';
 
 export async function executeForLlm(
   deployment: Deployment,
-  request: OpenAIChatCompletionRequest,
+  request: OpenAIChatCompletionRequest
 ): Promise<{
   transformedRequest: OpenAIChatCompletionRequest;
   provider: Provider;
 }> {
   const providerRepository = await getProviderRepository();
   const provider = await providerRepository.getById(
-    deployment.defaultProviderId,
+    deployment.defaultProviderId
   );
 
   if (!provider) {
@@ -33,7 +33,7 @@ export async function executeForHttp(deployment: Deployment): Promise<{
 }> {
   const providerRepository = await getProviderRepository();
   const provider = await providerRepository.getById(
-    deployment.defaultProviderId,
+    deployment.defaultProviderId
   );
 
   if (!provider) {

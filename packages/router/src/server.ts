@@ -4,17 +4,17 @@ import express, {
   type Request,
   type Response,
 } from 'express';
-import { initialize as initializeChatCompletions } from './modules/chat-completions/routes/index.js';
-import { initialize as initializeWeave } from './modules/weave/routes/index.js';
-import { initialize as initializeApiKey } from './modules/api-key/routes/index.js';
-import { initialize as initializeConfiguration } from './modules/configuration/routes/index.js';
 import { initialize as initializeDb } from './core/db/index.js';
 import { logger, setLoggerLevel } from './core/logger.js';
 import { isProduction } from './core/utils/is-production.js';
+import { initialize as initializeApiKey } from './modules/api-key/routes/index.js';
+import { initialize as initializeChatCompletions } from './modules/chat-completions/routes/index.js';
 import {
   type Configuration,
   setConfiguration,
 } from './modules/configuration/get-configuration.js';
+import { initialize as initializeConfiguration } from './modules/configuration/routes/index.js';
+import { initialize as initializeWeave } from './modules/weave/routes/index.js';
 import { initializeUI } from './ui/initialize.cjs';
 
 export type StartServerOptions = {
@@ -25,7 +25,7 @@ export type StartServerOptions = {
 } & Configuration;
 
 export async function startServer(
-  options: StartServerOptions,
+  options: StartServerOptions
 ): Promise<() => void> {
   if (options.logLevel) {
     setLoggerLevel(options.logLevel);
@@ -84,7 +84,7 @@ export async function startServer(
       res.send(
         isProduction()
           ? 'An unexpected error occurred'
-          : `${error.message}: ${error.stack}`,
+          : `${error.message}: ${error.stack}`
       );
     }
   });

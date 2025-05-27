@@ -1,13 +1,13 @@
-import { isResponseLocalsNextAuthSession } from './types.js';
-import type { Response, Request } from 'express';
 import { type Session, getSession as getSessionAuth } from '@auth/express';
-import { getNextAuthConfig } from './get-next-auth-config.js';
 import { getNextAuthUserRepository } from '@genie-nexus/database';
+import type { Request, Response } from 'express';
 import { logger } from '../../../core/logger.js';
+import { getNextAuthConfig } from './get-next-auth-config.js';
+import { isResponseLocalsNextAuthSession } from './types.js';
 
 export async function getSession(
   req: Request,
-  res: Response,
+  res: Response
 ): Promise<Session | null> {
   if (isResponseLocalsNextAuthSession(res)) {
     return res.locals['session'];
@@ -23,7 +23,7 @@ export async function getSession(
   // TODO: when testing, the user set was only { email: 'xxx' }, so we replace it with the full object for now
   const userRepository = await getNextAuthUserRepository();
   const user = await userRepository.getOneByQuery(
-    userRepository.createQuery().eq('email', session.user.email),
+    userRepository.createQuery().eq('email', session.user.email)
   );
   if (user) {
     // @ts-expect-error TODO, cannot align the zod generated DB type for the name attribute (undefined/null)

@@ -1,5 +1,5 @@
 import 'server-only';
-import { str, cleanEnv, bool } from 'envalid';
+import { bool, cleanEnv, str } from 'envalid';
 
 export const environment = cleanEnv(process.env, {
   NODE_ENV: str({

@@ -1,7 +1,7 @@
 import {
-  initialize,
   getDB as getGenieNexusDB,
   getNextAuthUserRepository as getGenieNexusNextAuthUserRepository,
+  initialize,
 } from '@genie-nexus/database';
 import { environment } from '@lib/environment';
 

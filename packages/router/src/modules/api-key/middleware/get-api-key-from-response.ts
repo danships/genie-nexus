@@ -1,9 +1,9 @@
-import type { Response } from 'express';
 import type { ApiKey } from '@genie-nexus/database';
+import type { Response } from 'express';
 
 export function getApiKeyFromResponse(
   response: Response,
-  expectedType: ApiKey['type'],
+  expectedType: ApiKey['type']
 ) {
   if (!response.locals['apiKey']) {
     throw new Error('API key not found');

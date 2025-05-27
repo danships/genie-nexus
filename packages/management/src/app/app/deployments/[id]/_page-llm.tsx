@@ -9,26 +9,26 @@ import { PageTitle } from '@lib/components/atoms/page-title';
 import { DetailCard } from '@lib/components/molecules/detail-card';
 import { useServerUrl } from '@lib/hooks/use-server-url';
 import {
-  Stack,
-  Group,
-  Text,
-  Badge,
-  Grid,
-  Button,
-  Table,
-  CopyButton,
   ActionIcon,
+  Badge,
+  Button,
+  CopyButton,
+  Grid,
+  Group,
   Modal,
+  Stack,
+  Table,
   Tabs,
+  Text,
 } from '@mantine/core';
 import {
-  IconKey,
   IconApi,
-  IconEdit,
+  IconBrain,
   IconClipboard,
   IconClipboardCheckFilled,
-  IconBrain,
   IconCode,
+  IconEdit,
+  IconKey,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -46,11 +46,11 @@ export function DeploymentLlmDetailClientPage({
     useApi<Provider>(() =>
       deployment.defaultProviderId
         ? `/collections/providers/${deployment.defaultProviderId}`
-        : false,
+        : false
     );
 
   const serverUrl = useServerUrl(
-    `/api/v1/${tenant ? `${tenant.id}/` : ''}${deployment.name}`,
+    `/api/v1/${tenant ? `${tenant.id}/` : ''}${deployment.name}`
   );
   const [sdkModalOpen, setSdkModalOpen] = useState(false);
 

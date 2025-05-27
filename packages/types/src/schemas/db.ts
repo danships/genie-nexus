@@ -10,10 +10,10 @@ const entityWithTenantIdSchema = baseEntitySchema.extend({
 });
 
 export const openAIProviderSchema = apiSchemas.openAIProviderSchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 export const googleProviderSchema = apiSchemas.googleProviderSchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 
 export const staticLlmProviderSchema =
@@ -26,39 +26,39 @@ export const weaveHttpStaticProviderSchema =
   apiSchemas.weaveHttpStaticProviderSchemaApi.and(entityWithTenantIdSchema);
 
 export const providerSchema = apiSchemas.providerSchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 
 // Deployment schemas
 
 export const deploymentLLMSchema = apiSchemas.deploymentLLMSchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 
 export const deploymentWeaveSchema = apiSchemas.deploymentWeaveSchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 
 export const deploymentSchema = apiSchemas.deploymentSchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 
 // API Key schemas
 
 export const llmApiKeySchema = apiSchemas.llmApiKeySchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 
 export const managementKeySchema = apiSchemas.managementKeySchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 
 export const weaveApiKeySchema = apiSchemas.weaveApiKeySchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 
 export const apiKeySchema = apiSchemas.apiKeySchemaApi.and(
-  entityWithTenantIdSchema,
+  entityWithTenantIdSchema
 );
 
 // Tenant schema

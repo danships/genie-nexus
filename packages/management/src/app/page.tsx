@@ -1,4 +1,4 @@
-import { Container, Title, Text, Button } from '@mantine/core';
+import { Button, Container, Text, Title } from '@mantine/core';
 import Link from 'next/link';
 
 export default function HomePage() {

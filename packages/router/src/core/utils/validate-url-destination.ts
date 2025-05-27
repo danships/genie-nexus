@@ -1,5 +1,5 @@
-import { logger } from '../logger.js';
 import { promises as dns } from 'dns';
+import { logger } from '../logger.js';
 
 // List of private IP ranges
 const PRIVATE_IP_RANGES = [

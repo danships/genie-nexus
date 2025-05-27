@@ -1,19 +1,19 @@
 import type { Repository } from 'supersave';
-import type {
-  Provider as ProviderType,
-  ApiKey as ApiKeyType,
-  Tenant as TenantType,
-  Deployment as DeploymentType,
-  NextAuthUser as NextAuthUserType,
-} from './types.js';
 import {
-  Provider,
   ApiKey,
-  Tenant,
   Deployment,
   NextAuthUser,
+  Provider,
+  Tenant,
 } from './entities.js';
 import { getDB } from './initialize.js';
+import type {
+  ApiKey as ApiKeyType,
+  Deployment as DeploymentType,
+  NextAuthUser as NextAuthUserType,
+  Provider as ProviderType,
+  Tenant as TenantType,
+} from './types.js';
 
 export * from './initialize.js';
 export * from './types.js';
@@ -48,6 +48,6 @@ export async function getNextAuthUserRepository(): Promise<
   const db = await getDB();
   return db.getRepository<NextAuthUserType>(
     NextAuthUser.name,
-    NextAuthUser.namespace,
+    NextAuthUser.namespace
   );
 }

@@ -1,17 +1,17 @@
-import type { SuperSave } from 'supersave';
-import type { MigrationDefinition } from '../types.js';
-import type {
-  Tenant as TenantType,
-  Provider as ProviderType,
-  Deployment as DeploymentType,
-} from '../../types.js';
-import { Provider, Tenant, Deployment } from '../../entities.js';
 import type {
   DeploymentLLM,
   DeploymentWeave,
   WeaveHttpProxyProvider,
   WeaveHttpStaticProvider,
 } from '@genie-nexus/types';
+import type { SuperSave } from 'supersave';
+import { Deployment, Provider, Tenant } from '../../entities.js';
+import type {
+  Deployment as DeploymentType,
+  Provider as ProviderType,
+  Tenant as TenantType,
+} from '../../types.js';
+import type { MigrationDefinition } from '../types.js';
 
 // TODO duplicate from the constant in the router package
 const DEFAULT_TENANT_ID = 'default';
@@ -27,7 +27,7 @@ export const tenantAndSampleData: MigrationDefinition = {
     } satisfies Omit<TenantType, 'id'>);
 
     const providerRepository = superSave.getRepository<ProviderType>(
-      Provider.name,
+      Provider.name
     );
     const createdLlmProvider = await providerRepository.create({
       name: 'Static Echo Provider',
@@ -36,7 +36,7 @@ export const tenantAndSampleData: MigrationDefinition = {
     } satisfies Omit<ProviderType, 'id'>);
 
     const deploymentRepository = superSave.getRepository<DeploymentType>(
-      Deployment.name,
+      Deployment.name
     );
     const staticEchoDeployment: Omit<DeploymentLLM, 'id'> = {
       name: 'static-echo',
@@ -68,7 +68,7 @@ export const tenantAndSampleData: MigrationDefinition = {
       ],
     };
     const staticHttpProvider = await providerRepository.create(
-      staticHttpProviderToCreate,
+      staticHttpProviderToCreate
     );
 
     await deploymentRepository.create({
@@ -96,7 +96,7 @@ export const tenantAndSampleData: MigrationDefinition = {
       ],
     };
     const proxyHttpProvider = await providerRepository.create(
-      proxyHttpProviderToCreate,
+      proxyHttpProviderToCreate
     );
 
     const deploymentToCreate: Omit<DeploymentWeave, 'id'> = {

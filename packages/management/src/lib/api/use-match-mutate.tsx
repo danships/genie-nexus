@@ -10,7 +10,7 @@ export function useMatchMutate() {
     matchMutate: (matcher: RegExp, ...args: unknown[]): Promise<unknown> => {
       if (!(cache instanceof Map)) {
         throw new Error(
-          'matchMutate requires the cache provider to be a Map instance',
+          'matchMutate requires the cache provider to be a Map instance'
         );
       }
 

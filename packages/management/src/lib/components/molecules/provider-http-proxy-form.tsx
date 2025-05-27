@@ -1,15 +1,15 @@
+import { WeaveHttpProxyProvider } from '@genie-nexus/types';
 import {
-  TextInput,
-  Button,
-  Stack,
-  Group,
   ActionIcon,
+  Button,
+  Group,
   Paper,
-  Title,
+  Stack,
   Text,
+  TextInput,
+  Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { WeaveHttpProxyProvider } from '@genie-nexus/types';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 
 type FormValues = Pick<
@@ -54,11 +54,11 @@ export function ProviderHttpProxyForm({ provider, submit }: Properties) {
 
   const removeHeader = (
     type: 'requestHeaders' | 'responseHeaders',
-    index: number,
+    index: number
   ) => {
     form.setFieldValue(
       type,
-      (form.values[type] ?? []).filter((_, i) => i !== index),
+      (form.values[type] ?? []).filter((_, i) => i !== index)
     );
   };
 

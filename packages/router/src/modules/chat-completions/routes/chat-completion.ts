@@ -1,8 +1,8 @@
-import type {
-  OpenAIChatCompletionRequest,
-  OpenAIChatCompletionResponse,
-} from '../types/openai.js';
-import type { Request, Response, RequestHandler } from 'express';
+import type { Request, RequestHandler, Response } from 'express';
+import {
+  createChatCompletion as googleCreateChatCompletion,
+  createStreamingChatCompletion as googleCreateStreamingChatCompletion,
+} from '../../llm-providers/google/proxy.js';
 import {
   createChatCompletion as openAICreateChatCompletion,
   createStreamingChatCompletion as openAICreateStreamingChatCompletion,
@@ -11,15 +11,16 @@ import {
   createChatCompletion as staticCreateChatCompletion,
   createStreamingChatCompletion as staticCreateStreamingChatCompletion,
 } from '../../llm-providers/static/proxy.js';
-import {
-  createChatCompletion as googleCreateChatCompletion,
-  createStreamingChatCompletion as googleCreateStreamingChatCompletion,
-} from '../../llm-providers/google/proxy.js';
+import type {
+  OpenAIChatCompletionRequest,
+  OpenAIChatCompletionResponse,
+} from '../types/openai.js';
 
-import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response.js';
-import { getDeploymentByName } from '../../deployments/get-deployment-by-name.js';
-import { executeForLlm } from '../../deployments/execute.js';
 import { isLlmApiKey } from '@genie-nexus/types';
+import { logger } from '../../../core/logger.js';
+import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response.js';
+import { executeForLlm } from '../../deployments/execute.js';
+import { getDeploymentByName } from '../../deployments/get-deployment-by-name.js';
 import { handleAiSdkStreamResponse } from '../handle-ai-sdk-stream-response.js';
 import { handleAiSdkTextResponse } from '../handle-ai-sdk-text-response.js';
 
@@ -29,7 +30,7 @@ export const handler: RequestHandler<
   OpenAIChatCompletionRequest
 > = async (
   req: Request<object, unknown, OpenAIChatCompletionRequest>,
-  res: Response,
+  res: Response
 ) => {
   try {
     const request = req.body;
@@ -51,7 +52,7 @@ export const handler: RequestHandler<
     const deployment = await getDeploymentByName(
       apiKey.tenantId,
       request.model,
-      'llm',
+      'llm'
     );
     if (
       !isLlmApiKey(apiKey) ||
@@ -69,7 +70,7 @@ export const handler: RequestHandler<
 
     const { transformedRequest, provider } = await executeForLlm(
       deployment,
-      request,
+      request
     );
 
     if (isStreaming) {
@@ -82,7 +83,7 @@ export const handler: RequestHandler<
         case 'openai': {
           const aiResponse = openAICreateStreamingChatCompletion(
             transformedRequest,
-            provider.apiKey,
+            provider.apiKey
           );
 
           await handleAiSdkStreamResponse(request.model, res, aiResponse);
@@ -92,7 +93,7 @@ export const handler: RequestHandler<
         case 'google': {
           const aiResponse = googleCreateStreamingChatCompletion(
             transformedRequest,
-            { apiKey: provider.apiKey },
+            { apiKey: provider.apiKey }
           );
           await handleAiSdkStreamResponse(request.model, res, aiResponse);
           break;
@@ -149,7 +150,7 @@ export const handler: RequestHandler<
         case 'openai': {
           const response = await openAICreateChatCompletion(
             transformedRequest,
-            provider.apiKey,
+            provider.apiKey
           );
 
           handleAiSdkTextResponse(request.model, res, response);
@@ -159,7 +160,7 @@ export const handler: RequestHandler<
         case 'google': {
           const response = await googleCreateChatCompletion(
             transformedRequest,
-            { apiKey: provider.apiKey },
+            { apiKey: provider.apiKey }
           );
           handleAiSdkTextResponse(request.model, res, response);
           break;
@@ -201,8 +202,7 @@ export const handler: RequestHandler<
   } catch (error) {
     // Log error for debugging purposes
     if (process.env['NODE_ENV'] !== 'production') {
-      // eslint-disable-next-line no-console
-      console.error('Error in chat completion:', error);
+      logger.error('Error in chat completion:', error);
     }
 
     res.status(500).json({

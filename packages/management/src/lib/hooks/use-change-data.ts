@@ -15,7 +15,7 @@ export function useChangeData() {
 
   async function changeData<T, O>(
     action: () => Promise<T | null>,
-    success?: (result?: O) => void,
+    success?: (result?: O) => void
   ) {
     try {
       setInProgress(true);

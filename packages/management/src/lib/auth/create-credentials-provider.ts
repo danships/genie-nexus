@@ -1,6 +1,6 @@
-import Credentials from 'next-auth/providers/credentials';
 import { getCredentialsAuthorize } from '@genie-nexus/auth';
 import { getNextAuthUserRepository } from '@genie-nexus/database';
+import Credentials from 'next-auth/providers/credentials';
 
 export const createCredentialsProvider = async () => {
   const userRepository = await getNextAuthUserRepository();

@@ -1,17 +1,17 @@
-import { getNextAuthUserRepository } from '@genie-nexus/database';
-import { getConfiguration } from '../../configuration/get-configuration.js';
-import { logger } from '../../../core/logger.js';
 import { saltAndHashPassword } from '@genie-nexus/auth';
-import { generatePassword } from './generate-password.js';
-import { DEFAULT_USER_EMAIL, DEFAULT_USER_ID } from '../constants.js';
+import { getNextAuthUserRepository } from '@genie-nexus/database';
+import { logger } from '../../../core/logger.js';
+import { getConfiguration } from '../../configuration/get-configuration.js';
 import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
+import { DEFAULT_USER_EMAIL, DEFAULT_USER_ID } from '../constants.js';
+import { generatePassword } from './generate-password.js';
 
 const DEV_PASSWORD = 'Tester01';
 
 export async function initialize() {
   const userRepository = await getNextAuthUserRepository();
   const users = await userRepository.getByQuery(
-    userRepository.createQuery().limit(1),
+    userRepository.createQuery().limit(1)
   );
 
   if (getConfiguration().authentication.type === 'none') {

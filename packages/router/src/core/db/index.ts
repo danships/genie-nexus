@@ -1,11 +1,11 @@
-import type { Application } from 'express';
-import { getHooksForCollection } from './hooks/get-hooks-for-collection.js';
 import { initialize as initializeDB } from '@genie-nexus/database';
-import express from 'express';
 import cors from 'cors';
-import { getTenant } from '../../modules/tenants/middleware/get-tenant.js';
-import { checkApiKeyOrUser } from '../../modules/api-key/middleware/check-api-key-or-user.js';
+import type { Application } from 'express';
+import express from 'express';
 import type { SuperSave } from 'supersave';
+import { checkApiKeyOrUser } from '../../modules/api-key/middleware/check-api-key-or-user.js';
+import { getTenant } from '../../modules/tenants/middleware/get-tenant.js';
+import { getHooksForCollection } from './hooks/get-hooks-for-collection.js';
 
 export {
   getDB,
@@ -15,9 +15,9 @@ export {
   getTenantRepository,
 } from '@genie-nexus/database';
 
-export async function initialize(
+export function initialize(
   connectionString: string,
-  app: Application,
+  app: Application
 ): Promise<SuperSave> {
   const router = express.Router();
 
@@ -29,7 +29,7 @@ export async function initialize(
     express.json(),
     checkApiKeyOrUser('management-key'),
     getTenant,
-    router,
+    router
   );
 
   return initializeDB({
@@ -37,6 +37,5 @@ export async function initialize(
     executeMigrations: true,
     hooks: getHooksForCollection(),
     app: router,
-    // We force the return type to this package its SuperSave, because of the separate packages the typings get mixed up.
-  }) as unknown as SuperSave;
+  });
 }

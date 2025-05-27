@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { evaluateExpression } from './evaluate-expression';
 
 describe('evaluateExpression', () => {
@@ -10,28 +10,28 @@ describe('evaluateExpression', () => {
 
     it('should handle multiple expressions in one template', () => {
       expect(evaluateExpression('{{ 1 + 1 }}-{{ 2 + 2 }}-{{ 3 + 3 }}')).toBe(
-        '2-4-6',
+        '2-4-6'
       );
       expect(evaluateExpression('Start {{ 1 }} middle {{ 2 }} end')).toBe(
-        'Start 1 middle 2 end',
+        'Start 1 middle 2 end'
       );
     });
 
     it('should handle complex expressions in templates', () => {
       expect(evaluateExpression('Result: {{ Math.pow(2, 3) }}')).toBe(
-        'Result: 8',
+        'Result: 8'
       );
       expect(evaluateExpression('Length: {{ "hello".length }}')).toBe(
-        'Length: 5',
+        'Length: 5'
       );
     });
 
     it('should handle object and array expressions', () => {
       expect(evaluateExpression('Array: {{ [1,2,3].map(x => x * 2) }}')).toBe(
-        'Array: [2,4,6]',
+        'Array: [2,4,6]'
       );
       expect(evaluateExpression('Keys: {{ Object.keys({a:1,b:2}) }}')).toBe(
-        'Keys: ["a","b"]',
+        'Keys: ["a","b"]'
       );
     });
 
@@ -63,7 +63,7 @@ describe('evaluateExpression', () => {
       expect(evaluateExpression('{{ "hello".toUpperCase() }}')).toBe('HELLO');
       expect(evaluateExpression('{{ "hello".length }}')).toBe('5');
       expect(evaluateExpression('{{ "hello" + " world" }}')).toBe(
-        'hello world',
+        'hello world'
       );
     });
   });
@@ -72,10 +72,10 @@ describe('evaluateExpression', () => {
     it('should handle array operations', () => {
       expect(evaluateExpression('{{ [1,2,3].length }}')).toBe('3');
       expect(evaluateExpression('{{ [1,2,3].map(x => x * 2) }}')).toBe(
-        '[2,4,6]',
+        '[2,4,6]'
       );
       expect(evaluateExpression('{{ [1,2,3].filter(x => x > 1) }}')).toBe(
-        '[2,3]',
+        '[2,3]'
       );
     });
   });
@@ -83,10 +83,10 @@ describe('evaluateExpression', () => {
   describe('Object Operations', () => {
     it('should handle object operations', () => {
       expect(evaluateExpression('{{ Object.keys({a: 1, b: 2}) }}')).toBe(
-        '["a","b"]',
+        '["a","b"]'
       );
       expect(evaluateExpression('{{ Object.values({a: 1, b: 2}) }}')).toBe(
-        '[1,2]',
+        '[1,2]'
       );
     });
   });
@@ -95,7 +95,7 @@ describe('evaluateExpression', () => {
     it('should handle date operations', () => {
       const currentYear = new Date().getFullYear();
       expect(evaluateExpression('{{ new Date().getFullYear() }}')).toBe(
-        String(currentYear),
+        String(currentYear)
       );
     });
   });
@@ -104,25 +104,25 @@ describe('evaluateExpression', () => {
     describe('Loop Detection', () => {
       it('should block while loops', () => {
         expect(() => evaluateExpression('{{ while(true) {} }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
         expect(() => evaluateExpression('{{ while (true) {} }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
       });
 
       it('should block for loops', () => {
         expect(() => evaluateExpression('{{ for(;;) {} }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
         expect(() =>
-          evaluateExpression('{{ for(let i=0;i<10;i++) {} }}'),
+          evaluateExpression('{{ for(let i=0;i<10;i++) {} }}')
         ).toThrow('potentially dangerous operations');
       });
 
       it('should block do-while loops', () => {
         expect(() => evaluateExpression('{{ do {} while(true) }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
       });
     });
@@ -130,13 +130,13 @@ describe('evaluateExpression', () => {
     describe('Module Access', () => {
       it('should block require statements', () => {
         expect(() => evaluateExpression('{{ require("fs") }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
       });
 
       it('should block import statements', () => {
         expect(() => evaluateExpression('{{ import("fs") }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
       });
     });
@@ -144,22 +144,22 @@ describe('evaluateExpression', () => {
     describe('System Access', () => {
       it('should block process access', () => {
         expect(() => evaluateExpression('{{ process.exit() }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
       });
 
       it('should block global object access', () => {
         expect(() => evaluateExpression('{{ global }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
       });
 
       it('should block Node.js module access', () => {
         expect(() => evaluateExpression('{{ fs.readFile() }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
         expect(() => evaluateExpression('{{ http.get() }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
       });
     });
@@ -167,13 +167,13 @@ describe('evaluateExpression', () => {
     describe('Dynamic Code Execution', () => {
       it('should block eval', () => {
         expect(() => evaluateExpression('{{ eval("1+1") }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
       });
 
       it('should block Function constructor', () => {
         expect(() =>
-          evaluateExpression('{{ new Function("return 1+1") }}'),
+          evaluateExpression('{{ new Function("return 1+1") }}')
         ).toThrow('potentially dangerous operations');
       });
     });
@@ -181,13 +181,13 @@ describe('evaluateExpression', () => {
     describe('Network Access', () => {
       it('should block fetch', () => {
         expect(() =>
-          evaluateExpression('{{ fetch("http://example.com") }}'),
+          evaluateExpression('{{ fetch("http://example.com") }}')
         ).toThrow('potentially dangerous operations');
       });
 
       it('should block XMLHttpRequest', () => {
         expect(() => evaluateExpression('{{ new XMLHttpRequest() }}')).toThrow(
-          'potentially dangerous operations',
+          'potentially dangerous operations'
         );
       });
     });
@@ -195,13 +195,13 @@ describe('evaluateExpression', () => {
     describe('Timers', () => {
       it('should block setTimeout', () => {
         expect(() =>
-          evaluateExpression('{{ setTimeout(() => {}, 1000) }}'),
+          evaluateExpression('{{ setTimeout(() => {}, 1000) }}')
         ).toThrow('potentially dangerous operations');
       });
 
       it('should block setInterval', () => {
         expect(() =>
-          evaluateExpression('{{ setInterval(() => {}, 1000) }}'),
+          evaluateExpression('{{ setInterval(() => {}, 1000) }}')
         ).toThrow('potentially dangerous operations');
       });
     });
@@ -231,14 +231,14 @@ describe('evaluateExpression', () => {
       const complexExpression =
         '{{ Array(1000).fill(0).reduce((a, b) => a + b, 0) }}';
       expect(evaluateExpression(complexExpression, { timeout: 1000 })).toBe(
-        '0',
+        '0'
       );
     });
 
     it('should handle template with multiple expressions and timeout', () => {
       const template = 'Start {{ 1 + 1 }} middle {{ 2 + 2 }} end';
       expect(evaluateExpression(template, { timeout: 1000 })).toBe(
-        'Start 2 middle 4 end',
+        'Start 2 middle 4 end'
       );
     });
   });

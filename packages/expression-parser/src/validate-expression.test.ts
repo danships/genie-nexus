@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { validateExpression } from './validate-expression.js';
 
 describe('validateExpression', () => {
@@ -87,7 +87,7 @@ describe('validateExpression', () => {
       const result = validateExpression('plain text');
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain(
-        'Template must contain at least one expression',
+        'Template must contain at least one expression'
       );
     });
 

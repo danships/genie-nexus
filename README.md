@@ -32,7 +32,7 @@ This project is built as a monorepo using pnpm workspaces, consisting of several
 - Express.js for API routing
 - SQLite or Mysql for data persistence
 - pnpm for package management
-- ESLint and Prettier for code quality
+- biome for code quality
 - Husky for git hooks
 - Conventional commits for version control
 

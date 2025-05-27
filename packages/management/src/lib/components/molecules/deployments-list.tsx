@@ -1,12 +1,12 @@
 'use client';
 
-import { Checkbox, Button, Notification, Stack } from '@mantine/core';
+import { DeploymentLLMApi, DeploymentWeaveApi } from '@genie-nexus/types';
+import { DetailCard } from '@lib/components/molecules/detail-card';
+import { debugLogger } from '@lib/core/debug-logger';
+import { Button, Checkbox, Notification, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { debugLogger } from '@lib/core/debug-logger';
-import { DetailCard } from '@lib/components/molecules/detail-card';
 import { IconCircleCheck } from '@tabler/icons-react';
-import { DeploymentLLMApi, DeploymentWeaveApi } from '@genie-nexus/types';
 
 type Properties = {
   deployments: (DeploymentWeaveApi | DeploymentLLMApi)[];
@@ -67,7 +67,7 @@ export function DeploymentsList({
                 const newValue = event.currentTarget.checked
                   ? [...form.values.allowedDeployments, deployment.id]
                   : form.values.allowedDeployments.filter(
-                      (id: string) => id !== deployment.id,
+                      (id: string) => id !== deployment.id
                     );
                 form.setFieldValue('allowedDeployments', newValue);
               }}

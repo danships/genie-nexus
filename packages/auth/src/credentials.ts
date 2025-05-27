@@ -1,7 +1,7 @@
-import { z, ZodError } from 'zod';
-import { logger, verifyUsingHashedPassword } from './utils.js';
 import type { NextAuthUser } from '@genie-nexus/database';
 import type { Repository } from 'supersave';
+import { ZodError, z } from 'zod';
+import { logger, verifyUsingHashedPassword } from './utils.js';
 
 export const credentialsSchema = z.object({
   email: z
@@ -21,7 +21,7 @@ export const getCredentialsAuthorize =
       const input = await credentialsSchema.parseAsync(credentials);
 
       const user = await userRepository.getOneByQuery(
-        userRepository.createQuery().eq('email', input.email),
+        userRepository.createQuery().eq('email', input.email)
       );
       if (!user) {
         logger('User not found', { email: input.email });

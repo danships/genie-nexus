@@ -1,5 +1,5 @@
 import { GoogleProvider } from '@genie-nexus/types';
-import { Button, Stack, PasswordInput } from '@mantine/core';
+import { Button, PasswordInput, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
 type Properties = {

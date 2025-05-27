@@ -13,7 +13,7 @@ let client!: AxiosInstance;
 export function getClient(): AxiosInstance {
   if (!client) {
     throw new Error(
-      'Client not initialized. Did you forget to wrap your app in SwrDefaultApiConfig?',
+      'Client not initialized. Did you forget to wrap your app in SwrDefaultApiConfig?'
     );
   }
   return client;
@@ -40,30 +40,22 @@ export const SwrDefaultApiConfig: FunctionComponent<
 };
 
 export const noUnwrapFetcher = (resource: unknown) => {
-  return (
-    getClient()
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      .get(`${resource}`)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      .then((res) => res.data)
-  );
+  return getClient()
+    .get(`${resource}`)
+
+    .then((res) => res.data);
 };
 
 export const fetcher = (resource: unknown) => {
-  return (
-    getClient()
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      .get(`${resource}`)
-      .then((res) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        if (typeof res.data?.data === 'object') {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-          return res.data['data']; // Unwrap the data wrapper in the response.
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return res.data;
-      })
-  );
+  return getClient()
+    .get(`${resource}`)
+    .then((res) => {
+      if (typeof res.data?.data === 'object') {
+        return res.data['data']; // Unwrap the data wrapper in the response.
+      }
+
+      return res.data;
+    });
 };
 
 /* We define this as an inner component, so that we can wrap it in the ErrorContainer. */

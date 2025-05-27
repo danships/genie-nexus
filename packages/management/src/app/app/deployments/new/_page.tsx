@@ -1,17 +1,17 @@
 'use client';
 
-import { Card, Group, Stack, Title, Text, Button } from '@mantine/core';
-import { disableSSR } from '@lib/components/atoms/disable-ssr';
-import { useCudApi } from '@lib/api/use-api';
-import { useState } from 'react';
 import { Deployment } from '@genie-nexus/database';
 import {
   DeploymentLLMApiCreate,
   DeploymentWeaveApiCreate,
 } from '@genie-nexus/types';
-import { useRouter } from 'next/navigation';
-import { useSWRConfig } from 'swr';
 import { ENDPOINT_DEPLOYMENTS_OVERVIEW } from '@lib/api/swr-constants';
+import { useCudApi } from '@lib/api/use-api';
+import { disableSSR } from '@lib/components/atoms/disable-ssr';
+import { Button, Card, Group, Stack, Text, Title } from '@mantine/core';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useSWRConfig } from 'swr';
 
 export const NewDeploymentPage = disableSSR(function () {
   const [creatingType, setCreatingType] = useState<'llm' | 'http' | null>(null);

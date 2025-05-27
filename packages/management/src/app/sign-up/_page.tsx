@@ -1,6 +1,8 @@
 'use client';
 
+import { ErrorNotification } from '@lib/components/atoms/error-notification';
 import { PageTitle } from '@lib/components/atoms/page-title';
+import { useChangeData } from '@lib/hooks/use-change-data';
 import {
   Button,
   Container,
@@ -10,10 +12,8 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { doSignUp } from './_actions';
 import { useRouter } from 'next/navigation';
-import { ErrorNotification } from '@lib/components/atoms/error-notification';
-import { useChangeData } from '@lib/hooks/use-change-data';
+import { doSignUp } from './_actions';
 
 type FormValues = {
   name: string;

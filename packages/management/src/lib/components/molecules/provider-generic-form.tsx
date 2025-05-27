@@ -1,4 +1,4 @@
-import { TextInput, Button, Stack } from '@mantine/core';
+import { Button, Stack, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
 type FormValues = {

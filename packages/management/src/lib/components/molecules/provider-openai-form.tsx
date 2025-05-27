@@ -1,6 +1,6 @@
-import { TextInput, Button, Stack } from '@mantine/core';
-import { useForm } from '@mantine/form';
 import { OpenAIProvider } from '@genie-nexus/types';
+import { Button, Stack, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 
 type FormValues = {
   baseURL: string;

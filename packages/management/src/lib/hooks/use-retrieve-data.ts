@@ -8,7 +8,7 @@ type Options = {
 
 export function useRetrieveData<T>(
   fetcher: () => Promise<T>,
-  providedOptions?: Options,
+  providedOptions?: Options
 ) {
   const options = {
     autoStart: true,

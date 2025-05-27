@@ -8,7 +8,7 @@ const ENDPOINT = 'https://openrouter.ai/api/v1';
 
 export async function createChatCompletion(
   request: OpenAIChatCompletionRequest,
-  apiKey: string,
+  apiKey: string
 ): Promise<GenerateTextResult<never, never>> {
   if (!apiKey) {
     throw new Error('OpenAI API key is required');
@@ -35,7 +35,7 @@ export async function createChatCompletion(
 
 export function createStreamingChatCompletion(
   request: OpenAIChatCompletionRequest,
-  apiKey: string,
+  apiKey: string
 ): StreamTextResult<never, never> {
   if (!apiKey) {
     throw new Error('OpenAI API key is required');

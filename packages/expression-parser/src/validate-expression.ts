@@ -1,12 +1,12 @@
+import { Script } from 'vm';
+import * as acorn from 'acorn';
+import type { CallExpression, Identifier, MemberExpression, Node } from 'acorn';
+import { simple } from 'acorn-walk';
 import {
   checkForDangerousOperations,
   expressionRegex,
   validateTemplateStructure,
 } from './expression-utils.js';
-import { Script } from 'vm';
-import * as acorn from 'acorn';
-import { simple } from 'acorn-walk';
-import type { Node, Identifier, MemberExpression, CallExpression } from 'acorn';
 
 /**
  * Extracts variable names from an expression using AST parsing
@@ -43,7 +43,7 @@ function extractVariableNames(expression: string): Set<string> {
         // Skip built-in JavaScript values
         if (
           ['true', 'false', 'null', 'undefined', 'NaN', 'Infinity'].includes(
-            node.name,
+            node.name
           )
         ) {
           return;
@@ -68,7 +68,7 @@ function extractVariableNames(expression: string): Set<string> {
  */
 export function validateExpressionSyntax(
   expression: string,
-  allowedVariables?: string[],
+  allowedVariables?: string[]
 ): {
   isValid: boolean;
   error?: string;
@@ -82,7 +82,7 @@ export function validateExpressionSyntax(
       const variables = new Set(allowedVariables);
       const usedVariables = extractVariableNames(expression);
       const undefinedVars = Array.from(usedVariables).filter(
-        (varName) => !variables.has(varName),
+        (varName) => !variables.has(varName)
       );
 
       if (undefinedVars.length > 0) {
@@ -111,7 +111,7 @@ export function validateExpressionSyntax(
  */
 export function validateExpression(
   expression: string,
-  allowedVariables?: string[],
+  allowedVariables?: string[]
 ): {
   isValid: boolean;
   errors: string[];
@@ -141,11 +141,11 @@ export function validateExpression(
     // Validate expression syntax and check for dangerous operations
     const syntaxResult = validateExpressionSyntax(
       trimmedExpression,
-      allowedVariables,
+      allowedVariables
     );
     if (!syntaxResult.isValid && syntaxResult.error) {
       errors.push(
-        `Invalid expression "${trimmedExpression}": ${syntaxResult.error}`,
+        `Invalid expression "${trimmedExpression}": ${syntaxResult.error}`
       );
     }
   }

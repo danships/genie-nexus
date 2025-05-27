@@ -1,8 +1,8 @@
+import type { WeaveHttpProxyProvider } from '@genie-nexus/types';
 import type {
   Request as ExpressRequest,
   Response as ExpressResponse,
 } from 'express';
-import type { WeaveHttpProxyProvider } from '@genie-nexus/types';
 import { logger } from '../../core/logger.js';
 import { validateUrlDestination } from '../../core/utils/validate-url-destination.js';
 
@@ -12,7 +12,7 @@ export async function proxyRequest(
   provider: WeaveHttpProxyProvider,
   req: ExpressRequest<unknown, unknown>,
   res: ExpressResponse,
-  path: string,
+  path: string
 ) {
   // Construct the target URL by appending the path to the base URL
   const targetUrl = new URL(path, provider.baseUrl).toString();
@@ -64,7 +64,7 @@ export async function proxyRequest(
         ...headers,
         'accept-encoding': 'gzip, deflate, br',
       }),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       ...(req.method !== 'GET' && req.method !== 'HEAD' && { body: req.body }),
     });
 
