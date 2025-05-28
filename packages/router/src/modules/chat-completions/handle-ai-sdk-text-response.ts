@@ -5,7 +5,7 @@ import type { OpenAIChatCompletionResponse } from './types/openai.js';
 export function handleAiSdkTextResponse(
   model: string,
   expressResponse: Response,
-  aiResponse: GenerateTextResult<never, never>
+  aiResponse: GenerateTextResult<{}, unknown>
 ) {
   // Transform the response to match OpenAI's format
   const openAIResponse: OpenAIChatCompletionResponse = {
