@@ -1,8 +1,8 @@
-import type { Flow, RequestContext } from '@genie-nexus/types';
+import type { Condition, RequestContext } from '@genie-nexus/types';
 import { getFieldValue } from './get-field-value.js';
 
 export function evaluateCondition(
-  condition: Flow['steps'][number]['condition'],
+  condition: Condition,
   context: RequestContext
 ): boolean {
   if (!condition) return true;

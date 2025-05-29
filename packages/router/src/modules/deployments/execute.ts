@@ -7,8 +7,8 @@ import { proxyRequest } from '../../weave-providers/http-proxy/proxy.js';
 import { generateStaticResponse } from '../../weave-providers/static/generate-static-response.js';
 import type { ProviderResponse } from '../../weave-providers/types.js';
 import type { OpenAIChatCompletionRequest } from '../chat-completions/types/openai.js';
-import { evaluateCondition } from './flow/evaluate-condition.js';
 import { executeAction } from './flow/execute-action.js';
+import { evaluateConditions } from './flow/evaluate-conditions.js';
 
 export async function executeForLlm(
   deployment: Deployment,
@@ -121,8 +121,8 @@ export async function executeFlow(
   // Execute each step in the flow
   for (const step of flow.steps) {
     // Check condition if present
-    if (step.condition) {
-      const shouldExecute = evaluateCondition(step.condition, newContext);
+    if (step.conditions) {
+      const shouldExecute = evaluateConditions(step.conditions, newContext);
       if (!shouldExecute) {
         continue;
       }

@@ -129,8 +129,22 @@ export const actionSchema = z.discriminatedUnion('type', [
 ]);
 
 export const flowStepSchema = z.object({
-  condition: conditionSchema.optional(),
+  conditions: z.array(conditionSchema).optional(),
   action: actionSchema,
+});
+
+export const pipelineSchema = z.object({
+  id: z.string(),
+  steps: z.array(flowStepSchema),
+  enabled: z.boolean(),
+});
+
+export const eventSchema = z.object({
+  id: z.string(),
+  type: z.enum(['incomingRequest', 'response', 'requestFailed', 'timeout']),
+  name: z.string(),
+  pipeline: pipelineSchema,
+  enabled: z.boolean(),
 });
 
 export const flowSchema = z.object({

@@ -1,9 +1,16 @@
-'use client';
+"use client";
 
-import { DeploymentApi, Flow, FlowStep } from '@genie-nexus/types';
-import { useCudApi } from '@lib/api/use-api';
-import { ErrorNotification } from '@lib/components/atoms/error-notification';
-import { PipelineBlocksForm } from '@lib/components/molecules/pipeline-blocks-form';
+import {
+  DeploymentApi,
+  Event,
+  Flow,
+  FlowStep,
+  Pipeline,
+} from "@genie-nexus/types";
+import { useCudApi } from "@lib/api/use-api";
+import { ErrorNotification } from "@lib/components/atoms/error-notification";
+import { EmptyFlowState } from "@lib/components/molecules/empty-flow-state";
+import { PipelineBlocksForm } from "@lib/components/molecules/pipeline-blocks-form";
 import {
   Button,
   Grid,
@@ -16,8 +23,8 @@ import {
   Text,
   TextInput,
   Title,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
 import {
   IconAlertCircle,
   IconArrowRight,
@@ -28,26 +35,12 @@ import {
   IconListDetails,
   IconPlus,
   IconTransform,
-} from '@tabler/icons-react';
-import { useState } from 'react';
+} from "@tabler/icons-react";
+import { useState } from "react";
 
 type Properties = {
   deployment: DeploymentApi;
   flow: Flow | null;
-};
-
-type Pipeline = {
-  id: string;
-  steps: FlowStep[];
-  enabled: boolean;
-};
-
-type Event = {
-  id: string;
-  type: 'incomingRequest' | 'response' | 'requestFailed' | 'timeout';
-  name: string;
-  pipeline: Pipeline;
-  enabled: boolean;
 };
 
 type FormValues = {
@@ -75,7 +68,7 @@ export function FlowEditorClientPage({
       });
       setFlow(updatedFlow);
     } else {
-      const createdFlow = await post<Flow>('/collections/flows', {
+      const createdFlow = await post<Flow>("/collections/flows", {
         deploymentId: deployment.id,
         steps: form.values.events.map((event) => event.pipeline.steps),
       });
@@ -88,33 +81,45 @@ export function FlowEditorClientPage({
   const [selectedBlockType, setSelectedBlockType] = useState<string | null>(
     null
   );
-  const [modalStep, setModalStep] = useState<'block' | 'pipeline'>('block');
+  const [modalStep, setModalStep] = useState<"block" | "pipeline">("block");
 
   // Building block definitions
   const buildingBlocks = [
-    { label: 'Transform Data', icon: IconTransform, type: 'transform' },
-    { label: 'Validate', icon: IconCheck, type: 'validate' },
-    { label: 'Filter', icon: IconFilter, type: 'filter' },
-    { label: 'Add Delay', icon: IconClock, type: 'delay' },
-    { label: 'Log Data', icon: IconListDetails, type: 'log' },
+    { label: "Transform Data", icon: IconTransform, type: "transform" },
+    { label: "Validate", icon: IconCheck, type: "validate" },
+    { label: "Filter", icon: IconFilter, type: "filter" },
+    { label: "Add Delay", icon: IconClock, type: "delay" },
+    { label: "Log Data", icon: IconListDetails, type: "log" },
   ];
 
   // Event type definitions
   const eventTypes = [
     {
-      label: 'Incoming Request',
+      label: "Incoming Request",
       icon: IconArrowRight,
-      type: 'incomingRequest',
+      type: "incomingRequest" as const,
     },
-    { label: 'Response', icon: IconCheck, type: 'response' },
-    { label: 'Request Failed', icon: IconAlertCircle, type: 'requestFailed' },
-    { label: 'Timeout', icon: IconClockHour4, type: 'timeout' },
+    {
+      label: "Response",
+      icon: IconCheck,
+      type: "response" as const,
+    },
+    {
+      label: "Request Failed",
+      icon: IconAlertCircle,
+      type: "requestFailed" as const,
+    },
+    {
+      label: "Timeout",
+      icon: IconClockHour4,
+      type: "timeout" as const,
+    },
   ];
 
   // Update pipeline steps
   const handlePipelineStepsChange = (eventId: string, steps: FlowStep[]) => {
     form.setFieldValue(
-      'events',
+      "events",
       form.values.events.map((event) =>
         event.id === eventId
           ? {
@@ -130,24 +135,24 @@ export function FlowEditorClientPage({
   const handleAddBlock = (eventId: string, type: string) => {
     let newStep: FlowStep;
     switch (type) {
-      case 'transform':
-        newStep = { action: { type: 'transformData', expression: '' } };
+      case "transform":
+        newStep = { action: { type: "transformData", expression: "" } };
         break;
-      case 'filter':
-        newStep = { action: { type: 'filter', expression: '' } };
+      case "filter":
+        newStep = { action: { type: "filter", expression: "" } };
         break;
-      case 'delay':
-        newStep = { action: { type: 'delay', ms: 1000 } };
+      case "delay":
+        newStep = { action: { type: "delay", ms: 1000 } };
         break;
-      case 'log':
-        newStep = { action: { type: 'log', message: '' } };
+      case "log":
+        newStep = { action: { type: "log", message: "" } };
         break;
       default:
-        newStep = { action: { type: 'updateResponseBody', value: '' } };
+        newStep = { action: { type: "updateResponseBody", value: "" } };
     }
 
     form.setFieldValue(
-      'events',
+      "events",
       form.values.events.map((event) =>
         event.id === eventId
           ? {
@@ -172,7 +177,7 @@ export function FlowEditorClientPage({
     } else {
       setSelectedBlockType(blockType);
       setModalOpened(true);
-      setModalStep('pipeline');
+      setModalStep("pipeline");
     }
   };
 
@@ -182,7 +187,7 @@ export function FlowEditorClientPage({
       handleAddBlock(eventId, selectedBlockType);
       setModalOpened(false);
       setSelectedBlockType(null);
-      setModalStep('block');
+      setModalStep("block");
     }
   };
 
@@ -190,83 +195,76 @@ export function FlowEditorClientPage({
   const handleModalClose = () => {
     setModalOpened(false);
     setSelectedBlockType(null);
-    setModalStep('block');
+    setModalStep("block");
   };
 
   // Handle block type selection
   const handleBlockTypeSelect = (type: string) => {
     setSelectedBlockType(type);
-    setModalStep('pipeline');
+    setModalStep("pipeline");
+  };
+
+  const handleAddEvent = (type: Event["type"]) => {
+    const newEvent: Event = {
+      id: Math.random().toString(36).slice(2),
+      type,
+      name: `${type} ${form.values.events.length + 1}`,
+      pipeline: {
+        id: Math.random().toString(36).slice(2),
+        steps: [],
+        enabled: true,
+      },
+      enabled: true,
+    };
+    form.setFieldValue("events", [...form.values.events, newEvent]);
   };
 
   return (
     <form onSubmit={form.onSubmit(handleSave)}>
-      <Grid gutter="xl">
-        <Grid.Col span={{ base: 12, md: 9 }}>
-          <Stack gap="xl">
-            {/* Events and Pipelines */}
-            <Paper p="md" withBorder>
-              <Title order={4} mb="md">
-                Events and Pipelines
-              </Title>
-              <Stack>
-                {form.values.events.map((event) => (
-                  <Paper key={event.id} p="md" withBorder>
-                    <Group justify="space-between" mb="md">
-                      <Group>
-                        <Text fw={500}>Event: {event.type}</Text>
-                        <TextInput
-                          placeholder="Event name"
-                          value={event.name}
-                          onChange={(e) =>
-                            form.setFieldValue(
-                              'events',
-                              form.values.events.map((ev) =>
-                                ev.id === event.id
-                                  ? { ...ev, name: e.currentTarget.value }
-                                  : ev
-                              )
-                            )
-                          }
-                          size="xs"
-                          style={{ width: '200px' }}
-                        />
-                        <Switch
-                          checked={event.enabled}
-                          label={event.enabled ? 'Active' : 'Inactive'}
-                          onChange={(e) =>
-                            form.setFieldValue(
-                              'events',
-                              form.values.events.map((ev) =>
-                                ev.id === event.id
-                                  ? { ...ev, enabled: e.currentTarget.checked }
-                                  : ev
-                              )
-                            )
-                          }
-                        />
-                      </Group>
-                    </Group>
-                    <Paper p="md" withBorder>
+      {form.values.events.length === 0 ? (
+        <EmptyFlowState onAddEvent={handleAddEvent} />
+      ) : (
+        <Grid gutter="xl">
+          <Grid.Col span={{ base: 12, md: 9 }}>
+            <Stack gap="xl">
+              {/* Events and Pipelines */}
+              <Paper p="md" withBorder>
+                <Title order={4} mb="md">
+                  Events and Pipelines
+                </Title>
+                <Stack>
+                  {form.values.events.map((event) => (
+                    <Paper key={event.id} p="md" withBorder>
                       <Group justify="space-between" mb="md">
                         <Group>
-                          <Text fw={500}>Pipeline</Text>
-                          <Switch
-                            checked={event.pipeline.enabled}
-                            label={
-                              event.pipeline.enabled ? 'Active' : 'Inactive'
-                            }
+                          <Text fw={500}>Event: {event.type}</Text>
+                          <TextInput
+                            placeholder="Event name"
+                            value={event.name}
                             onChange={(e) =>
                               form.setFieldValue(
-                                'events',
+                                "events",
+                                form.values.events.map((ev) =>
+                                  ev.id === event.id
+                                    ? { ...ev, name: e.currentTarget.value }
+                                    : ev
+                                )
+                              )
+                            }
+                            size="xs"
+                            style={{ width: "200px" }}
+                          />
+                          <Switch
+                            checked={event.enabled}
+                            label={event.enabled ? "Active" : "Inactive"}
+                            onChange={(e) =>
+                              form.setFieldValue(
+                                "events",
                                 form.values.events.map((ev) =>
                                   ev.id === event.id
                                     ? {
                                         ...ev,
-                                        pipeline: {
-                                          ...ev.pipeline,
-                                          enabled: e.currentTarget.checked,
-                                        },
+                                        enabled: e.currentTarget.checked,
                                       }
                                     : ev
                                 )
@@ -275,31 +273,54 @@ export function FlowEditorClientPage({
                           />
                         </Group>
                       </Group>
-                      <PipelineBlocksForm
-                        steps={event.pipeline.steps}
-                        onChange={(steps) =>
-                          handlePipelineStepsChange(event.id, steps)
-                        }
-                      />
+                      <Paper p="md" withBorder>
+                        <Group justify="space-between" mb="md">
+                          <Group>
+                            <Text fw={500}>Pipeline</Text>
+                            <Switch
+                              checked={event.pipeline.enabled}
+                              label={
+                                event.pipeline.enabled ? "Active" : "Inactive"
+                              }
+                              onChange={(e) =>
+                                form.setFieldValue(
+                                  "events",
+                                  form.values.events.map((ev) =>
+                                    ev.id === event.id
+                                      ? {
+                                          ...ev,
+                                          pipeline: {
+                                            ...ev.pipeline,
+                                            enabled: e.currentTarget.checked,
+                                          },
+                                        }
+                                      : ev
+                                  )
+                                )
+                              }
+                            />
+                          </Group>
+                        </Group>
+                        <PipelineBlocksForm
+                          steps={event.pipeline.steps}
+                          onChange={(steps) =>
+                            handlePipelineStepsChange(event.id, steps)
+                          }
+                        />
+                      </Paper>
                     </Paper>
-                  </Paper>
-                ))}
-              </Stack>
-            </Paper>
-          </Stack>
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 3 }}>
-          <Stack gap="xl">
-            {/* Add Building Blocks */}
-            <Paper p="md" withBorder>
-              <Title order={5}>Add Building Blocks</Title>
-              <Stack>
-                {form.values.events.length === 0 ? (
-                  <Text c="dimmed" size="sm">
-                    Add an event first to add blocks
-                  </Text>
-                ) : (
-                  buildingBlocks.map((block) => (
+                  ))}
+                </Stack>
+              </Paper>
+            </Stack>
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 3 }}>
+            <Stack gap="xl">
+              {/* Add Building Blocks */}
+              <Paper p="md" withBorder>
+                <Title order={5}>Add Building Blocks</Title>
+                <Stack>
+                  {buildingBlocks.map((block) => (
                     <Button
                       key={block.type}
                       leftSection={<block.icon size={16} />}
@@ -308,94 +329,79 @@ export function FlowEditorClientPage({
                     >
                       {block.label}
                     </Button>
-                  ))
-                )}
-              </Stack>
-            </Paper>
+                  ))}
+                </Stack>
+              </Paper>
 
-            {/* Add Events */}
-            <Paper p="md" withBorder>
-              <Title order={5}>Add Events</Title>
-              <Stack>
-                {eventTypes.map((eventType) => (
-                  <Button
-                    key={eventType.type}
-                    leftSection={<eventType.icon size={16} />}
-                    variant="light"
-                    onClick={() => {
-                      const newEvent: Event = {
-                        id: Math.random().toString(36).slice(2),
-                        type: eventType.type as Event['type'],
-                        name: `${eventType.label} ${
-                          form.values.events.length + 1
-                        }`,
-                        pipeline: {
-                          id: Math.random().toString(36).slice(2),
-                          steps: [],
-                          enabled: true,
-                        },
-                        enabled: true,
-                      };
-                      form.setFieldValue('events', [
-                        ...form.values.events,
-                        newEvent,
-                      ]);
-                    }}
-                  >
-                    {eventType.label}
-                  </Button>
-                ))}
-              </Stack>
-            </Paper>
+              {/* Add Events */}
+              <Paper p="md" withBorder>
+                <Title order={5}>Add Events</Title>
+                <Stack>
+                  {eventTypes.map((eventType) => (
+                    <Button
+                      key={eventType.type}
+                      leftSection={<eventType.icon size={16} />}
+                      variant="light"
+                      onClick={() => handleAddEvent(eventType.type)}
+                    >
+                      {eventType.label}
+                    </Button>
+                  ))}
+                </Stack>
+              </Paper>
 
-            {/* Flow Status */}
-            <Paper p="md" withBorder>
-              <Title order={5}>Flow Status</Title>
-              <Stack gap={4}>
-                <Group justify="space-between">
-                  <span>Total Events:</span>
-                  <span>{form.values.events.length}</span>
-                </Group>
-                <Group justify="space-between">
-                  <span>Active Events:</span>
-                  <span>
-                    {form.values.events.filter((event) => event.enabled).length}
-                  </span>
-                </Group>
-                <Group justify="space-between">
-                  <span>Active Pipelines:</span>
-                  <span>
-                    {
-                      form.values.events.filter(
-                        (event) => event.enabled && event.pipeline.enabled
-                      ).length
-                    }
-                  </span>
-                </Group>
-              </Stack>
-              <Button
-                mt="md"
-                variant="default"
-                fullWidth
-                type="submit"
-                loading={inProgress}
-              >
-                Save
-              </Button>
-            </Paper>
-          </Stack>
-        </Grid.Col>
-      </Grid>
+              {/* Flow Status */}
+              <Paper p="md" withBorder>
+                <Title order={5}>Flow Status</Title>
+                <Stack gap={4}>
+                  <Group justify="space-between">
+                    <span>Total Events:</span>
+                    <span>{form.values.events.length}</span>
+                  </Group>
+                  <Group justify="space-between">
+                    <span>Active Events:</span>
+                    <span>
+                      {
+                        form.values.events.filter((event) => event.enabled)
+                          .length
+                      }
+                    </span>
+                  </Group>
+                  <Group justify="space-between">
+                    <span>Active Pipelines:</span>
+                    <span>
+                      {
+                        form.values.events.filter(
+                          (event) => event.enabled && event.pipeline.enabled
+                        ).length
+                      }
+                    </span>
+                  </Group>
+                </Stack>
+                <Button
+                  mt="md"
+                  variant="default"
+                  fullWidth
+                  type="submit"
+                  loading={inProgress}
+                >
+                  Save
+                </Button>
+              </Paper>
+            </Stack>
+          </Grid.Col>
+        </Grid>
+      )}
 
       {/* Pipeline Selection Modal */}
       <Modal
         opened={modalOpened}
         onClose={handleModalClose}
-        title={modalStep === 'block' ? 'Select Block Type' : 'Select Pipeline'}
+        title={modalStep === "block" ? "Select Block Type" : "Select Pipeline"}
         size="md"
       >
         <Stack>
-          {modalStep === 'block' ? (
+          {modalStep === "block" ? (
             <>
               <Text size="sm">Select the type of block to add:</Text>
               <Stack>
@@ -427,7 +433,7 @@ export function FlowEditorClientPage({
                 }}
               />
               <Group justify="flex-end" mt="md">
-                <Button variant="subtle" onClick={() => setModalStep('block')}>
+                <Button variant="subtle" onClick={() => setModalStep("block")}>
                   Back
                 </Button>
               </Group>

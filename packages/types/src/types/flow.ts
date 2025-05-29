@@ -8,6 +8,7 @@ import {
   delayActionSchema,
   doesNotContainConditionSchema,
   equalsConditionSchema,
+  eventSchema,
   filterActionSchema,
   flowSchema,
   flowStepSchema,
@@ -15,6 +16,7 @@ import {
   isNotEmptyConditionSchema,
   logActionSchema,
   notEqualsConditionSchema,
+  pipelineSchema,
   removeRequestHeaderActionSchema,
   removeResponseHeaderActionSchema,
   setRequestHeaderActionSchema,
@@ -76,3 +78,6 @@ export type RequestContext = {
   responseBody: unknown;
   responseStatusCode: number;
 };
+
+export type Pipeline = z.infer<typeof pipelineSchema>;
+export type Event = z.infer<typeof eventSchema>;
