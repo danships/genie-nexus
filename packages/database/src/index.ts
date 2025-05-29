@@ -2,6 +2,7 @@ import type { Repository } from 'supersave';
 import {
   ApiKey,
   Deployment,
+  Flow,
   NextAuthUser,
   Provider,
   Tenant,
@@ -10,6 +11,7 @@ import { getDB } from './initialize.js';
 import type {
   ApiKey as ApiKeyType,
   Deployment as DeploymentType,
+  Flow as FlowType,
   NextAuthUser as NextAuthUserType,
   Provider as ProviderType,
   Tenant as TenantType,
@@ -50,4 +52,9 @@ export async function getNextAuthUserRepository(): Promise<
     NextAuthUser.name,
     NextAuthUser.namespace
   );
+}
+
+export async function getFlowRepository() {
+  const db = await getDB();
+  return db.getRepository<FlowType>(Flow.name);
 }

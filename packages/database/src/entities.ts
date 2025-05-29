@@ -89,3 +89,14 @@ export const NextAuthUser: EntityDefinition = {
     email: 'string',
   },
 };
+
+export const Flow: Collection = {
+  name: 'flow',
+  relations: [],
+  template: {},
+  filterSortFields: {
+    deploymentId: 'string',
+    tenantId: 'string',
+    isDeleted: 'boolean',
+  },
+};

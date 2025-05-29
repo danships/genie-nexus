@@ -1,3 +1,4 @@
+import type { RequestContext } from '@genie-nexus/types';
 import type { Request, Response } from 'express';
 import { proxyRequest } from '../../../weave-providers/http-proxy/proxy.js';
 import { generateStaticResponse } from '../../../weave-providers/static/generate-static-response.js';
@@ -56,16 +57,25 @@ export async function processRequest(
     return;
   }
 
-  const { provider } = await executeDeploymentForHttp(deployment);
+  // Create the request context
+  const requestContext: RequestContext = {
+    path: Array.isArray(path) ? path.join('/') : (path ?? ''),
+    method: req.method,
+    requestHeaders: req.headers as Record<string, string>,
+    requestBody: req.body,
+    responseHeaders: {},
+    responseBody: undefined,
+    responseStatusCode: 200,
+  };
+
+  const { provider, transformedRequest } = await executeDeploymentForHttp(
+    deployment,
+    requestContext
+  );
 
   switch (provider.type) {
     case 'http-proxy': {
-      await proxyRequest(
-        provider,
-        req,
-        res,
-        Array.isArray(path) ? path.join('/') : (path ?? '')
-      );
+      await proxyRequest(provider, req, res, transformedRequest.path);
       return;
     }
 
