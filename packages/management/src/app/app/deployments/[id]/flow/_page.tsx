@@ -160,20 +160,6 @@ export function FlowEditorClientPage({
     );
   };
 
-  // Handle block button click
-  const handleBlockButtonClick = (blockType: string) => {
-    if (form.values.events.length === 1) {
-      const firstEvent = form.values.events[0];
-      if (firstEvent) {
-        handleAddBlock(firstEvent.id, blockType);
-      }
-    } else {
-      setSelectedBlockType(blockType);
-      setModalOpened(true);
-      setModalStep("pipeline");
-    }
-  };
-
   // Handle modal confirm
   const handleModalConfirm = (eventId: string) => {
     if (selectedBlockType) {
@@ -309,23 +295,6 @@ export function FlowEditorClientPage({
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 3 }}>
             <Stack gap="xl">
-              {/* Add Building Blocks */}
-              <Paper p="md" withBorder>
-                <Title order={5}>Add Building Blocks</Title>
-                <Stack>
-                  {buildingBlocks.map((block) => (
-                    <Button
-                      key={block.type}
-                      leftSection={<block.icon size={16} />}
-                      variant="light"
-                      onClick={() => handleBlockButtonClick(block.type)}
-                    >
-                      {block.label}
-                    </Button>
-                  ))}
-                </Stack>
-              </Paper>
-
               {/* Add Events */}
               <Paper p="md" withBorder>
                 <Title order={5}>Add Events</Title>

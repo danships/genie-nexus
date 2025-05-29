@@ -39,7 +39,7 @@ export type WeaveHttpProxyProviderApi = z.infer<
 export type WeaveHttpStaticProviderApi = z.infer<
   typeof weaveHttpStaticProviderSchemaApi
 >;
-export type ProviderApi = z.infer<typeof providerSchemaApi>;
+export type ProviderApi = WithId<z.infer<typeof providerSchemaApi>>;
 export type ApiKeyApi = WithId<z.infer<typeof apiKeySchemaApi>>;
 
 export type LlmApiKeyApi = WithId<z.infer<typeof llmApiKeySchemaApi>>;

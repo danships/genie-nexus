@@ -24,6 +24,7 @@ import {
   transformDataActionSchema,
   updateResponseBodyActionSchema,
   updateResponseStatusCodeActionSchema,
+  setProviderActionSchema,
 } from '../schemas/flow.js';
 
 export type EqualsCondition = z.infer<typeof equalsConditionSchema>;
@@ -64,6 +65,7 @@ export type TransformDataAction = z.infer<typeof transformDataActionSchema>;
 export type FilterAction = z.infer<typeof filterActionSchema>;
 export type DelayAction = z.infer<typeof delayActionSchema>;
 export type LogAction = z.infer<typeof logActionSchema>;
+export type SetProviderAction = z.infer<typeof setProviderActionSchema>;
 export type Action = z.infer<typeof actionSchema>;
 
 export type FlowStep = z.infer<typeof flowStepSchema>;
@@ -77,6 +79,7 @@ export type RequestContext = {
   responseHeaders: Record<string, string>;
   responseBody: unknown;
   responseStatusCode: number;
+  providerId: string;
 };
 
 export type Pipeline = z.infer<typeof pipelineSchema>;

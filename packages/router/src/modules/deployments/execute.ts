@@ -44,13 +44,6 @@ export async function executeForHttp(
 }> {
   const providerRepository = await getProviderRepository();
   const flowRepository = await getFlowRepository();
-  const provider = await providerRepository.getById(
-    deployment.defaultProviderId
-  );
-
-  if (!provider) {
-    throw new Error('Provider not found');
-  }
 
   // Get the flow for this deployment
   const flow = await flowRepository.getOneByQuery(
@@ -64,6 +57,15 @@ export async function executeForHttp(
   const transformedRequest = flow
     ? await executeFlowEvent(flow, 'incomingRequest', request)
     : request;
+
+  // Get the provider - either from the context or use the default
+  const provider = await providerRepository.getById(
+    transformedRequest.providerId
+  );
+
+  if (!provider || provider.tenantId !== deployment.tenantId) {
+    throw new Error('Provider not found');
+  }
 
   // Execute the provider to get the response
   let providerResponse: ProviderResponse;

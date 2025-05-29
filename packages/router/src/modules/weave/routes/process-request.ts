@@ -64,6 +64,7 @@ export async function processRequest(
     responseHeaders: {},
     responseBody: undefined,
     responseStatusCode: 200,
+    providerId: deployment.defaultProviderId,
   };
 
   // Execute the deployment and get the response

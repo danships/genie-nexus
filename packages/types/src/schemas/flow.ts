@@ -113,6 +113,12 @@ export const logActionSchema = z.object({
   message: z.string().optional(),
 });
 
+// Set Provider action
+export const setProviderActionSchema = z.object({
+  type: z.literal('setProvider'),
+  providerId: z.string(),
+});
+
 export const actionSchema = z.discriminatedUnion('type', [
   addRequestHeaderActionSchema,
   removeRequestHeaderActionSchema,
@@ -126,6 +132,7 @@ export const actionSchema = z.discriminatedUnion('type', [
   filterActionSchema,
   delayActionSchema,
   logActionSchema,
+  setProviderActionSchema,
 ]);
 
 export const flowStepSchema = z.object({

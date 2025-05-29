@@ -9,6 +9,7 @@ export const Provider: Collection = {
     name: 'string',
     tenantId: 'string',
     isDeleted: 'boolean',
+    type: 'string',
   },
   hooks: [
     {

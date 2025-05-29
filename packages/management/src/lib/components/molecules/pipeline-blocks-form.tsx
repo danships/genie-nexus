@@ -1,6 +1,5 @@
 import { Condition, FlowStep } from "@genie-nexus/types";
 import {
-  ActionIcon,
   Button,
   Code,
   Group,
@@ -11,9 +10,8 @@ import {
   Text,
   TextInput,
   Switch,
-  Divider,
 } from "@mantine/core";
-import { IconGripVertical, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconGripVertical, IconPlus } from "@tabler/icons-react";
 import {
   IconCheck,
   IconClock,
@@ -29,6 +27,7 @@ import { FilterBlock } from "./pipeline-blocks/filter-block";
 import { LogBlock } from "./pipeline-blocks/log-block";
 import { RemoveRequestHeaderBlock } from "./pipeline-blocks/remove-request-header-block";
 import { RemoveResponseHeaderBlock } from "./pipeline-blocks/remove-response-header-block";
+import { SetProviderBlock } from "./pipeline-blocks/set-provider-block";
 import { SetRequestHeaderBlock } from "./pipeline-blocks/set-request-header-block";
 import { SetResponseHeaderBlock } from "./pipeline-blocks/set-response-header-block";
 import { TransformDataBlock } from "./pipeline-blocks/transform-data-block";
@@ -49,6 +48,7 @@ const ACTION_LABELS: Record<string, string> = {
   filter: "Filter",
   delay: "Add Delay",
   log: "Log Data",
+  setProvider: "Set Provider",
 };
 
 function getActionLabel(type: string) {
@@ -232,6 +232,7 @@ const buildingBlocks = [
   { label: "Filter", icon: IconFilter, type: "filter" },
   { label: "Add Delay", icon: IconClock, type: "delay" },
   { label: "Log Data", icon: IconListDetails, type: "log" },
+  { label: "Set Provider", icon: IconCheck, type: "setProvider" },
 ];
 
 export function PipelineBlocksForm({
@@ -268,7 +269,7 @@ export function PipelineBlocksForm({
   const handleAdd = (type: string) => {
     let newStep: FlowStep;
     switch (type) {
-      case "transformData":
+      case "transform":
         newStep = { action: { type: "transformData", expression: "" } };
         break;
       case "filter":
@@ -279,6 +280,9 @@ export function PipelineBlocksForm({
         break;
       case "log":
         newStep = { action: { type: "log", message: "" } };
+        break;
+      case "setProvider":
+        newStep = { action: { type: "setProvider", providerId: "" } };
         break;
       default:
         newStep = { action: { type: "updateResponseBody", value: "" } };
@@ -395,6 +399,13 @@ export function PipelineBlocksForm({
                 case "log":
                   return (
                     <LogBlock
+                      action={step.action}
+                      onChange={(a) => handleBlockChange(index, a)}
+                    />
+                  );
+                case "setProvider":
+                  return (
+                    <SetProviderBlock
                       action={step.action}
                       onChange={(a) => handleBlockChange(index, a)}
                     />

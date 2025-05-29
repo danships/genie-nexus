@@ -122,5 +122,9 @@ export async function executeAction(
         },
       });
       break;
+    case 'setProvider':
+      context.providerId = action.providerId;
+      logger.debug('Set provider', { providerId: action.providerId });
+      break;
   }
 }
