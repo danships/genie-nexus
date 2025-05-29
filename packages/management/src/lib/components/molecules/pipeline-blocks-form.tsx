@@ -1,4 +1,4 @@
-import { Condition, FlowStep } from "@genie-nexus/types";
+import { Condition, FlowStep, Action } from "@genie-nexus/types";
 import {
   Button,
   Code,
@@ -10,8 +10,9 @@ import {
   Text,
   TextInput,
   Switch,
+  ActionIcon,
 } from "@mantine/core";
-import { IconGripVertical, IconPlus } from "@tabler/icons-react";
+import { IconGripVertical, IconPlus, IconTrash } from "@tabler/icons-react";
 import {
   IconCheck,
   IconClock,
@@ -20,6 +21,23 @@ import {
   IconTransform,
 } from "@tabler/icons-react";
 import { useState } from "react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { AddRequestHeaderBlock } from "./pipeline-blocks/add-request-header-block";
 import { AddResponseHeaderBlock } from "./pipeline-blocks/add-response-header-block";
 import { DelayBlock } from "./pipeline-blocks/delay-block";
@@ -226,25 +244,107 @@ type PipelineBlocksFormProps = {
   onChange: (steps: FlowStep[]) => void;
 };
 
-const buildingBlocks = [
-  { label: "Transform Data", icon: IconTransform, type: "transformData" },
-  { label: "Validate", icon: IconCheck, type: "validate" },
-  { label: "Filter", icon: IconFilter, type: "filter" },
-  { label: "Add Delay", icon: IconClock, type: "delay" },
-  { label: "Log Data", icon: IconListDetails, type: "log" },
-  { label: "Set Provider", icon: IconCheck, type: "setProvider" },
+const BLOCK_TYPES: Array<{
+  type: Action["type"];
+  label: string;
+  icon: React.ComponentType<{ size: number }>;
+}> = [
+  { type: "addRequestHeader", label: "Add Request Header", icon: IconCheck },
+  {
+    type: "removeRequestHeader",
+    label: "Remove Request Header",
+    icon: IconCheck,
+  },
+  { type: "setRequestHeader", label: "Set Request Header", icon: IconCheck },
+  { type: "addResponseHeader", label: "Add Response Header", icon: IconCheck },
+  {
+    type: "removeResponseHeader",
+    label: "Remove Response Header",
+    icon: IconCheck,
+  },
+  { type: "setResponseHeader", label: "Set Response Header", icon: IconCheck },
+  {
+    type: "updateResponseBody",
+    label: "Update Response Body",
+    icon: IconCheck,
+  },
+  {
+    type: "updateResponseStatusCode",
+    label: "Update Response Status Code",
+    icon: IconCheck,
+  },
+  { type: "transformData", label: "Transform Data", icon: IconTransform },
+  { type: "filter", label: "Filter", icon: IconFilter },
+  { type: "delay", label: "Add Delay", icon: IconClock },
+  { type: "log", label: "Log Data", icon: IconListDetails },
+  { type: "setProvider", label: "Set Provider", icon: IconCheck },
 ];
+
+// Add SortableBlock component
+function SortableBlock({
+  id,
+  children,
+}: {
+  id: string;
+  children: React.ReactNode;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <Group>
+        <div {...attributes} {...listeners} style={{ cursor: "grab" }}>
+          <IconGripVertical size={16} />
+        </div>
+        {children}
+      </Group>
+    </div>
+  );
+}
 
 export function PipelineBlocksForm({
   steps,
   onChange,
 }: PipelineBlocksFormProps) {
-  const [modalOpened, setModalOpened] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = steps.findIndex((step) => step.id === active.id);
+      const newIndex = steps.findIndex((step) => step.id === over.id);
+      onChange(arrayMove(steps, oldIndex, newIndex));
+    }
+  };
 
   // Edit a block
-  const handleBlockChange = (idx: number, action: FlowStep["action"]) => {
+  const handleBlockChange = (idx: number, action: Action) => {
     const newSteps = [...steps];
-    newSteps[idx] = { ...newSteps[idx], action };
+    const step = newSteps[idx];
+    if (!step) return;
+    newSteps[idx] = {
+      ...step,
+      action,
+    };
     onChange(newSteps);
   };
 
@@ -256,186 +356,229 @@ export function PipelineBlocksForm({
     const step = newSteps[idx];
     if (!step) return;
     newSteps[idx] = {
-      action: step.action,
+      ...step,
       conditions,
     };
     onChange(newSteps);
   };
 
   const handleDelete = (index: number) => {
-    onChange(steps.filter((_, i) => i !== index));
+    const newSteps = [...steps];
+    newSteps.splice(index, 1);
+    onChange(newSteps);
   };
 
-  const handleAdd = (type: string) => {
-    let newStep: FlowStep;
+  const handleAdd = (type: Action["type"]) => {
+    let action: Action;
     switch (type) {
-      case "transform":
-        newStep = { action: { type: "transformData", expression: "" } };
+      case "addRequestHeader":
+        action = { type, key: "", value: "" };
+        break;
+      case "removeRequestHeader":
+        action = { type, key: "" };
+        break;
+      case "setRequestHeader":
+        action = { type, key: "", value: "" };
+        break;
+      case "addResponseHeader":
+        action = { type, key: "", value: "" };
+        break;
+      case "removeResponseHeader":
+        action = { type, key: "" };
+        break;
+      case "setResponseHeader":
+        action = { type, key: "", value: "" };
+        break;
+      case "updateResponseBody":
+        action = { type, value: "" };
+        break;
+      case "updateResponseStatusCode":
+        action = { type, value: "" };
+        break;
+      case "transformData":
+        action = { type, expression: "" };
         break;
       case "filter":
-        newStep = { action: { type: "filter", expression: "" } };
+        action = { type, expression: "" };
         break;
       case "delay":
-        newStep = { action: { type: "delay", ms: 1000 } };
+        action = { type, ms: 1000 };
         break;
       case "log":
-        newStep = { action: { type: "log", message: "" } };
+        action = { type, message: "" };
         break;
       case "setProvider":
-        newStep = { action: { type: "setProvider", providerId: "" } };
+        action = { type, providerId: "" };
         break;
-      default:
-        newStep = { action: { type: "updateResponseBody", value: "" } };
     }
+
+    const newStep: FlowStep = {
+      id: crypto.randomUUID(),
+      action,
+    };
     onChange([...steps, newStep]);
-    setModalOpened(false);
+    setShowAddModal(false);
   };
 
   return (
     <Stack>
-      {steps.map((step, index) => (
-        <Paper key={index} p="sm" withBorder>
-          <Group justify="space-between" align="center" mb="xs">
-            <Group>
-              <IconGripVertical size={18} />
-              <Text fw={500}>{getActionLabel(step.action.type)}</Text>
-              <Code ml="sm">{step.action.type}</Code>
-            </Group>
-            <Button
-              variant="subtle"
-              color="red"
-              onClick={() => handleDelete(index)}
-            >
-              Delete
-            </Button>
-          </Group>
-          <Stack>
-            <ConditionEditor
-              conditions={step.conditions}
-              onChange={(conditions) =>
-                handleConditionChange(index, conditions)
-              }
-            />
-            {/* Render the correct block form */}
-            {(() => {
-              switch (step.action.type) {
-                case "addRequestHeader":
-                  return (
-                    <AddRequestHeaderBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "removeRequestHeader":
-                  return (
-                    <RemoveRequestHeaderBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "setRequestHeader":
-                  return (
-                    <SetRequestHeaderBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "addResponseHeader":
-                  return (
-                    <AddResponseHeaderBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "removeResponseHeader":
-                  return (
-                    <RemoveResponseHeaderBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "setResponseHeader":
-                  return (
-                    <SetResponseHeaderBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "updateResponseBody":
-                  return (
-                    <UpdateResponseBodyBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "updateResponseStatusCode":
-                  return (
-                    <UpdateResponseStatusCodeBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "transformData":
-                  return (
-                    <TransformDataBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "filter":
-                  return (
-                    <FilterBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "delay":
-                  return (
-                    <DelayBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "log":
-                  return (
-                    <LogBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                case "setProvider":
-                  return (
-                    <SetProviderBlock
-                      action={step.action}
-                      onChange={(a) => handleBlockChange(index, a)}
-                    />
-                  );
-                default:
-                  return (
-                    <Text c="dimmed">No editable fields for this action.</Text>
-                  );
-              }
-            })()}
-          </Stack>
-        </Paper>
-      ))}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={steps.map((step) => step.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {steps.map((step, index) => (
+            <SortableBlock key={step.id} id={step.id}>
+              <Paper p="md" withBorder style={{ flex: 1 }}>
+                <Group justify="space-between" align="center" mb="xs">
+                  <Group>
+                    <Text fw={500}>{getActionLabel(step.action.type)}</Text>
+                    <Code ml="sm">{step.action.type}</Code>
+                  </Group>
+                  <ActionIcon
+                    variant="subtle"
+                    color="red"
+                    onClick={() => handleDelete(index)}
+                  >
+                    <IconTrash />
+                  </ActionIcon>
+                </Group>
+                <Stack>
+                  <ConditionEditor
+                    conditions={step.conditions}
+                    onChange={(conditions) =>
+                      handleConditionChange(index, conditions)
+                    }
+                  />
+                  {/* Render the correct block form */}
+                  {(() => {
+                    switch (step.action.type) {
+                      case "addRequestHeader":
+                        return (
+                          <AddRequestHeaderBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "removeRequestHeader":
+                        return (
+                          <RemoveRequestHeaderBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "setRequestHeader":
+                        return (
+                          <SetRequestHeaderBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "addResponseHeader":
+                        return (
+                          <AddResponseHeaderBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "removeResponseHeader":
+                        return (
+                          <RemoveResponseHeaderBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "setResponseHeader":
+                        return (
+                          <SetResponseHeaderBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "updateResponseBody":
+                        return (
+                          <UpdateResponseBodyBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "updateResponseStatusCode":
+                        return (
+                          <UpdateResponseStatusCodeBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "transformData":
+                        return (
+                          <TransformDataBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "filter":
+                        return (
+                          <FilterBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "delay":
+                        return (
+                          <DelayBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "log":
+                        return (
+                          <LogBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      case "setProvider":
+                        return (
+                          <SetProviderBlock
+                            action={step.action}
+                            onChange={(a) => handleBlockChange(index, a)}
+                          />
+                        );
+                      default:
+                        return (
+                          <Text c="dimmed">
+                            No editable fields for this action.
+                          </Text>
+                        );
+                    }
+                  })()}
+                </Stack>
+              </Paper>
+            </SortableBlock>
+          ))}
+        </SortableContext>
+      </DndContext>
+
       <Button
         leftSection={<IconPlus size={16} />}
         variant="light"
-        onClick={() => setModalOpened(true)}
+        onClick={() => setShowAddModal(true)}
       >
         Add Block
       </Button>
 
       <Modal
-        opened={modalOpened}
-        onClose={() => setModalOpened(false)}
+        opened={showAddModal}
+        onClose={() => setShowAddModal(false)}
         title="Select Block Type"
         size="md"
       >
         <Stack>
-          <Text size="sm">Select the type of block to add:</Text>
-          {buildingBlocks.map((block) => (
+          {BLOCK_TYPES.map((block) => (
             <Button
               key={block.type}
               leftSection={<block.icon size={16} />}

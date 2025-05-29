@@ -136,6 +136,7 @@ export const actionSchema = z.discriminatedUnion('type', [
 ]);
 
 export const flowStepSchema = z.object({
+  id: z.string(),
   conditions: z.array(conditionSchema).optional(),
   action: actionSchema,
 });
