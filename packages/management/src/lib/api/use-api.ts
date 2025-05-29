@@ -36,6 +36,7 @@ export const useApi = <T = unknown>(
 
 export const useCudApi = () => {
   const [inProgress, setInProgress] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function request<T, D>(
     method: 'post' | 'patch' | 'delete',
@@ -43,6 +44,7 @@ export const useCudApi = () => {
     data?: D
   ): Promise<T> {
     setInProgress(true);
+    setError(null);
     try {
       const result = await getClient()<T>({
         method,
@@ -50,6 +52,9 @@ export const useCudApi = () => {
         data,
       });
       return result.data;
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Unknown error');
+      throw error;
     } finally {
       setInProgress(false);
     }
@@ -63,5 +68,6 @@ export const useCudApi = () => {
       request<T, D>('patch', path, data),
     delete: <T, D = unknown>(path: string, data?: D) =>
       request<T, D>('delete', path, data),
+    error,
   };
 };

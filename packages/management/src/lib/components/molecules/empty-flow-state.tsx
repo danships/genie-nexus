@@ -1,19 +1,10 @@
-import {
-  Button,
-  Card,
-  Container,
-  Group,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Card, Container, Group, Stack, Text, Title } from "@mantine/core";
 import {
   IconArrowRight,
   IconCheck,
   IconClockHour4,
   IconFilter,
   IconListDetails,
-  IconPlus,
   IconTransform,
 } from "@tabler/icons-react";
 
@@ -61,7 +52,7 @@ export function EmptyFlowState({ onAddEvent }: EmptyFlowStateProps) {
           </Text>
         </Stack>
 
-        <Card withBorder p="xl">
+        <Card withBorder p="xl" className="is-transparent">
           <Stack gap="xl">
             <Stack gap="xs">
               <Title order={3}>What can you do?</Title>

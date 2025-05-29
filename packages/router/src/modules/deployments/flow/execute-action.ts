@@ -1,33 +1,55 @@
-import type { Flow, RequestContext } from '@genie-nexus/types';
+import type { Action, RequestContext } from '@genie-nexus/types';
 import { logger } from '../../../core/logger.js';
 
 // Maximum allowed delay in milliseconds (5 seconds)
 const MAX_DELAY_MS = 5000;
 
 export async function executeAction(
-  action: Flow['steps'][number]['action'],
+  action: Action,
   context: RequestContext
 ): Promise<void> {
+  logger.debug('Executing action', {
+    actionType: action.type,
+    context: {
+      path: context.path,
+      method: context.method,
+    },
+  });
+
   switch (action.type) {
     case 'addRequestHeader':
     case 'setRequestHeader':
       context.requestHeaders[action.key] = action.value;
+      logger.debug('Updated request header', {
+        key: action.key,
+        value: action.value,
+      });
       break;
     case 'removeRequestHeader':
       delete context.requestHeaders[action.key];
+      logger.debug('Removed request header', { key: action.key });
       break;
     case 'addResponseHeader':
     case 'setResponseHeader':
       context.responseHeaders[action.key] = action.value;
+      logger.debug('Updated response header', {
+        key: action.key,
+        value: action.value,
+      });
       break;
     case 'removeResponseHeader':
       delete context.responseHeaders[action.key];
+      logger.debug('Removed response header', { key: action.key });
       break;
     case 'updateResponseBody':
       context.responseBody = action.value;
+      logger.debug('Updated response body', { value: action.value });
       break;
     case 'updateResponseStatusCode':
       context.responseStatusCode = parseInt(action.value, 10);
+      logger.debug('Updated response status code', {
+        statusCode: context.responseStatusCode,
+      });
       break;
     case 'transformData':
       try {
@@ -45,6 +67,7 @@ export async function executeAction(
         });
       } catch (error) {
         logger.error('Error executing transform data action', { error });
+        throw error;
       }
       break;
     case 'filter':
@@ -63,6 +86,7 @@ export async function executeAction(
         });
       } catch (error) {
         logger.error('Error executing filter action', { error });
+        throw error;
       }
       break;
     case 'delay':

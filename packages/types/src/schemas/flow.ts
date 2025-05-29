@@ -150,7 +150,7 @@ export const eventSchema = z.object({
 export const flowSchema = z.object({
   id: z.string(),
   deploymentId: z.string(),
-  steps: z.array(flowStepSchema),
+  events: z.array(eventSchema),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

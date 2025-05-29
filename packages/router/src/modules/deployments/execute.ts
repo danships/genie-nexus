@@ -1,14 +1,12 @@
 import type { Deployment, Provider } from '@genie-nexus/database';
-import type { Flow, RequestContext } from '@genie-nexus/types';
+import type { RequestContext } from '@genie-nexus/types';
 import { getProviderRepository } from '../../core/db/index.js';
 import { getFlowRepository } from '../../core/db/index.js';
-import { logger } from '../../core/logger.js';
 import { proxyRequest } from '../../weave-providers/http-proxy/proxy.js';
 import { generateStaticResponse } from '../../weave-providers/static/generate-static-response.js';
 import type { ProviderResponse } from '../../weave-providers/types.js';
 import type { OpenAIChatCompletionRequest } from '../chat-completions/types/openai.js';
-import { executeAction } from './flow/execute-action.js';
-import { evaluateConditions } from './flow/evaluate-conditions.js';
+import { executeFlowEvent } from './flow/execute-flow-event.js';
 
 export async function executeForLlm(
   deployment: Deployment,
@@ -62,8 +60,10 @@ export async function executeForHttp(
       .eq('isDeleted', false)
   );
 
-  // Execute the flow if it exists to transform the request
-  const transformedRequest = flow ? await executeFlow(flow, request) : request;
+  // Execute the incoming request event if it exists
+  const transformedRequest = flow
+    ? await executeFlowEvent(flow, 'incomingRequest', request)
+    : request;
 
   // Execute the provider to get the response
   let providerResponse: ProviderResponse;
@@ -93,9 +93,9 @@ export async function executeForHttp(
     responseStatusCode: providerResponse.statusCode,
   };
 
-  // Execute the flow again if it exists to transform the response
+  // Execute the response event if it exists
   const finalContext = flow
-    ? await executeFlow(flow, responseContext)
+    ? await executeFlowEvent(flow, 'response', responseContext)
     : responseContext;
 
   return {
@@ -107,30 +107,4 @@ export async function executeForHttp(
       body: finalContext.responseBody as Buffer,
     },
   };
-}
-
-export async function executeFlow(
-  flow: Flow,
-  context: RequestContext
-): Promise<RequestContext> {
-  logger.debug('Executing flow', { flowId: flow.id });
-
-  // Create a copy of the context to modify
-  const newContext = { ...context };
-
-  // Execute each step in the flow
-  for (const step of flow.steps) {
-    // Check condition if present
-    if (step.conditions) {
-      const shouldExecute = evaluateConditions(step.conditions, newContext);
-      if (!shouldExecute) {
-        continue;
-      }
-    }
-
-    // Execute the action
-    await executeAction(step.action, newContext);
-  }
-
-  return newContext;
 }

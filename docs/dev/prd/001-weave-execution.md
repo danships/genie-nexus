@@ -78,7 +78,10 @@ The components for the editor should be in the lib/components/deployment-editor 
 - Added type safety and validation for weave deployments
 - Set up metadata generation for the flow editor page
 
-[ ] Ask for the image of design of the weave editor and implement it with Mantine components.
+[x] Ask for the image of design of the weave editor and implement it with Mantine components.
+
+[ ] Implement integrations tests for the router part of the weave execution and the actions. These are not unit tests, but rather tests that verify that the router and actions are working as expected. But they must be set up so that external database
+data or providers are not needed. They can be placed in the packages/router/tests/integration/weave-flow folder.
 
 #### Follow up tasks
 
@@ -87,3 +90,4 @@ The components for the editor should be in the lib/components/deployment-editor 
   - [ ] Update the UI management to allow the user to fill in expressions. The update logic must be updated to handle expressions.
 - [ ] Add the ability to set a different provider to run for the deployment than the default provider.
 - [ ] Set up a way to preview the processing in the flow editor.
+- [ ] Add support for request failed or timeout error, by throwing that specific type of error from the provider specific code.

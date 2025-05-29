@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  DeploymentApi,
-  Event,
-  Flow,
-  FlowStep,
-  Pipeline,
-} from "@genie-nexus/types";
+import { DeploymentApi, Event, Flow, FlowStep } from "@genie-nexus/types";
 import { useCudApi } from "@lib/api/use-api";
 import { ErrorNotification } from "@lib/components/atoms/error-notification";
 import { EmptyFlowState } from "@lib/components/molecules/empty-flow-state";
@@ -33,7 +27,6 @@ import {
   IconClockHour4,
   IconFilter,
   IconListDetails,
-  IconPlus,
   IconTransform,
 } from "@tabler/icons-react";
 import { useState } from "react";
@@ -58,19 +51,19 @@ export function FlowEditorClientPage({
     },
   });
 
-  const { patch, post, inProgress } = useCudApi();
+  const { patch, post, inProgress, error } = useCudApi();
 
   const handleSave = async () => {
     if (flow) {
       const updatedFlow = await patch<Flow>(`/collections/flows/${flow.id}`, {
         ...flow,
-        steps: form.values.events.map((event) => event.pipeline.steps),
+        events: form.values.events,
       });
       setFlow(updatedFlow);
     } else {
       const createdFlow = await post<Flow>("/collections/flows", {
         deploymentId: deployment.id,
-        steps: form.values.events.map((event) => event.pipeline.steps),
+        events: form.values.events,
       });
       setFlow(createdFlow);
     }
@@ -387,6 +380,7 @@ export function FlowEditorClientPage({
                 >
                   Save
                 </Button>
+                {error && <ErrorNotification>{error}</ErrorNotification>}
               </Paper>
             </Stack>
           </Grid.Col>
