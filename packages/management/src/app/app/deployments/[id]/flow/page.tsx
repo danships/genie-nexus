@@ -1,9 +1,16 @@
-import { DeploymentWeave } from '@genie-nexus/types';
-import { PageTitle } from '@lib/components/atoms/page-title';
-import { Stack } from '@mantine/core';
+import { Flow } from '@genie-nexus/types';
+import { getEntityByQuery } from '@lib/api/server-api';
 import { redirect } from 'next/navigation';
 import { getDeployment } from '../page';
 import { FlowEditorClientPage } from './_page';
+
+export async function getFlow(deploymentId: string): Promise<Flow | null> {
+  const flow = await getEntityByQuery<Flow>(
+    'flows',
+    `deploymentId=${deploymentId}&isDeleted=false`
+  );
+  return flow;
+}
 
 export async function generateMetadata({
   params,
@@ -25,11 +32,14 @@ export default async function FlowEditorPage({
 }) {
   const { id } = await params;
 
-  const deployment = await getDeployment(id);
+  const [deployment, flow] = await Promise.all([
+    getDeployment(id),
+    getFlow(id),
+  ]);
 
   if (deployment.type !== 'weave') {
     redirect('/app/deployments/' + id);
   }
 
-  return <FlowEditorClientPage />;
+  return <FlowEditorClientPage deployment={deployment} flow={flow} />;
 }

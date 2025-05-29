@@ -70,7 +70,14 @@ In the management package we need to create the UI when managing a Weave deploym
 This is in the packages/management/src/app/app/deployments/[id]/\_page-weave.tsx file.
 The components for the editor should be in the lib/components/deployment-editor folder.
 
-[ ] Create the raw layout for the weave editor. Only the container components, the contents will be added later.
+[x] Create the raw layout for the weave editor. Only the container components, the contents will be added later.
+
+- Created WeaveEditor component in packages/management/src/lib/components/deployment-editor/weave-editor.tsx
+- Added a dedicated flow editor page at /app/deployments/[id]/flow
+- Implemented proper Next.js page structure with server/client component separation
+- Added type safety and validation for weave deployments
+- Set up metadata generation for the flow editor page
+
 [ ] Ask for the image of design of the weave editor and implement it with Mantine components.
 
 #### Follow up tasks
@@ -79,7 +86,4 @@ The components for the editor should be in the lib/components/deployment-editor 
   - [ ] Update the types to support expressions.
   - [ ] Update the UI management to allow the user to fill in expressions. The update logic must be updated to handle expressions.
 - [ ] Add the ability to set a different provider to run for the deployment than the default provider.
-
-```
-
-```
+- [ ] Set up a way to preview the processing in the flow editor.

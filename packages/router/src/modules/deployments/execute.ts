@@ -63,7 +63,7 @@ export async function executeForHttp(
   );
 
   // Execute the flow if it exists to transform the request
-  const transformedRequest = flow ? executeFlow(flow, request) : request;
+  const transformedRequest = flow ? await executeFlow(flow, request) : request;
 
   // Execute the provider to get the response
   let providerResponse: ProviderResponse;
@@ -95,7 +95,7 @@ export async function executeForHttp(
 
   // Execute the flow again if it exists to transform the response
   const finalContext = flow
-    ? executeFlow(flow, responseContext)
+    ? await executeFlow(flow, responseContext)
     : responseContext;
 
   return {
@@ -109,10 +109,10 @@ export async function executeForHttp(
   };
 }
 
-export function executeFlow(
+export async function executeFlow(
   flow: Flow,
   context: RequestContext
-): RequestContext {
+): Promise<RequestContext> {
   logger.debug('Executing flow', { flowId: flow.id });
 
   // Create a copy of the context to modify
@@ -129,7 +129,7 @@ export function executeFlow(
     }
 
     // Execute the action
-    executeAction(step.action, newContext);
+    await executeAction(step.action, newContext);
   }
 
   return newContext;

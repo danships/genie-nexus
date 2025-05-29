@@ -89,6 +89,30 @@ export const updateResponseStatusCodeActionSchema = z.object({
   value: z.string(),
 });
 
+// Transform Data action
+export const transformDataActionSchema = z.object({
+  type: z.literal('transformData'),
+  expression: z.string(), // e.g. JS or expression
+});
+
+// Filter action
+export const filterActionSchema = z.object({
+  type: z.literal('filter'),
+  expression: z.string(), // e.g. filter expression
+});
+
+// Delay action
+export const delayActionSchema = z.object({
+  type: z.literal('delay'),
+  ms: z.number(), // delay in milliseconds
+});
+
+// Log Data action
+export const logActionSchema = z.object({
+  type: z.literal('log'),
+  message: z.string().optional(),
+});
+
 export const actionSchema = z.discriminatedUnion('type', [
   addRequestHeaderActionSchema,
   removeRequestHeaderActionSchema,
@@ -98,6 +122,10 @@ export const actionSchema = z.discriminatedUnion('type', [
   setResponseHeaderActionSchema,
   updateResponseBodyActionSchema,
   updateResponseStatusCodeActionSchema,
+  transformDataActionSchema,
+  filterActionSchema,
+  delayActionSchema,
+  logActionSchema,
 ]);
 
 export const flowStepSchema = z.object({

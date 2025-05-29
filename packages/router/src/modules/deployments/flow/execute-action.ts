@@ -1,9 +1,13 @@
 import type { Flow, RequestContext } from '@genie-nexus/types';
+import { logger } from '../../../core/logger.js';
 
-export function executeAction(
+// Maximum allowed delay in milliseconds (5 seconds)
+const MAX_DELAY_MS = 5000;
+
+export async function executeAction(
   action: Flow['steps'][number]['action'],
   context: RequestContext
-): void {
+): Promise<void> {
   switch (action.type) {
     case 'addRequestHeader':
     case 'setRequestHeader':
@@ -24,6 +28,75 @@ export function executeAction(
       break;
     case 'updateResponseStatusCode':
       context.responseStatusCode = parseInt(action.value, 10);
+      break;
+    case 'transformData':
+      try {
+        // For now, we'll just log that this action was executed
+        // In the future, this could be integrated with @supersave/expression
+        logger.debug('Transform data action executed', {
+          expression: action.expression,
+          context: {
+            path: context.path,
+            method: context.method,
+            requestHeaders: context.requestHeaders,
+            responseHeaders: context.responseHeaders,
+            responseStatusCode: context.responseStatusCode,
+          },
+        });
+      } catch (error) {
+        logger.error('Error executing transform data action', { error });
+      }
+      break;
+    case 'filter':
+      try {
+        // For now, we'll just log that this action was executed
+        // In the future, this could be integrated with @supersave/expression
+        logger.debug('Filter action executed', {
+          expression: action.expression,
+          context: {
+            path: context.path,
+            method: context.method,
+            requestHeaders: context.requestHeaders,
+            responseHeaders: context.responseHeaders,
+            responseStatusCode: context.responseStatusCode,
+          },
+        });
+      } catch (error) {
+        logger.error('Error executing filter action', { error });
+      }
+      break;
+    case 'delay':
+      const delayMs = Math.min(action.ms, MAX_DELAY_MS);
+      if (delayMs !== action.ms) {
+        logger.warn('Delay action exceeded maximum delay limit', {
+          requested: action.ms,
+          actual: delayMs,
+          maxAllowed: MAX_DELAY_MS,
+          context: {
+            path: context.path,
+            method: context.method,
+          },
+        });
+      }
+      logger.debug('Executing delay action', {
+        ms: delayMs,
+        context: {
+          path: context.path,
+          method: context.method,
+        },
+      });
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+      break;
+    case 'log':
+      logger.info(action.message || 'Log action executed', {
+        context: {
+          path: context.path,
+          method: context.method,
+          requestHeaders: context.requestHeaders,
+          responseHeaders: context.responseHeaders,
+          responseStatusCode: context.responseStatusCode,
+        },
+      });
       break;
   }
 }

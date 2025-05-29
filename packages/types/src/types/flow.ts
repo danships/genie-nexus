@@ -5,17 +5,21 @@ import {
   addResponseHeaderActionSchema,
   conditionSchema,
   containsConditionSchema,
+  delayActionSchema,
   doesNotContainConditionSchema,
   equalsConditionSchema,
+  filterActionSchema,
   flowSchema,
   flowStepSchema,
   isEmptyConditionSchema,
   isNotEmptyConditionSchema,
+  logActionSchema,
   notEqualsConditionSchema,
   removeRequestHeaderActionSchema,
   removeResponseHeaderActionSchema,
   setRequestHeaderActionSchema,
   setResponseHeaderActionSchema,
+  transformDataActionSchema,
   updateResponseBodyActionSchema,
   updateResponseStatusCodeActionSchema,
 } from '../schemas/flow.js';
@@ -54,6 +58,10 @@ export type UpdateResponseBodyAction = z.infer<
 export type UpdateResponseStatusCodeAction = z.infer<
   typeof updateResponseStatusCodeActionSchema
 >;
+export type TransformDataAction = z.infer<typeof transformDataActionSchema>;
+export type FilterAction = z.infer<typeof filterActionSchema>;
+export type DelayAction = z.infer<typeof delayActionSchema>;
+export type LogAction = z.infer<typeof logActionSchema>;
 export type Action = z.infer<typeof actionSchema>;
 
 export type FlowStep = z.infer<typeof flowStepSchema>;

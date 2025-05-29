@@ -47,6 +47,31 @@ export async function getEntity<T extends LocalBaseEntity>(
   return data.data;
 }
 
+export async function getEntityByQuery<T extends LocalBaseEntity>(
+  collection: string,
+  query: string
+) {
+  const response = await fetch(
+    `${COLLECTION_API_URL}/collections/${collection}?${query}`,
+    await getCookieHeaders()
+  );
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    serverLogger.error(`Failed to fetch entity: ${response.statusText}`, {
+      response: await response.text(),
+    });
+    throw new Error(`Failed to fetch entity: ${response.statusText}`);
+  }
+  const data = (await response.json()) as { data: T[] };
+  if (data.data.length === 0) {
+    return null;
+  }
+  return data.data[0] ?? null;
+}
+
 export async function getEntities<T extends LocalBaseEntity>(
   collection: string,
   query: string
