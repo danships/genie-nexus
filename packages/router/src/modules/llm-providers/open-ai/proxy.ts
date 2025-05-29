@@ -2,14 +2,13 @@ import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import type { GenerateTextResult, StreamTextResult } from 'ai';
 import { generateText, streamText } from 'ai';
 import type { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai.js';
-
-// TODO: Make this configurable
-const ENDPOINT = 'https://openrouter.ai/api/v1';
+import { openAiToAiSdkRequestMapper } from '../utils/openai-to-ai-sdk-request-mapper.js';
 
 export async function createChatCompletion(
   request: OpenAIChatCompletionRequest,
+  baseURL: string,
   apiKey: string
-): Promise<GenerateTextResult<never, never>> {
+): Promise<GenerateTextResult<{}, unknown>> {
   if (!apiKey) {
     throw new Error('OpenAI API key is required');
   }
@@ -17,11 +16,12 @@ export async function createChatCompletion(
   try {
     const response = await generateText({
       model: createOpenAICompatible({
-        baseURL: ENDPOINT,
-        name: 'Ollama',
+        baseURL,
+        name: 'OpenAI Compatible',
         apiKey,
       }).chatModel(request.model),
       messages: request.messages,
+      ...openAiToAiSdkRequestMapper(request),
     });
 
     return response;
@@ -35,8 +35,9 @@ export async function createChatCompletion(
 
 export function createStreamingChatCompletion(
   request: OpenAIChatCompletionRequest,
+  baseURL: string,
   apiKey: string
-): StreamTextResult<never, never> {
+): StreamTextResult<{}, unknown> {
   if (!apiKey) {
     throw new Error('OpenAI API key is required');
   }
@@ -44,11 +45,12 @@ export function createStreamingChatCompletion(
   try {
     const response = streamText({
       model: createOpenAICompatible({
-        baseURL: ENDPOINT,
-        name: 'Ollama',
+        baseURL,
+        name: 'OpenAI Compatible',
         apiKey,
       }).chatModel(request.model),
       messages: request.messages,
+      ...openAiToAiSdkRequestMapper(request),
     });
 
     return response;

@@ -83,6 +83,7 @@ export const handler: RequestHandler<
         case 'openai': {
           const aiResponse = openAICreateStreamingChatCompletion(
             transformedRequest,
+            provider.baseURL,
             provider.apiKey
           );
 
@@ -150,6 +151,7 @@ export const handler: RequestHandler<
         case 'openai': {
           const response = await openAICreateChatCompletion(
             transformedRequest,
+            provider.baseURL,
             provider.apiKey
           );
 
