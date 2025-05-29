@@ -1,7 +1,5 @@
 import type { RequestContext } from '@genie-nexus/types';
 import type { Request, Response } from 'express';
-import { proxyRequest } from '../../../weave-providers/http-proxy/proxy.js';
-import { generateStaticResponse } from '../../../weave-providers/static/generate-static-response.js';
 import { checkApiKeyInRequest } from '../../api-key/check-api-key-in-request.js';
 import { ApiKeyNotPresentError } from '../../api-key/errors/api-key-not-present-error.js';
 import { ApiKeyValidationError } from '../../api-key/errors/api-key-validation-error.js';
@@ -68,23 +66,16 @@ export async function processRequest(
     responseStatusCode: 200,
   };
 
-  const { provider, transformedRequest } = await executeDeploymentForHttp(
+  // Execute the deployment and get the response
+  const { providerResponse } = await executeDeploymentForHttp(
     deployment,
     requestContext
   );
 
-  switch (provider.type) {
-    case 'http-proxy': {
-      await proxyRequest(provider, req, res, transformedRequest.path);
-      return;
-    }
-
-    case 'http-static': {
-      generateStaticResponse(provider, res);
-      return;
-    }
-    default: {
-      throw new Error(`Unknown provider type ${provider.type}`);
-    }
-  }
+  // Send the response to the client
+  Object.entries(providerResponse.headers).forEach(([key, value]) => {
+    res.set(key, value);
+  });
+  res.status(providerResponse.statusCode);
+  res.send(providerResponse.body);
 }

@@ -1,5 +1,17 @@
 # 001 Weave Execution
 
+Start prompt:
+
+```
+We are going to implement this PRD, one task at a time. Read the PRD, and then start on the feature, one task at a time. At the end of each task, ask for confirmation whether it is done. If it is done, mark the task as completed in the PRD file and add some comments to the task to be able to reference to later.
+```
+
+Continue prompt:
+
+```
+Parts of this PRD are implemented, one task at a time. Read the PRD, and then start on the next feature, one task at a time. At the end of each task, ask for confirmation whether it is done. If it is done, mark the task as completed in the PRD file and add some comments to the task to be able to reference to later.
+```
+
 This is a PRD for the weave execution feature. We are going to implement
 a feature that allows users to execute a weave on a given input.
 
@@ -50,7 +62,7 @@ This feature is broken down into the following tasks:
 
 [x] Create the required types and the flow entity for supersave. This is in the types and database packages. The flow entity has a deploymentId that refers to the deployment it is the configuration for. - Created Zod schemas in packages/types/src/schemas/flow.ts - Created inferred types in packages/types/src/types/flow.ts - Added Flow entity to packages/database/src/entities.ts - Note: All types are inferred from Zod schemas for runtime validation
 
-[x] In the execute.ts file, create a function that will execute the flow. This function will take a flow and a request and return a response. - Created RequestContext type to hold request/response state - Implemented executeFlow function that processes each step in sequence - Added condition evaluation with support for all condition types - Implemented action execution for all action types - Added proper type safety using discriminated unions - Added logging for debugging - Note: Flow execution is integrated with executeForHttp to transform requests before proxying - Note: Flow repository is exported from @genie-nexus/database instead of being redefined - Note: Flow query uses createQuery().eq() pattern for better type safety and query building - Note: Request context is created from express request and passed through the flow execution pipeline
+[x] In the execute.ts file, create a function that will execute the flow. This function will take a flow and a request and return a response. - Created RequestContext type to hold request/response state - Implemented executeFlow function that processes each step in sequence - Added condition evaluation with support for all condition types - Implemented action execution for all action types - Added proper type safety using discriminated unions - Added logging for debugging - Note: Flow execution is integrated with executeForHttp to transform requests before proxying - Note: Flow repository is exported from @genie-nexus/database instead of being redefined - Note: Flow query uses createQuery().eq() pattern for better type safety and query building - Note: Request context is created from express request and passed through the flow execution pipeline - Note: Flow execution happens twice: once for request transformation and once for response transformation - Note: Provider execution is now centralized in execute.ts, with providers returning a standardized ProviderResponse type - Note: Process-request.ts is simplified to only handle Express request/response flow
 
 #### UI
 
@@ -66,3 +78,8 @@ The components for the editor should be in the lib/components/deployment-editor 
 - [ ] Update the actions and conditions to support expressions from the @supersave/expression package. A condition can have a value or an expression. If expression is filled in, it needs to be evaluated and then used as the value.
   - [ ] Update the types to support expressions.
   - [ ] Update the UI management to allow the user to fill in expressions. The update logic must be updated to handle expressions.
+- [ ] Add the ability to set a different provider to run for the deployment than the default provider.
+
+```
+
+```

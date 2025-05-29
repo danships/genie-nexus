@@ -1,19 +1,16 @@
 import type { WeaveHttpProxyProvider } from '@genie-nexus/types';
-import type {
-  Request as ExpressRequest,
-  Response as ExpressResponse,
-} from 'express';
+import type { RequestContext } from '@genie-nexus/types';
 import { logger } from '../../core/logger.js';
 import { validateUrlDestination } from '../../core/utils/validate-url-destination.js';
+import { ProviderResponse } from '../types.js';
 
 export const NOT_ALLOWED_REQUEST_HEADERS = ['host', 'authorization'];
 
 export async function proxyRequest(
   provider: WeaveHttpProxyProvider,
-  req: ExpressRequest<unknown, unknown>,
-  res: ExpressResponse,
+  request: RequestContext,
   path: string
-) {
+): Promise<ProviderResponse> {
   // Construct the target URL by appending the path to the base URL
   const targetUrl = new URL(path, provider.baseUrl).toString();
   logger.debug('Proxying request', { targetUrl });
@@ -23,16 +20,12 @@ export async function proxyRequest(
 
   // Prepare headers for the proxied request
   const headers: Record<string, string> = {};
-  for (const [key, value] of Object.entries(req.headers)) {
+  for (const [key, value] of Object.entries(request.requestHeaders)) {
     if (NOT_ALLOWED_REQUEST_HEADERS.includes(key.toLowerCase())) {
       continue;
     }
 
-    if (typeof value === 'string') {
-      headers[key] = value;
-    } else if (Array.isArray(value)) {
-      headers[key] = value.join(', ');
-    }
+    headers[key] = value;
   }
 
   // Apply request header modifications from the provider configuration
@@ -57,22 +50,35 @@ export async function proxyRequest(
   }
 
   try {
-    // Forward the request to the target URL
-    const fetchResponse = await fetch(targetUrl, {
-      method: req.method,
+    // Prepare the fetch options
+    const fetchOptions: RequestInit = {
+      method: request.method,
       headers: new Headers({
         ...headers,
         'accept-encoding': 'gzip, deflate, br',
       }),
+    };
 
-      ...(req.method !== 'GET' && req.method !== 'HEAD' && { body: req.body }),
-    });
+    // Add body for non-GET/HEAD requests
+    if (
+      request.method.toUpperCase() !== 'GET' &&
+      request.method.toUpperCase() !== 'HEAD' &&
+      request.requestBody !== undefined
+    ) {
+      if (typeof request.requestBody === 'string') {
+        fetchOptions.body = request.requestBody;
+      } else if (request.requestBody instanceof Buffer) {
+        fetchOptions.body = request.requestBody;
+      } else {
+        fetchOptions.body = JSON.stringify(request.requestBody);
+      }
+    }
+
+    // Forward the request to the target URL
+    const fetchResponse = await fetch(targetUrl, fetchOptions);
 
     // Get the response body
     const body = await fetchResponse.arrayBuffer();
-
-    // Set the status code
-    res.status(fetchResponse.status);
 
     // Apply response header modifications from the provider configuration
     const responseHeaders: Record<string, string> = {};
@@ -103,18 +109,11 @@ export async function proxyRequest(
       }
     }
 
-    /**
-     * Express updates the Content-Type header and adds a charset.
-     * //TODO https://stackoverflow.com/a/59449326/13944042
-     */
-
-    // Set the response headers
-    Object.entries(responseHeaders).forEach(([key, value]) => {
-      res.set(key, value);
-    });
-
-    // Send the response body
-    res.send(Buffer.from(body));
+    return {
+      statusCode: fetchResponse.status,
+      headers: responseHeaders,
+      body: Buffer.from(body),
+    };
   } catch (error) {
     logger.error('Proxy error:', { err: error });
     throw error;

@@ -4,7 +4,7 @@ import { UserRequired } from '@lib/components/molecules/user-required';
 import { DeploymentLlmDetailClientPage } from './_page-llm';
 import { DeploymentWeaveDetailClientPage } from './_page-weave';
 
-async function getDeployment(id: string) {
+export async function getDeployment(id: string) {
   const deployment = await getEntity<Deployment>('deployments', id);
   return deployment;
 }
