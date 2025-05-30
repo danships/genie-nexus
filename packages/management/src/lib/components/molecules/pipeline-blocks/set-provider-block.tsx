@@ -1,8 +1,8 @@
-import { ProviderApi, SetProviderAction } from "@genie-nexus/types";
-import { Paper, Select, Stack, Text } from "@mantine/core";
-import { useApi } from "@lib/api/use-api";
-import { ENDPOINT_PROVIDERS_OVERVIEW } from "@lib/api/swr-constants";
-import { Loader } from "@lib/components/atoms/loader";
+import { ProviderApi, SetProviderAction } from '@genie-nexus/types';
+import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
+import { useApi } from '@lib/api/use-api';
+import { Loader } from '@lib/components/atoms/loader';
+import { Paper, Select, Stack, Text } from '@mantine/core';
 
 type Properties = {
   action: SetProviderAction;

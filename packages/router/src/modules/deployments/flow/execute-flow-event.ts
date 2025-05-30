@@ -1,7 +1,7 @@
 import type { Flow, RequestContext } from '@genie-nexus/types';
 import { logger } from '../../../core/logger.js';
-import { executeAction } from './execute-action.js';
 import { evaluateConditions } from './evaluate-conditions.js';
+import { executeAction } from './execute-action.js';
 
 export async function executeFlowEvent(
   flow: Flow,

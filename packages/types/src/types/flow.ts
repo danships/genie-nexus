@@ -19,12 +19,12 @@ import {
   pipelineSchema,
   removeRequestHeaderActionSchema,
   removeResponseHeaderActionSchema,
+  setProviderActionSchema,
   setRequestHeaderActionSchema,
   setResponseHeaderActionSchema,
   transformDataActionSchema,
   updateResponseBodyActionSchema,
   updateResponseStatusCodeActionSchema,
-  setProviderActionSchema,
 } from '../schemas/flow.js';
 
 export type EqualsCondition = z.infer<typeof equalsConditionSchema>;

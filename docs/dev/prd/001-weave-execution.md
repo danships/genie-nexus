@@ -106,7 +106,24 @@ The components for the editor should be in the lib/components/deployment-editor 
     - Added visual feedback during dragging
     - Preserved block IDs during reordering
     - Added keyboard accessibility support
+- [x] Refactor the pipeline-blocks-form.tsx file to be more modular and reusable.
+  - Note: Split the component into smaller, focused components:
+    - Created types.ts for shared types and constants
+    - Created condition-editor.tsx for condition editing functionality
+    - Created add-block-modal.tsx for block selection with collapsible groups
+    - Created sortable-block.tsx for drag-and-drop functionality
+    - Added event type awareness to show relevant blocks based on event type
+    - Improved code organization and maintainability
+- [x] Show a warning when someone attempts to navigate away from the flow editor without saving.
+  - Note: Implemented using Mantine's form.isDirty() to track changes
+  - Added click event listener with capture phase to intercept all navigation attempts
+  - Shows confirmation modal when navigating away with unsaved changes
+  - Uses Next.js router for client-side navigation after confirmation
+  - Handles both link clicks and browser back/forward navigation
 - [ ] Update the actions and conditions to support expressions from the @supersave/expression package. A condition can have a value or an expression. If expression is filled in, it needs to be evaluated and then used as the value.
+  - [ ] The values in the context can be arguments and used in the expression.
 - [ ] Add the ability to set a different provider to run for the deployment than the default provider.
 - [ ] Set up a way to preview the processing in the flow editor.
 - [ ] Add support for request failed or timeout error, by throwing that specific type of error from the provider specific code.
+- [ ] Rename flow to WeaveFlow, so that it is distinct from future LLM flows.
+- [ ] Collapse the <Navbar /> on this page and set the width to almost full width to be able to see the flow editor. The navbar should only be icons.

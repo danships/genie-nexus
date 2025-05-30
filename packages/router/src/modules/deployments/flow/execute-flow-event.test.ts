@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import type { Flow, RequestContext } from '@genie-nexus/types';
+import { describe, expect, it } from 'vitest';
 import { executeFlowEvent } from './execute-flow-event.js';
 
 describe('executeFlowEvent', () => {

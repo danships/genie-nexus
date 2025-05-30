@@ -1,4 +1,4 @@
-import { Card, Container, Group, Stack, Text, Title } from "@mantine/core";
+import { Card, Container, Group, Stack, Text, Title } from '@mantine/core';
 import {
   IconArrowRight,
   IconCheck,
@@ -6,39 +6,39 @@ import {
   IconFilter,
   IconListDetails,
   IconTransform,
-} from "@tabler/icons-react";
+} from '@tabler/icons-react';
 
 type EmptyFlowStateProps = {
   onAddEvent: (
-    type: "incomingRequest" | "response" | "requestFailed" | "timeout"
+    type: 'incomingRequest' | 'response' | 'requestFailed' | 'timeout'
   ) => void;
 };
 
 export function EmptyFlowState({ onAddEvent }: EmptyFlowStateProps) {
   const eventTypes = [
     {
-      label: "Incoming Request",
+      label: 'Incoming Request',
       icon: IconArrowRight,
-      type: "incomingRequest" as const,
-      description: "Handle incoming HTTP requests before they are processed",
+      type: 'incomingRequest' as const,
+      description: 'Handle incoming HTTP requests before they are processed',
     },
     {
-      label: "Response",
+      label: 'Response',
       icon: IconCheck,
-      type: "response" as const,
-      description: "Modify responses before they are sent back to the client",
+      type: 'response' as const,
+      description: 'Modify responses before they are sent back to the client',
     },
     {
-      label: "Request Failed",
+      label: 'Request Failed',
       icon: IconFilter,
-      type: "requestFailed" as const,
-      description: "Handle cases where the request processing fails",
+      type: 'requestFailed' as const,
+      description: 'Handle cases where the request processing fails',
     },
     {
-      label: "Timeout",
+      label: 'Timeout',
       icon: IconClockHour4,
-      type: "timeout" as const,
-      description: "Handle cases where the request times out",
+      type: 'timeout' as const,
+      description: 'Handle cases where the request times out',
     },
   ];
 
@@ -85,7 +85,7 @@ export function EmptyFlowState({ onAddEvent }: EmptyFlowStateProps) {
                     key={eventType.type}
                     withBorder
                     p="md"
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     onClick={() => onAddEvent(eventType.type)}
                   >
                     <Stack gap="xs">
