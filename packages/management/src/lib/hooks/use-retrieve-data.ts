@@ -54,7 +54,7 @@ export function useRetrieveData<T>(
       debugLogger('Auto-starting data retrieval due to autoStart option');
       void retrieveData();
     }
-  }, [fetcher]);
+  }, [fetcher, options.autoStart, retrieveData]);
 
   return {
     error,

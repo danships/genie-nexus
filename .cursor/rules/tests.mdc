@@ -1,0 +1,6 @@
+---
+description: 
+globs: *.test.ts
+alwaysApply: false
+---
+vitest is a testing library in this monorepo. Unit tests are written parallel to the file under test, as {file}.test.ts. Integration tests are placed in tests/integration in the package for which the tests are written.

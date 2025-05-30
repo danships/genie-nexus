@@ -6,6 +6,7 @@ import { useApi } from '@lib/api/use-api';
 import { Loader } from '@lib/components/atoms/loader';
 import { PageTitle } from '@lib/components/atoms/page-title';
 import { WeaveIcon } from '@lib/components/atoms/weave-icon';
+import { WeaveEditor } from '@lib/components/deployment-editor/weave-editor';
 import { DetailCard } from '@lib/components/molecules/detail-card';
 import { useServerUrl } from '@lib/hooks/use-server-url';
 import {
@@ -64,6 +65,9 @@ export function DeploymentWeaveDetailClientPage({ deployment }: Properties) {
         </Button>
       </Group>
       <Grid>
+        <Grid.Col span={12}>
+          <WeaveEditor deploymentId={deployment.id} />
+        </Grid.Col>
         <Grid.Col span={12}>
           <DetailCard icon={WeaveIcon} title="Endpoint Details">
             <Table>

@@ -13,6 +13,7 @@ export {
   getDeploymentRepository,
   getProviderRepository,
   getTenantRepository,
+  getFlowRepository,
 } from '@genie-nexus/database';
 
 export function initialize(

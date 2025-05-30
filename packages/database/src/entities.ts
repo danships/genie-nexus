@@ -9,6 +9,7 @@ export const Provider: Collection = {
     name: 'string',
     tenantId: 'string',
     isDeleted: 'boolean',
+    type: 'string',
   },
   hooks: [
     {
@@ -87,5 +88,16 @@ export const NextAuthUser: EntityDefinition = {
   template: {},
   filterSortFields: {
     email: 'string',
+  },
+};
+
+export const Flow: Collection = {
+  name: 'flow',
+  relations: [],
+  template: {},
+  filterSortFields: {
+    deploymentId: 'string',
+    tenantId: 'string',
+    isDeleted: 'boolean',
   },
 };

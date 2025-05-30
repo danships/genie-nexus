@@ -43,7 +43,7 @@ export function LoginClientPage({ error }: { error?: string }) {
       <Paper className="is-half-size" mt="md">
         <Stack>
           <Button component="a" href="/sign-up" variant="subtle">
-            Don't have an account? Sign up
+            Don&quot;t have an account? Sign up
           </Button>
         </Stack>
       </Paper>

@@ -1,6 +1,5 @@
+import type { RequestContext } from '@genie-nexus/types';
 import type { Request, Response } from 'express';
-import { proxyRequest } from '../../../weave-providers/http-proxy/proxy.js';
-import { generateStaticResponse } from '../../../weave-providers/static/generate-static-response.js';
 import { checkApiKeyInRequest } from '../../api-key/check-api-key-in-request.js';
 import { ApiKeyNotPresentError } from '../../api-key/errors/api-key-not-present-error.js';
 import { ApiKeyValidationError } from '../../api-key/errors/api-key-validation-error.js';
@@ -56,25 +55,28 @@ export async function processRequest(
     return;
   }
 
-  const { provider } = await executeDeploymentForHttp(deployment);
+  // Create the request context
+  const requestContext: RequestContext = {
+    path: Array.isArray(path) ? path.join('/') : (path ?? ''),
+    method: req.method,
+    requestHeaders: req.headers as Record<string, string>,
+    requestBody: req.body,
+    responseHeaders: {},
+    responseBody: undefined,
+    responseStatusCode: 200,
+    providerId: deployment.defaultProviderId,
+  };
 
-  switch (provider.type) {
-    case 'http-proxy': {
-      await proxyRequest(
-        provider,
-        req,
-        res,
-        Array.isArray(path) ? path.join('/') : (path ?? '')
-      );
-      return;
-    }
+  // Execute the deployment and get the response
+  const { providerResponse } = await executeDeploymentForHttp(
+    deployment,
+    requestContext
+  );
 
-    case 'http-static': {
-      generateStaticResponse(provider, res);
-      return;
-    }
-    default: {
-      throw new Error(`Unknown provider type ${provider.type}`);
-    }
-  }
+  // Send the response to the client
+  Object.entries(providerResponse.headers).forEach(([key, value]) => {
+    res.set(key, value);
+  });
+  res.status(providerResponse.statusCode);
+  res.send(providerResponse.body);
 }
