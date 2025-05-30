@@ -72,7 +72,7 @@ const SwrDefaultApiConfigInner: FunctionComponent<
     });
 
     setClientAvailable(true);
-  }, [client]);
+  }, [client, customOptions.baseURL, defaultOptions.baseURL]);
 
   return (
     <SWRConfig

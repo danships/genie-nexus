@@ -13,6 +13,7 @@
   },
   "scripts": {
     "lint:biome": "biome check .",
+    "lint:management": "pnpm --filter @genie-nexus/management lint",
     "lint": "concurrently --kill-others-on-fail \"pnpm:lint:*\"",
     "format": "concurrently \"pnpm:format:*\"",
     "format:biome": "biome check --write .",

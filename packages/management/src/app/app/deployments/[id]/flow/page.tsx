@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { getDeployment } from '../page';
 import { FlowEditorClientPage } from './_page';
 
-export async function getFlow(deploymentId: string): Promise<Flow | null> {
+async function getFlow(deploymentId: string): Promise<Flow | null> {
   const flow = await getEntityByQuery<Flow>(
     'flows',
     `deploymentId=${deploymentId}&isDeleted=false`

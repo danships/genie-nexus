@@ -122,8 +122,8 @@ The components for the editor should be in the lib/components/deployment-editor 
   - Handles both link clicks and browser back/forward navigation
 - [ ] Update the actions and conditions to support expressions from the @supersave/expression package. A condition can have a value or an expression. If expression is filled in, it needs to be evaluated and then used as the value.
   - [ ] The values in the context can be arguments and used in the expression.
-- [ ] Add the ability to set a different provider to run for the deployment than the default provider.
+- [x] Add the ability to set a different provider to run for the deployment than the default provider.
 - [ ] Set up a way to preview the processing in the flow editor.
 - [ ] Add support for request failed or timeout error, by throwing that specific type of error from the provider specific code.
-- [ ] Rename flow to WeaveFlow, so that it is distinct from future LLM flows.
+- [ ] Rename Flow to WeaveFlow, also in database, so that it is distinct from future LLM flows.
 - [ ] Collapse the <Navbar /> on this page and set the width to almost full width to be able to see the flow editor. The navbar should only be icons.
