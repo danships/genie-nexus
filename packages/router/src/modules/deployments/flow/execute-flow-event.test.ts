@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import type { Flow, RequestContext } from '@genie-nexus/types';
 import { describe, expect, it } from 'vitest';
 import { executeFlowEvent } from './execute-flow-event.js';
@@ -35,6 +36,7 @@ describe('executeFlowEvent', () => {
             enabled: true,
             steps: [
               {
+                id: 'test-step',
                 action: {
                   type: 'addRequestHeader',
                   key: 'X-Test',
@@ -64,6 +66,7 @@ describe('executeFlowEvent', () => {
             enabled: true,
             steps: [
               {
+                id: 'test-step',
                 action: {
                   type: 'addRequestHeader',
                   key: 'X-Test',
@@ -71,6 +74,7 @@ describe('executeFlowEvent', () => {
                 },
               },
               {
+                id: 'test-step2',
                 action: {
                   type: 'removeRequestHeader',
                   key: 'X-Test',
@@ -101,6 +105,7 @@ describe('executeFlowEvent', () => {
             enabled: true,
             steps: [
               {
+                id: 'test-step',
                 action: {
                   type: 'updateResponseStatusCode',
                   value: '404',
@@ -129,6 +134,7 @@ describe('executeFlowEvent', () => {
             enabled: true,
             steps: [
               {
+                id: 'test-step',
                 action: {
                   type: 'updateResponseBody',
                   value: '{"message":"test"}',
@@ -159,6 +165,7 @@ describe('executeFlowEvent', () => {
             enabled: true,
             steps: [
               {
+                id: 'test-step',
                 conditions: [
                   {
                     type: 'equals',
@@ -195,6 +202,7 @@ describe('executeFlowEvent', () => {
             enabled: true,
             steps: [
               {
+                id: 'test-step',
                 conditions: [
                   {
                     type: 'equals',
@@ -231,6 +239,7 @@ describe('executeFlowEvent', () => {
             enabled: true,
             steps: [
               {
+                id: 'test-step',
                 conditions: [
                   {
                     type: 'equals',
@@ -274,6 +283,7 @@ describe('executeFlowEvent', () => {
             enabled: true,
             steps: [
               {
+                id: 'test-step',
                 action: {
                   type: 'addRequestHeader',
                   key: 'X-Test',
@@ -303,6 +313,7 @@ describe('executeFlowEvent', () => {
             enabled: false,
             steps: [
               {
+                id: 'test-step',
                 action: {
                   type: 'addRequestHeader',
                   key: 'X-Test',
@@ -334,6 +345,7 @@ describe('executeFlowEvent', () => {
             enabled: true,
             steps: [
               {
+                id: 'test-step',
                 action: {
                   type: 'setProvider',
                   providerId: 'test-provider',

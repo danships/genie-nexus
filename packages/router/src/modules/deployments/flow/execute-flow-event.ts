@@ -1,5 +1,5 @@
 import type { Flow, RequestContext } from '@genie-nexus/types';
-import { logger } from '../../../core/logger.js';
+import { getLogger } from '../../../core/get-logger.js';
 import { evaluateConditions } from './evaluate-conditions.js';
 import { executeAction } from './execute-action.js';
 
@@ -8,6 +8,7 @@ export async function executeFlowEvent(
   eventType: 'incomingRequest' | 'response',
   context: RequestContext
 ): Promise<RequestContext> {
+  const logger = getLogger();
   logger.debug('Executing flow event', { flowId: flow.id, eventType });
 
   // Find the event for this type

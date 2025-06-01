@@ -1,5 +1,5 @@
 import { promises as dns } from 'dns';
-import { logger } from '../logger.js';
+import { getLogger } from '../get-logger.js';
 
 // List of private IP ranges
 const PRIVATE_IP_RANGES = [
@@ -58,6 +58,7 @@ function isPrivateIP(ip: string): boolean {
 }
 
 export async function validateUrlDestination(url: string): Promise<void> {
+  const logger = getLogger();
   let hostname: string;
   try {
     hostname = new URL(url).hostname;

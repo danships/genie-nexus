@@ -1,11 +1,6 @@
+import 'reflect-metadata';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import {
-  DEFAULT_TENANT_ID,
-  type StartServerOptions,
-  generateManagementApiKey,
-  generatePublicApiKey,
-  startServer,
-} from '../../../dist/index.js';
+import { type StartServerOptions, startServer } from '../../../dist/index.js';
 
 const OPTIONS: StartServerOptions = {
   port: 3031,

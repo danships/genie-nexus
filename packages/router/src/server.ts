@@ -1,11 +1,13 @@
+import 'reflect-metadata';
 import 'dotenv/config';
+import { TYPE_SYMBOLS, container } from '@genie-nexus/container';
+import { type Logger, configureLogger } from '@genie-nexus/logger';
 import express, {
   type NextFunction,
   type Request,
   type Response,
 } from 'express';
 import { initialize as initializeDb } from './core/db/index.js';
-import { logger, setLoggerLevel } from './core/logger.js';
 import { isProduction } from './core/utils/is-production.js';
 import { initialize as initializeApiKey } from './modules/api-key/routes/index.js';
 import { initialize as initializeChatCompletions } from './modules/chat-completions/routes/index.js';
@@ -28,7 +30,7 @@ export async function startServer(
   options: StartServerOptions
 ): Promise<() => void> {
   if (options.logLevel) {
-    setLoggerLevel(options.logLevel);
+    configureLogger(options.logLevel);
   }
 
   setConfiguration({
@@ -42,6 +44,7 @@ export async function startServer(
 
   const db = await initializeDb(options.dbConnectionString, app);
 
+  const logger = container.resolve<Logger>(TYPE_SYMBOLS.LOGGER);
   app.use((req: Request, _res: Response, next: NextFunction) => {
     logger.debug('req', { method: req.method, url: req.url });
     next();

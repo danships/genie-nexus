@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2';
-import { logger } from '../../../core/logger.js';
+import { getLogger } from '../../../core/get-logger.js';
 
 /**
  * Validates if a provided secret matches the stored hash for a given ID
@@ -18,6 +18,7 @@ export async function validateApiKey(
     // Note: The salt and other parameters are embedded in the hash string
     return await argon2.verify(hash, `${secret}${id}`);
   } catch (error) {
+    const logger = getLogger();
     logger.warning('Failed to validate API key', { error });
     return false;
   }

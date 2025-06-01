@@ -1,7 +1,7 @@
 import type { ApiKey } from '@genie-nexus/database';
 import type { NextFunction, Request, Response } from 'express';
 import { ApplicationError } from '../../../core/errors/application-error.js';
-import { logger } from '../../../core/logger.js';
+import { getLogger } from '../../../core/get-logger.js';
 import { getConfiguration } from '../../configuration/get-configuration.js';
 import { API_KEY_PREFIX } from '../constants.js';
 import { checkApiKey } from './check-api-key.js';
@@ -16,6 +16,8 @@ export const checkApiKeyOrUser =
     if (getConfiguration().authentication.type === 'none') {
       return next();
     }
+
+    const logger = getLogger();
 
     const authHeader = req.headers.authorization;
 

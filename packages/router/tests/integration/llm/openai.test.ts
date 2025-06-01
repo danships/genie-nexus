@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { OpenAI } from 'openai';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
