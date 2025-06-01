@@ -2,7 +2,7 @@ import type { CollectionEntityWithTenantId } from '@genie-nexus/database';
 import type { Request, Response } from 'express';
 import { type Collection, HookError } from 'supersave';
 import { getTenantFromResponse } from '../../../../modules/tenants/get-tenant-from-response.js';
-import { logger } from '../../../logger.js';
+import { getLogger } from '../../../get-logger.js';
 
 export default function (
   _collection: Collection,
@@ -14,6 +14,8 @@ export default function (
     return;
   }
   const tenant = getTenantFromResponse(res);
+
+  const logger = getLogger();
 
   // Check if the item we are deleting belongs to this user.
   if (entity.tenantId !== tenant.id) {

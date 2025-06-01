@@ -3,7 +3,7 @@ import type { Request, Response } from 'express';
 import type { Collection } from 'supersave';
 import { HookError } from 'supersave';
 import { getTenantFromResponse } from '../../../../modules/tenants/get-tenant-from-response.js';
-import { logger } from '../../../logger.js';
+import { getLogger } from '../../../get-logger.js';
 
 export default function (
   _collection: Collection,
@@ -16,6 +16,7 @@ export default function (
   }
   const tenant = getTenantFromResponse(res);
 
+  const logger = getLogger();
   if (entity.tenantId !== tenant.id) {
     logger.warn('Unauthorized, tenant id mismatch.', {
       entityTenantId: entity.tenantId,

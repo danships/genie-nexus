@@ -13,5 +13,6 @@
     "src/modules/auth/next-auth/types.ts",
     "src/modules/auth/next-auth/get-session.ts",
     "src/ui/initialize.cts"
-  ]
+  ],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }

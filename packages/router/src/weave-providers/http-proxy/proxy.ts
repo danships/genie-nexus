@@ -1,6 +1,6 @@
 import type { WeaveHttpProxyProvider } from '@genie-nexus/types';
 import type { RequestContext } from '@genie-nexus/types';
-import { logger } from '../../core/logger.js';
+import { getLogger } from '../../core/get-logger.js';
 import { validateUrlDestination } from '../../core/utils/validate-url-destination.js';
 import { ProviderResponse } from '../types.js';
 
@@ -11,6 +11,8 @@ export async function proxyRequest(
   request: RequestContext,
   path: string
 ): Promise<ProviderResponse> {
+  const logger = getLogger();
+
   // Construct the target URL by appending the path to the base URL
   const targetUrl = new URL(path, provider.baseUrl).toString();
   logger.debug('Proxying request', { targetUrl });

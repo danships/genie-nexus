@@ -1,5 +1,5 @@
 import type { Action, RequestContext } from '@genie-nexus/types';
-import { logger } from '../../../core/logger.js';
+import { getLogger } from '../../../core/get-logger.js';
 
 // Maximum allowed delay in milliseconds (5 seconds)
 const MAX_DELAY_MS = 5000;
@@ -8,6 +8,8 @@ export async function executeAction(
   action: Action,
   context: RequestContext
 ): Promise<void> {
+  const logger = getLogger();
+
   logger.debug('Executing action', {
     actionType: action.type,
     context: {

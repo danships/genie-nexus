@@ -2,9 +2,9 @@
   "name": "@genie-nexus/management",
   "private": true,
   "scripts": {
-    "dev": "PORT=3001 next dev",
-    "build": "AUTH_SECRET=\"\" next build",
-    "start": "next start",
+    "dev": "PORT=3001 NODE_OPTIONS=\"--require ./process-initialize.mjs\" next dev",
+    "build": "NODE_OPTIONS=\"--require ./process-initialize.mjs\" NEXT_BUILD=true next build",
+    "start": "NODE_OPTIONS=\"--require ./process-initialize.mjs\" next start",
     "lint": "next lint"
   },
   "type": "module",
@@ -29,12 +29,15 @@
     "next-auth": "5.0.0-beta.27",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "reflect-metadata": "^0.2.2",
     "server-only": "^0.0.1",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
     "swr": "^2.3.3",
     "unstated-next": "^1.1.0",
-    "zod": "^3.24.3"
+    "zod": "^3.24.3",
+    "@genie-nexus/container": "workspace:*",
+    "@genie-nexus/logger": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -1,6 +1,6 @@
 import { saltAndHashPassword } from '@genie-nexus/auth';
 import { getNextAuthUserRepository } from '@genie-nexus/database';
-import { logger } from '../../../core/logger.js';
+import { getLogger } from '../../../core/get-logger.js';
 import { getConfiguration } from '../../configuration/get-configuration.js';
 import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
 import { DEFAULT_USER_EMAIL, DEFAULT_USER_ID } from '../constants.js';
@@ -13,6 +13,8 @@ export async function initialize() {
   const users = await userRepository.getByQuery(
     userRepository.createQuery().limit(1)
   );
+
+  const logger = getLogger();
 
   if (getConfiguration().authentication.type === 'none') {
     logger.info('Authentication is disabled');

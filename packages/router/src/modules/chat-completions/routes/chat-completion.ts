@@ -17,7 +17,7 @@ import type {
 } from '../types/openai.js';
 
 import { isLlmApiKey } from '@genie-nexus/types';
-import { logger } from '../../../core/logger.js';
+import { getLogger } from '../../../core/get-logger.js';
 import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response.js';
 import { executeForLlm } from '../../deployments/execute.js';
 import { getDeploymentByName } from '../../deployments/get-deployment-by-name.js';
@@ -32,6 +32,8 @@ export const handler: RequestHandler<
   req: Request<object, unknown, OpenAIChatCompletionRequest>,
   res: Response
 ) => {
+  const logger = getLogger();
+
   try {
     const request = req.body;
     const isStreaming = Boolean(request.stream);
