@@ -79,6 +79,7 @@ export const tenantAndSampleData: MigrationDefinition = {
       active: true,
       defaultProviderId: staticHttpProvider.id,
       type: 'weave',
+      // @ts-expect-error TODO the discriminated union does not work with the zod schemas
       requiresApiKey: false,
       supportedMethods: ['get'],
     } satisfies Omit<DeploymentWeave, 'id'>);

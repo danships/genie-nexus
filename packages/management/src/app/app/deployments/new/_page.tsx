@@ -28,8 +28,8 @@ export const NewDeploymentPage = disableSSR(function () {
         DeploymentLLMApiCreate
       >('/collections/deployments', {
         type: 'llm',
-        name: `New LLM Deployment`,
-        slug: `llm-${Date.now() % 1000000}`,
+        name: 'New LLM Deployment',
+        slug: `llm-${crypto.randomUUID().split('-')[0]}`,
         active: true,
         defaultProviderId: '', // we accept that it is empty for now
         model: 'to be filled in',

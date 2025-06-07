@@ -42,9 +42,18 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
     },
     validate: {
       name: (value) => {
-        if (!value.trim()) return 'Name is required';
+        if (!value.trim()) {
+          return 'Name is required';
+        }
+
+        return null;
+      },
+      slug: (value) => {
+        if (!value.trim()) {
+          return 'Slug is required';
+        }
         if (!/^[a-zA-Z0-9-]+$/.test(value)) {
-          return 'Name can only contain letters, numbers, and dashes';
+          return 'Slug can only contain letters, numbers, and dashes';
         }
         return null;
       },

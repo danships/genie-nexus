@@ -56,7 +56,7 @@ export function DeploymentWeaveFormClientPage({ deployment }: Properties) {
           return 'Slug is required';
         }
         if (!/^[a-zA-Z0-9-]+$/.test(value)) {
-          return 'Name can only contain letters, numbers, and dashes';
+          return 'Slug can only contain letters, numbers, and dashes';
         }
         return null;
       },
