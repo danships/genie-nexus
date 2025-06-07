@@ -1,6 +1,5 @@
 import type { RemoveRequestHeaderAction } from '@genie-nexus/types';
 import { TextInput } from '@mantine/core';
-import React from 'react';
 
 export function RemoveRequestHeaderBlock({
   action,

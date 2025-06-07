@@ -25,13 +25,11 @@
     "enabled": true,
     "rules": {
       "recommended": false,
-      "complexity": {
-        "noUselessTypeConstraint": "error",
-        "useDateNow": "error"
-      },
+      "complexity": { "noUselessTypeConstraint": "error" },
       "correctness": {
         "noUnusedVariables": "error",
-        "useArrayLiterals": "off"
+        "useArrayLiterals": "off",
+        "noUnusedImports": "error"
       },
       "style": {
         "noNamespace": "error",
@@ -42,7 +40,8 @@
             "strictCase": true,
             "filenameCases": ["kebab-case"]
           }
-        }
+        },
+        "useImportType": "error"
       },
       "suspicious": {
         "noExplicitAny": "error",

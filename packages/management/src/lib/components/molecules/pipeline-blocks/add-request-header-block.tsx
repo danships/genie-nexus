@@ -1,6 +1,5 @@
 import type { AddRequestHeaderAction } from '@genie-nexus/types';
 import { Group, TextInput } from '@mantine/core';
-import React from 'react';
 
 export function AddRequestHeaderBlock({
   action,

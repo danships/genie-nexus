@@ -1,6 +1,6 @@
 'use client';
-import { Provider } from '@genie-nexus/database';
-import {
+import type { Provider } from '@genie-nexus/database';
+import type {
   OpenAIProvider,
   WeaveHttpProxyProvider,
   WeaveHttpStaticProvider,

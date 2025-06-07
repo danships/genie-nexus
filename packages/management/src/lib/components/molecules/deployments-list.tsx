@@ -1,6 +1,6 @@
 'use client';
 
-import { DeploymentLLMApi, DeploymentWeaveApi } from '@genie-nexus/types';
+import type { DeploymentLLMApi, DeploymentWeaveApi } from '@genie-nexus/types';
 import { DetailCard } from '@lib/components/molecules/detail-card';
 import { debugLogger } from '@lib/core/debug-logger';
 import { Button, Checkbox, Notification, Stack } from '@mantine/core';

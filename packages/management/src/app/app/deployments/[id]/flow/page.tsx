@@ -1,4 +1,4 @@
-import { Flow } from '@genie-nexus/types';
+import type { Flow } from '@genie-nexus/types';
 import { getEntityByQuery } from '@lib/api/server-api';
 import { redirect } from 'next/navigation';
 import { getDeployment } from '../page';

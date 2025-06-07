@@ -1,7 +1,7 @@
 'use client';
 
-import { Provider } from '@genie-nexus/database';
-import { DeploymentWeave } from '@genie-nexus/types';
+import type { Provider } from '@genie-nexus/database';
+import type { DeploymentWeave } from '@genie-nexus/types';
 import { useApi } from '@lib/api/use-api';
 import { Loader } from '@lib/components/atoms/loader';
 import { PageTitle } from '@lib/components/atoms/page-title';

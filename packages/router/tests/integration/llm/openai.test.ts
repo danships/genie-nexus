@@ -4,7 +4,6 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   DEFAULT_TENANT_ID,
   type StartServerOptions,
-  generateManagementApiKey,
   generatePublicApiKey,
   startServer,
 } from '../../../dist/index.js';

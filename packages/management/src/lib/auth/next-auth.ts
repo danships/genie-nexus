@@ -1,5 +1,5 @@
 import { COOKIE_NAME } from '@genie-nexus/auth';
-import { type NextAuthUser } from '@genie-nexus/database';
+import type { NextAuthUser } from '@genie-nexus/database';
 import { initialize } from '@genie-nexus/database';
 import { getNextAuthUserRepository } from '@lib/core/db';
 import { environment } from '@lib/environment';

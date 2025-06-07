@@ -1,4 +1,4 @@
-import { Action } from '@genie-nexus/types';
+import type { Action } from '@genie-nexus/types';
 import { Button, Collapse, Group, Modal, Stack, Text } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { useState } from 'react';

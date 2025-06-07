@@ -1,4 +1,4 @@
-import { Provider } from '@genie-nexus/database';
+import type { Provider } from '@genie-nexus/database';
 import { getEntity } from '@lib/api/server-api';
 import { ProviderDetailClientPage } from './_page';
 

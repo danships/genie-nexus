@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, Group, Paper, Stack, Title } from '@mantine/core';
-import { ComponentType, ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
 type Properties = {
   icon: ComponentType<{ size: number }>;

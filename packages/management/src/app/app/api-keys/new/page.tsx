@@ -1,5 +1,5 @@
 import { UserRequired } from '@lib/components/molecules/user-required';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { NewApiKeyPage } from './_page';
 
 export const metadata: Metadata = {

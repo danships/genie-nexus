@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
-import { ApiKey } from '@genie-nexus/database';
+import type { ApiKey } from '@genie-nexus/database';
 import { ENDPOINT_APIKEYS_OVERVIEW } from '@lib/api/swr-constants';
 import { useApi, useCudApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';

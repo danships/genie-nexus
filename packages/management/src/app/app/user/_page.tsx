@@ -4,7 +4,7 @@ import { PageTitle } from '@lib/components/atoms/page-title';
 import { DetailCard } from '@lib/components/molecules/detail-card';
 import { Button, Stack } from '@mantine/core';
 import { IconUser } from '@tabler/icons-react';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import Link from 'next/link';
 
 export function UserClientPage({ session }: { session: Session }) {

@@ -1,4 +1,4 @@
-import { Deployment } from '@genie-nexus/database';
+import type { Deployment } from '@genie-nexus/database';
 import { getConfiguration, getEntity } from '@lib/api/server-api';
 import { UserRequired } from '@lib/components/molecules/user-required';
 import { DeploymentLlmDetailClientPage } from './_page-llm';

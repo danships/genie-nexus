@@ -1,4 +1,4 @@
-import { Condition } from '@genie-nexus/types';
+import type { Condition } from '@genie-nexus/types';
 import {
   Button,
   Group,

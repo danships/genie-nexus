@@ -1,4 +1,4 @@
-import { WeaveHttpProxyProvider } from '@genie-nexus/types';
+import type { WeaveHttpProxyProvider } from '@genie-nexus/types';
 import {
   ActionIcon,
   Button,

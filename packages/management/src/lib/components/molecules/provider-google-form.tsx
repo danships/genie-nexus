@@ -1,4 +1,4 @@
-import { GoogleProvider } from '@genie-nexus/types';
+import type { GoogleProvider } from '@genie-nexus/types';
 import { Button, PasswordInput, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 

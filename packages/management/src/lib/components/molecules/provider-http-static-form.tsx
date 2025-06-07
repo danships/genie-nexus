@@ -1,4 +1,4 @@
-import { WeaveHttpStaticProvider } from '@genie-nexus/types';
+import type { WeaveHttpStaticProvider } from '@genie-nexus/types';
 import {
   ActionIcon,
   Button,
