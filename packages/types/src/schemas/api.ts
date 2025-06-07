@@ -58,6 +58,14 @@ export const providerSchemaApi = z.discriminatedUnion('type', [
 // Deployment schemas
 const baseDeploymentSchemaApi = z.object({
   name: z.string(),
+  slug: z
+    .string()
+    .min(1)
+    .max(100)
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      'Slug must contain only lowercase letters, numbers, and hyphens'
+    ),
   active: z.boolean(),
   defaultProviderId: z.string(),
   isDeleted: z.boolean().optional(),

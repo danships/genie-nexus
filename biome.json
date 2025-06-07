@@ -25,7 +25,10 @@
     "enabled": true,
     "rules": {
       "recommended": false,
-      "complexity": { "noUselessTypeConstraint": "error" },
+      "complexity": {
+        "noUselessTypeConstraint": "error",
+        "useDateNow": "error"
+      },
       "correctness": {
         "noUnusedVariables": "error",
         "useArrayLiterals": "off"

@@ -44,7 +44,7 @@ export function DeploymentWeaveDetailClientPage({ deployment }: Properties) {
         : false
     );
 
-  const serverUrl = useServerUrl(`/weave/${deployment.name}`);
+  const serverUrl = useServerUrl(`/weave/${deployment.slug}`);
 
   return (
     <Stack gap="lg">

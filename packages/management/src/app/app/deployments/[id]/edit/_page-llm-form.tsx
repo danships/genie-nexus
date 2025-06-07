@@ -35,15 +35,25 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
     initialValues: {
       type: 'llm',
       name: deployment.name,
+      slug: deployment.slug,
       active: deployment.active,
       defaultProviderId: deployment.defaultProviderId,
       model: deployment.type === 'llm' ? deployment.model : '',
     },
     validate: {
       name: (value) => {
-        if (!value.trim()) return 'Name is required';
+        if (!value.trim()) {
+          return 'Name is required';
+        }
+
+        return null;
+      },
+      slug: (value) => {
+        if (!value.trim()) {
+          return 'Slug is required';
+        }
         if (!/^[a-zA-Z0-9-]+$/.test(value)) {
-          return 'Name can only contain letters, numbers, and dashes';
+          return 'Slug can only contain letters, numbers, and dashes';
         }
         return null;
       },
@@ -116,6 +126,13 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
               placeholder="Enter deployment name"
               required
               {...form.getInputProps('name')}
+            />
+            <TextInput
+              label="Slug"
+              placeholder="Enter the slug for this deployment"
+              required
+              description="The slug is used to identify the deployment in the URL. It can only contain letters, numbers, and dashes."
+              {...form.getInputProps('slug')}
             />
 
             <TextInput

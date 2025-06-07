@@ -39,7 +39,8 @@ export const tenantAndSampleData: MigrationDefinition = {
       Deployment.name
     );
     const staticEchoDeployment: Omit<DeploymentLLM, 'id'> = {
-      name: 'static-echo',
+      name: 'Static Echo',
+      slug: 'static-echo',
       tenantId: DEFAULT_TENANT_ID,
       active: true,
       defaultProviderId: createdLlmProvider.id,
@@ -72,7 +73,8 @@ export const tenantAndSampleData: MigrationDefinition = {
     );
 
     await deploymentRepository.create({
-      name: `static-http`,
+      name: `Static HTTP`,
+      slug: 'static-http',
       tenantId: DEFAULT_TENANT_ID,
       active: true,
       defaultProviderId: staticHttpProvider.id,
@@ -100,7 +102,8 @@ export const tenantAndSampleData: MigrationDefinition = {
     );
 
     const deploymentToCreate: Omit<DeploymentWeave, 'id'> = {
-      name: `proxy-http`,
+      name: `Proxy HTTP`,
+      slug: 'proxy-http',
       tenantId: DEFAULT_TENANT_ID,
       active: true,
       defaultProviderId: proxyHttpProvider.id,

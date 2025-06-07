@@ -31,6 +31,7 @@ export const Deployment: Collection = {
   template: {},
   filterSortFields: {
     name: 'string',
+    slug: 'string',
     tenantId: 'string',
     isDeleted: 'boolean',
     type: 'string',

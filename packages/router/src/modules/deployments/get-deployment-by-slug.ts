@@ -1,14 +1,14 @@
 import type { Deployment } from '@genie-nexus/database';
 import { getDeploymentRepository } from '../../core/db/index.js';
 
-export async function getDeploymentByName(
+export async function getDeploymentBySlug(
   tenantId: string,
-  name: string,
+  slug: string,
   expectedType: Deployment['type']
 ): Promise<Deployment> {
   const deploymentRepository = await getDeploymentRepository();
   const deployment = await deploymentRepository.getOneByQuery(
-    deploymentRepository.createQuery().eq('tenantId', tenantId).eq('name', name)
+    deploymentRepository.createQuery().eq('tenantId', tenantId).eq('slug', slug)
   );
 
   if (deployment === null) {
