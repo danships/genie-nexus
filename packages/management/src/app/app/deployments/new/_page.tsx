@@ -49,8 +49,8 @@ export const NewDeploymentPage = disableSSR(function () {
         DeploymentWeaveApiCreate
       >('/collections/deployments', {
         type: 'weave',
-        name: `New Weave Deployment`,
-        slug: `weave-${Date.now() % 10000000}`,
+        name: 'New Weave Deployment',
+        slug: `weave-${crypto.randomUUID().split('-')[0]}`,
         active: true,
         defaultProviderId: '', // we accept that it is empty for now
         requiresApiKey: true,
