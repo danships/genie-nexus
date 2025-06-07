@@ -58,6 +58,7 @@ export const providerSchemaApi = z.discriminatedUnion('type', [
 // Deployment schemas
 const baseDeploymentSchemaApi = z.object({
   name: z.string(),
+  slug: z.string(),
   active: z.boolean(),
   defaultProviderId: z.string(),
   isDeleted: z.boolean().optional(),

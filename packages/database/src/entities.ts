@@ -13,9 +13,8 @@ export const Provider: Collection = {
   },
   hooks: [
     {
-      // @ts-expect-error - Type mismatch in entity transform function
+      // @ts-expect-error - Type mismatch in
       entityTransform: (_collection, _req, _res, entity) => {
-        // @ts-expect-error - Type mismatch in entity transform function
         if ('apiKey' in entity) {
           entity.apiKey = '';
         }
@@ -31,6 +30,7 @@ export const Deployment: Collection = {
   template: {},
   filterSortFields: {
     name: 'string',
+    slug: 'string',
     tenantId: 'string',
     isDeleted: 'boolean',
     type: 'string',
@@ -48,10 +48,12 @@ export const ApiKey: Collection = {
   },
   hooks: [
     {
-      // @ts-expect-error - Type mismatch in entity transform function
       entityTransform: (
+        // @ts-expect-error - Type mismatch in entity transform function
         _collection,
+        // @ts-expect-error - Type mismatch in entity transform function
         _req,
+        // @ts-expect-error - Type mismatch in entity transform function
         _res,
         entity: ApiKeyType
       ): Omit<ApiKeyType, 'hash'> => {

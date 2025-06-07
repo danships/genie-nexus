@@ -35,6 +35,7 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
     initialValues: {
       type: 'llm',
       name: deployment.name,
+      slug: deployment.slug,
       active: deployment.active,
       defaultProviderId: deployment.defaultProviderId,
       model: deployment.type === 'llm' ? deployment.model : '',
@@ -116,6 +117,13 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
               placeholder="Enter deployment name"
               required
               {...form.getInputProps('name')}
+            />
+            <TextInput
+              label="Slug"
+              placeholder="Enter the slug for this deployment"
+              required
+              description="The slug is used to identify the deployment in the URL. It can only contain letters, numbers, and dashes."
+              {...form.getInputProps('slug')}
             />
 
             <TextInput

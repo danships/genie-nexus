@@ -20,19 +20,25 @@ import { isLlmApiKey } from '@genie-nexus/types';
 import { getLogger } from '../../../core/get-logger.js';
 import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response.js';
 import { executeForLlm } from '../../deployments/execute.js';
-import { getDeploymentByName } from '../../deployments/get-deployment-by-name.js';
+import { getDeploymentBySlug } from '../../deployments/get-deployment-by-slug.js';
 import { handleAiSdkStreamResponse } from '../handle-ai-sdk-stream-response.js';
 import { handleAiSdkTextResponse } from '../handle-ai-sdk-text-response.js';
 
 export const handler: RequestHandler<
-  object,
+  { deploymentSlug: string },
   unknown,
   OpenAIChatCompletionRequest
 > = async (
-  req: Request<object, unknown, OpenAIChatCompletionRequest>,
+  req: Request<
+    { deploymentSlug: string },
+    unknown,
+    OpenAIChatCompletionRequest
+  >,
   res: Response
 ) => {
   const logger = getLogger();
+
+  const { deploymentSlug } = req.params;
 
   try {
     const request = req.body;
@@ -51,9 +57,9 @@ export const handler: RequestHandler<
 
     const apiKey = getApiKeyFromResponse(res, 'llm-api-key');
 
-    const deployment = await getDeploymentByName(
+    const deployment = await getDeploymentBySlug(
       apiKey.tenantId,
-      request.model,
+      deploymentSlug,
       'llm'
     );
     if (

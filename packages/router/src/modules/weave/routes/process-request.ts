@@ -4,23 +4,23 @@ import { checkApiKeyInRequest } from '../../api-key/check-api-key-in-request.js'
 import { ApiKeyNotPresentError } from '../../api-key/errors/api-key-not-present-error.js';
 import { ApiKeyValidationError } from '../../api-key/errors/api-key-validation-error.js';
 import { executeForHttp as executeDeploymentForHttp } from '../../deployments/execute.js';
-import { getDeploymentByName } from '../../deployments/get-deployment-by-name.js';
+import { getDeploymentBySlug } from '../../deployments/get-deployment-by-slug.js';
 import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
 import type { ResponseLocalsTenant } from '../../tenants/middleware/types.js';
 
 export async function processRequest(
   req: Request<{
     path: string | string[];
-    deploymentName: string;
+    deploymentSlug: string;
   }>,
   res: Response<unknown, ResponseLocalsTenant>
 ) {
-  const { deploymentName, path } = req.params;
+  const { deploymentSlug, path } = req.params;
   const tenant = getTenantFromResponse(res);
 
-  const deployment = await getDeploymentByName(
+  const deployment = await getDeploymentBySlug(
     tenant.id,
-    deploymentName ?? '',
+    deploymentSlug ?? '',
     'weave'
   );
   if (!deployment) {

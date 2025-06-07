@@ -1,1 +1,1 @@
-export const URL_PARAM_DEPLOYMENT_NAME = 'deploymentName';
+export const URL_PARAM_DEPLOYMENT_SLUG = 'deploymentSlug';

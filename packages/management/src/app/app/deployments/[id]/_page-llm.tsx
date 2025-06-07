@@ -50,7 +50,7 @@ export function DeploymentLlmDetailClientPage({
     );
 
   const serverUrl = useServerUrl(
-    `/api/v1/${tenant ? `${tenant.id}/` : ''}${deployment.name}`
+    `/api/v1/${tenant ? `${tenant.id}/` : ''}${deployment.slug}`
   );
   const [sdkModalOpen, setSdkModalOpen] = useState(false);
 

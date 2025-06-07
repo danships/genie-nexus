@@ -28,7 +28,8 @@ export const NewDeploymentPage = disableSSR(function () {
         DeploymentLLMApiCreate
       >('/collections/deployments', {
         type: 'llm',
-        name: `new-llm-deployment-${Date.now() % 1000000}`,
+        name: `New LLM Deployment`,
+        slug: `llm-${Date.now() % 1000000}`,
         active: true,
         defaultProviderId: '', // we accept that it is empty for now
         model: 'to be filled in',
@@ -48,7 +49,8 @@ export const NewDeploymentPage = disableSSR(function () {
         DeploymentWeaveApiCreate
       >('/collections/deployments', {
         type: 'weave',
-        name: `new-weave-deployment-${Date.now() % 10000000}`,
+        name: `New Weave Deployment`,
+        slug: `weave-${Date.now() % 10000000}`,
         active: true,
         defaultProviderId: '', // we accept that it is empty for now
         requiresApiKey: true,

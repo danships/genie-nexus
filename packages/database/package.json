@@ -10,8 +10,8 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "debug": "^4.4.0",
-    "mysql2": "^3.14.0",
+    "debug": "^4.4.1",
+    "mysql2": "^3.14.1",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
     "supersave": "^0.16.0"
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@genie-nexus/types": "workspace:*",
     "@types/debug": "^4.1.12",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.3",
     "typescript": "^5.8.3"
   }
 }

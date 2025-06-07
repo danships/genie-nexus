@@ -36,6 +36,7 @@ export function DeploymentWeaveFormClientPage({ deployment }: Properties) {
     initialValues: {
       type: 'weave',
       name: deployment.name,
+      slug: deployment.slug,
       active: deployment.active,
       defaultProviderId: deployment.defaultProviderId,
       requiresApiKey:
@@ -44,14 +45,22 @@ export function DeploymentWeaveFormClientPage({ deployment }: Properties) {
         deployment.type === 'weave' ? deployment.supportedMethods : [],
     },
     validate: {
-      name: (value) => {
-        if (!value.trim()) return 'Name is required';
+      name: (value: string) => {
+        if (!value.trim()) {
+          return 'Name is required';
+        }
+        return null;
+      },
+      slug: (value: string) => {
+        if (!value.trim()) {
+          return 'Slug is required';
+        }
         if (!/^[a-zA-Z0-9-]+$/.test(value)) {
           return 'Name can only contain letters, numbers, and dashes';
         }
         return null;
       },
-      defaultProviderId: (value) =>
+      defaultProviderId: (value: string) =>
         !value ? 'Default provider is required' : null,
     },
   });
@@ -116,6 +125,13 @@ export function DeploymentWeaveFormClientPage({ deployment }: Properties) {
               placeholder="Enter deployment name"
               required
               {...form.getInputProps('name')}
+            />
+            <TextInput
+              label="Slug"
+              placeholder="Enter the slug for this deployment"
+              required
+              description="The slug is used to identify the deployment in the URL. It can only contain letters, numbers, and dashes."
+              {...form.getInputProps('slug')}
             />
 
             {!filteredProviders && <Loader />}

@@ -24,10 +24,17 @@ export const environment = cleanEnv(
   },
   {
     reporter: ({ errors }) => {
-      if (process.env['NEXT_BUILD']) {
+      if (process.env['NEXT_BUILD'] || Object.keys(errors).length === 0) {
         return;
       }
-      throw new Error(`Environment variables are not set: ${errors}.`);
+
+      throw new Error(
+        `Environment variables are not set: ${Object.values(errors)
+          .map((error) =>
+            error instanceof Error ? error.message : String(error)
+          )
+          .join(', ')}.`
+      );
     },
   }
 );
