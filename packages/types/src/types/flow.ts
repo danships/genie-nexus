@@ -84,3 +84,5 @@ export type RequestContext = {
 
 export type Pipeline = z.infer<typeof pipelineSchema>;
 export type Event = z.infer<typeof eventSchema>;
+
+export type FlowCreate = Omit<Flow, 'id'>;

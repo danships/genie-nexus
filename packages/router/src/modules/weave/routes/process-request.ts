@@ -55,9 +55,10 @@ export async function processRequest(
     return;
   }
 
+  const flattenedPath = Array.isArray(path) ? path.join('/') : (path ?? '');
   // Create the request context
   const requestContext: RequestContext = {
-    path: Array.isArray(path) ? path.join('/') : (path ?? ''),
+    path: !flattenedPath.startsWith('/') ? `/${flattenedPath}` : flattenedPath,
     method: req.method,
     requestHeaders: req.headers as Record<string, string>,
     requestBody: req.body,
