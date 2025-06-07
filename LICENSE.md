@@ -2,7 +2,7 @@ Business Source License 1.1
 
 Parameters
 
-Licensor: Debugging Dan (@danhips)
+Licensor: Debugging Dan (@danships)
 Licensed Work: genie-nexus
 Additional Use Grant: None
 Change Date: April 24, 2028
