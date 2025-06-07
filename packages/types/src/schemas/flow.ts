@@ -159,6 +159,7 @@ export const flowSchema = z.object({
   id: z.string(),
   deploymentId: z.string(),
   events: z.array(eventSchema),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  isDeleted: z.boolean().optional(),
 });

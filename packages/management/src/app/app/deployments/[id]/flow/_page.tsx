@@ -21,6 +21,7 @@ import {
 import { useForm } from '@mantine/form';
 import {
   IconAlertCircle,
+  IconArrowLeft,
   IconArrowRight,
   IconCheck,
   IconClock,
@@ -29,12 +30,13 @@ import {
   IconListDetails,
   IconTransform,
 } from '@tabler/icons-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 type Properties = {
   deployment: DeploymentApi;
-  flow: Flow | null;
+  flow: Flow;
 };
 
 type FormValues = {
@@ -46,18 +48,18 @@ export function FlowEditorClientPage({
   deployment,
 }: Properties) {
   const router = useRouter();
-  const [flow, setFlow] = useState<Flow | null>(originalFlow);
+  const [flow, setFlow] = useState<Flow>(originalFlow);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(
     null
   );
   const form = useForm<FormValues>({
     initialValues: {
-      events: [],
+      events: flow.events,
     },
   });
 
-  const { patch, post, inProgress, error } = useCudApi();
+  const { patch, inProgress, error } = useCudApi();
 
   // Track form changes
   const hasUnsavedChanges = form.isDirty();
@@ -67,7 +69,6 @@ export function FlowEditorClientPage({
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasUnsavedChanges) {
         e.preventDefault();
-        e.returnValue = '';
       }
     };
 
@@ -108,23 +109,19 @@ export function FlowEditorClientPage({
     setPendingNavigation(null);
   };
 
-  const handleSave = async () => {
-    if (flow) {
-      const updatedFlow = await patch<Flow>(`/collections/flows/${flow.id}`, {
+  const handleSave = useCallback(async () => {
+    const updatedFlow = await patch<{ data: Flow }>(
+      `/collections/flows/${flow.id}`,
+      {
         ...flow,
         events: form.values.events,
-      });
-      setFlow(updatedFlow);
-      form.reset();
-    } else {
-      const createdFlow = await post<Flow>('/collections/flows', {
-        deploymentId: deployment.id,
-        events: form.values.events,
-      });
-      setFlow(createdFlow);
-      form.reset();
-    }
-  };
+        updatedAt: new Date().toISOString(),
+      }
+    );
+    setFlow(updatedFlow.data);
+    form.resetDirty();
+    return;
+  }, [flow, form, deployment, patch]);
 
   // Modal state
   const [modalOpened, setModalOpened] = useState(false);
@@ -373,7 +370,15 @@ export function FlowEditorClientPage({
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 3 }}>
               <Stack gap="xl">
-                {/* Add Events */}
+                <Button
+                  size="sm"
+                  component={Link}
+                  href={`/app/deployments/${deployment.id}`}
+                  leftSection={<IconArrowLeft size={16} />}
+                >
+                  {' '}
+                  Back
+                </Button>
                 <Paper p="md" withBorder>
                   <Title order={5}>Add Events</Title>
                   <Stack>

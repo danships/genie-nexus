@@ -47,6 +47,31 @@ export async function getEntity<T extends LocalBaseEntity>(
   return data.data;
 }
 
+export async function createEntity<T, R>(collection: string, flow: T) {
+  const cookieHeaders = await getCookieHeaders();
+
+  const response = await fetch(
+    `${COLLECTION_API_URL}/collections/${collection}`,
+    {
+      method: 'POST',
+      headers: {
+        ...cookieHeaders.headers,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(flow),
+    }
+  );
+  if (!response.ok) {
+    serverLogger.error(`Failed to create entity: ${response.statusText}`, {
+      response: await response.text(),
+    });
+    throw new Error(`Failed to create entity: ${response.statusText}`);
+  }
+
+  const data = (await response.json()) as { data: R };
+  return data.data;
+}
+
 export async function getEntityByQuery<T extends LocalBaseEntity>(
   collection: string,
   query: string
