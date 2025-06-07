@@ -1,7 +1,7 @@
 'use client';
 
-import { Deployment } from '@genie-nexus/database';
-import {
+import type { Deployment } from '@genie-nexus/database';
+import type {
   DeploymentLLMApiCreate,
   DeploymentWeaveApiCreate,
 } from '@genie-nexus/types';

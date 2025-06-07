@@ -13,7 +13,7 @@ import {
   IconWorld,
 } from '@tabler/icons-react';
 import type React from 'react';
-import { ComponentType, useEffect, useRef, useState } from 'react';
+import { type ComponentType, useEffect, useRef, useState } from 'react';
 import styles from './animated-background.module.css';
 
 // Animation types

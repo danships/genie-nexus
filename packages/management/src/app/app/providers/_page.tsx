@@ -1,6 +1,6 @@
 'use client';
 
-import { Provider } from '@genie-nexus/database';
+import type { Provider } from '@genie-nexus/database';
 import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
 import { useApi, useCudApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';

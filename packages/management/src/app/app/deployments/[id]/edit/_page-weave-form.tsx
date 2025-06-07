@@ -1,7 +1,7 @@
 'use client';
 
-import { Deployment, Provider } from '@genie-nexus/database';
-import { DeploymentWeaveApi } from '@genie-nexus/types';
+import type { Deployment, Provider } from '@genie-nexus/database';
+import type { DeploymentWeaveApi } from '@genie-nexus/types';
 import {
   ENDPOINT_DEPLOYMENTS_OVERVIEW,
   ENDPOINT_PROVIDERS_OVERVIEW,

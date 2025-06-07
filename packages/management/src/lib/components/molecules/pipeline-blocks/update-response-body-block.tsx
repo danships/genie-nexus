@@ -1,6 +1,5 @@
 import type { UpdateResponseBodyAction } from '@genie-nexus/types';
 import { TextInput } from '@mantine/core';
-import React from 'react';
 
 export function UpdateResponseBodyBlock({
   action,

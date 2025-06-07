@@ -1,5 +1,5 @@
-import { generateText, streamText } from 'ai';
-import { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai.js';
+import type { generateText, streamText } from 'ai';
+import type { OpenAIChatCompletionRequest } from '../../chat-completions/types/openai.js';
 
 export function openAiToAiSdkRequestMapper(
   request: OpenAIChatCompletionRequest

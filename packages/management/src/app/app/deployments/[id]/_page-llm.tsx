@@ -1,7 +1,7 @@
 'use client';
 
-import { Provider } from '@genie-nexus/database';
-import { DeploymentLLMApi, TenantApi } from '@genie-nexus/types';
+import type { Provider } from '@genie-nexus/database';
+import type { DeploymentLLMApi, TenantApi } from '@genie-nexus/types';
 import { useApi } from '@lib/api/use-api';
 import { CodeHighlight } from '@lib/components/atoms/code-highlight';
 import { Loader } from '@lib/components/atoms/loader';

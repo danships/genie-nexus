@@ -1,4 +1,4 @@
-import { Action, Condition, FlowStep } from '@genie-nexus/types';
+import type { Action, Condition, FlowStep } from '@genie-nexus/types';
 import {
   IconCheck,
   IconClock,

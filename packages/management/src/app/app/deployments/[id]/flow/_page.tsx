@@ -1,6 +1,6 @@
 'use client';
 
-import { DeploymentApi, Event, Flow, FlowStep } from '@genie-nexus/types';
+import type { DeploymentApi, Event, Flow, FlowStep } from '@genie-nexus/types';
 import { useCudApi } from '@lib/api/use-api';
 import { ErrorNotification } from '@lib/components/atoms/error-notification';
 import { EmptyFlowState } from '@lib/components/molecules/empty-flow-state';

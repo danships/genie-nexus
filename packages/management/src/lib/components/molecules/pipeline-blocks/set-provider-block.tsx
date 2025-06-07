@@ -1,4 +1,4 @@
-import { ProviderApi, SetProviderAction } from '@genie-nexus/types';
+import type { ProviderApi, SetProviderAction } from '@genie-nexus/types';
 import { ENDPOINT_PROVIDERS_OVERVIEW } from '@lib/api/swr-constants';
 import { useApi } from '@lib/api/use-api';
 import { Loader } from '@lib/components/atoms/loader';

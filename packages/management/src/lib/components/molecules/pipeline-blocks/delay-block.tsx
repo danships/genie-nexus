@@ -1,5 +1,4 @@
 import { NumberInput } from '@mantine/core';
-import React from 'react';
 
 export function DelayBlock({
   action,

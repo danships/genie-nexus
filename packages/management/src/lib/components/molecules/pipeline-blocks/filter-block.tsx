@@ -1,5 +1,4 @@
 import { TextInput } from '@mantine/core';
-import React from 'react';
 
 export function FilterBlock({
   action,

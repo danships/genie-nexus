@@ -1,4 +1,4 @@
-import { Condition, RequestContext } from '@genie-nexus/types';
+import type { Condition, RequestContext } from '@genie-nexus/types';
 import { evaluateCondition } from './evaluate-condition.js';
 
 export function evaluateConditions(

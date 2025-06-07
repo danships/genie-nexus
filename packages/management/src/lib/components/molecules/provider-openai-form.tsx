@@ -1,4 +1,4 @@
-import { OpenAIProvider } from '@genie-nexus/types';
+import type { OpenAIProvider } from '@genie-nexus/types';
 import { Button, Stack, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 

@@ -3,7 +3,7 @@
 import { PageTitle } from '@lib/components/atoms/page-title';
 import {
   Card,
-  MantineColorScheme,
+  type MantineColorScheme,
   SegmentedControl,
   Stack,
   Text,

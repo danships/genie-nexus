@@ -1,5 +1,5 @@
 import { getAuthMethod } from '@lib/auth/get-auth-method';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { LoginClientPage } from './_page';
 
 export const metadata: Metadata = {

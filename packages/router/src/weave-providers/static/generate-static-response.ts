@@ -1,5 +1,5 @@
 import type { Provider } from '@genie-nexus/database';
-import { ProviderResponse } from '../types.js';
+import type { ProviderResponse } from '../types.js';
 
 export function generateStaticResponse(provider: Provider): ProviderResponse {
   if (provider.type !== 'http-static') {

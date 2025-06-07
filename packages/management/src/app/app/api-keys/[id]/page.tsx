@@ -1,4 +1,4 @@
-import { ApiKeyApi, DeploymentApi } from '@genie-nexus/types';
+import type { ApiKeyApi, DeploymentApi } from '@genie-nexus/types';
 import { getEntities, getEntity } from '@lib/api/server-api';
 import { UserRequired } from '@lib/components/molecules/user-required';
 import { ApiKeyLlmDetailClientPage } from './_page-llm';

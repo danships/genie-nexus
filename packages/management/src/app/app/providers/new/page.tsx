@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import NewProviderClientPage from './_page';
 
 export const metadata: Metadata = {
