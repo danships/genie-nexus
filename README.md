@@ -46,6 +46,18 @@ The project uses modern development practices:
 - Conventional commit messages
 - Comprehensive testing setup
 
+### Docker build
+
+```bash
+docker build -t ghcr.io/danships/genie-nexus:0.1.0 .
+```
+
+### Docker run
+
+```bash
+docker run -p 3000:3000 ghcr.io/danships/genie-nexus:0.1.0
+```
+
 ## License
 
 This project is licensed under the BSL-1.1 License - see the LICENSE.md file for details.

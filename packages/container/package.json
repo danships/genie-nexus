@@ -4,6 +4,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
+  "files": ["dist"],
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc"
@@ -11,5 +12,8 @@
   "dependencies": {
     "@genie-nexus/logger": "workspace:*",
     "tsyringe": "^4.10.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
   }
 }
