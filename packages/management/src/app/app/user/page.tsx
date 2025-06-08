@@ -1,13 +1,21 @@
-import { getNextAuth } from '@lib/auth/next-auth';
-import { UserRequired } from '@lib/components/molecules/user-required';
+import { getAuthMethod } from '@lib/auth/get-auth-method';
 import type { Metadata } from 'next';
-import { UserClientPage } from './_page';
 
 export const metadata: Metadata = {
   title: 'User Details',
 };
 
 export default async function UserPage() {
+  if ((await getAuthMethod()) === 'none') {
+    return null;
+  }
+
+  const { getNextAuth } = await import('@lib/auth/next-auth');
+  const { UserRequired } = await import(
+    '@lib/components/molecules/user-required'
+  );
+  const { UserClientPage } = await import('./_page');
+
   const { auth } = await getNextAuth();
   const session = await auth();
 

@@ -1,13 +1,14 @@
 {
-  "name": "genie-nexus-router",
+  "name": "@genie-nexus/router",
   "version": "0.1.0",
   "private": true,
   "main": "dist/server.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "files": ["dist"],
   "scripts": {
     "build": "tsc",
-    "dev": "tsc-watch --onSuccess \"node --enable-source-maps dist/server.js --config config.example.json\"",
+    "dev": "tsc-watch --onSuccess \"node --enable-source-maps dist/server.js\"",
     "test": "vitest",
     "clean": "rimraf dist"
   },
@@ -19,7 +20,6 @@
     "@genie-nexus/container": "workspace:*",
     "@genie-nexus/database": "workspace:*",
     "@genie-nexus/logger": "workspace:*",
-    "@genie-nexus/management": "workspace:*",
     "@genie-nexus/types": "workspace:*",
     "ai": "^4.3.9",
     "argon2": "^0.41.1",
@@ -29,15 +29,14 @@
     "express": "^5.1.0",
     "next": "15.3.1",
     "reflect-metadata": "^0.2.2",
-    "winston": "^3.17.0",
-    "zod": "^3.24.3"
+    "zod": "^3.24.3",
+    "supersave": "^0.16.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.3",
     "openai": "^4.96.0",
     "rimraf": "^6.0.1",
-    "supersave": "^0.16.0",
     "tsc-watch": "^6.2.1",
     "typescript": "^5.8.3",
     "vitest": "^3.1.2"

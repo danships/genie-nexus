@@ -1,20 +1,17 @@
-import path from 'path';
+import { cwd } from 'node:process';
 import { parse } from 'url';
 import type { Application } from 'express';
 import next from 'next';
 
 /**
- * This file is a .ctj file on purpose, as a .(m)ts the
+ * This file is a .cts file on purpose, as a .(m)ts the
  * next import was not working correctly.
  */
 
-const managementPath = path.dirname(
-  require.resolve('@genie-nexus/management/package.json')
-);
-
 export async function initializeUI(app: Application) {
   const nextApp = next({
-    dir: managementPath,
+    dir: cwd(),
+    dev: process.env?.['NODE_ENV'] === 'development',
   });
   const handler = nextApp.getRequestHandler();
 

@@ -3,3 +3,5 @@ packages:
 
 onlyBuiltDependencies:
   - sqlite3
+
+injectWorkspacePackages: true

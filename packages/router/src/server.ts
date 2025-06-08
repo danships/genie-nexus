@@ -10,7 +10,9 @@ import express, {
 import { initialize as initializeDb } from './core/db/index.js';
 import { isProduction } from './core/utils/is-production.js';
 import { initialize as initializeApiKey } from './modules/api-key/routes/index.js';
+import { initialize as initializeAuthentication } from './modules/auth/next-auth/initialize.js';
 import { initialize as initializeChatCompletions } from './modules/chat-completions/routes/index.js';
+
 import {
   type Configuration,
   setConfiguration,
@@ -45,9 +47,16 @@ export async function startServer(
   const db = await initializeDb(options.dbConnectionString, app);
 
   const logger = container.resolve<Logger>(TYPE_SYMBOLS.LOGGER);
-  app.use((req: Request, _res: Response, next: NextFunction) => {
-    logger.debug('req', { method: req.method, url: req.url });
-    next();
+
+  if (options.devMode) {
+    app.use((req: Request, _res: Response, next: NextFunction) => {
+      logger.debug('req', { method: req.method, url: req.url });
+      next();
+    });
+  }
+
+  app.get('/_health', (_req: Request, res: Response) => {
+    res.send('OK');
   });
 
   app.use(initializeChatCompletions());
@@ -55,9 +64,6 @@ export async function startServer(
   app.use(initializeApiKey());
   app.use(initializeConfiguration());
 
-  const { initialize: initializeAuthentication } = await import(
-    './modules/auth/next-auth/initialize.js'
-  );
   await initializeAuthentication();
 
   // Link the next app
@@ -114,7 +120,7 @@ if (import.meta.url === new URL(process.argv[1] ?? '', 'file:').href) {
       logLevel: environment.LOG_LEVEL,
       multiTenant: environment.MULTI_TENANT,
       integrateManagementInterface: environment.INTEGRATE_WEB,
-      devMode: environment.isDevelopment,
+      devMode: environment.isDevelopment || environment.DEBUG,
       authentication: {
         type: environment.AUTH_METHOD,
       },

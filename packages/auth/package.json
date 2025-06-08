@@ -8,6 +8,7 @@
     "dev": "tsc -w",
     "build": "tsc"
   },
+  "files": ["dist"],
   "devDependencies": {
     "next-auth": "5.0.0-beta.27",
     "supersave": "^0.16.0",
