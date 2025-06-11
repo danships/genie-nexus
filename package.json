@@ -12,11 +12,11 @@
     ]
   },
   "scripts": {
-    "lint:biome": "biome check .",
+    "lint:biome": "pnpm -r lint:biome",
     "lint:management": "pnpm --filter @genie-nexus/management lint",
     "lint": "concurrently --kill-others-on-fail \"pnpm:lint:*\"",
     "format": "concurrently \"pnpm:format:*\"",
-    "format:biome": "biome check --write .",
+    "format:biome": "pnpm -r format:biome",
     "test": "pnpm -r test",
     "build": "pnpm -r build",
     "prepare": "husky",

@@ -10,7 +10,9 @@
     "build": "tsc",
     "dev": "tsc-watch --onSuccess \"node --enable-source-maps dist/server.js\"",
     "test": "vitest",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "format:biome": "biome format --write .",
+    "lint:biome": "biome lint ."
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.18",

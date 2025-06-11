@@ -29,7 +29,8 @@
       "correctness": {
         "noUnusedVariables": "error",
         "useArrayLiterals": "off",
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "noUndeclaredDependencies": "error"
       },
       "style": {
         "noNamespace": "error",
