@@ -1,10 +1,10 @@
 import { logger } from '@genie-nexus/logger';
-import type { Condition, RequestContext } from '@genie-nexus/types';
+import type { Condition, WeaveRequestContext } from '@genie-nexus/types';
 import { evaluateCondition } from './evaluate-condition.js';
 
 export function evaluateConditions(
   conditions: Condition[],
-  context: RequestContext
+  context: WeaveRequestContext
 ): boolean {
   logger.debug('Evaluating conditions', { conditions, context });
   for (const condition of conditions) {

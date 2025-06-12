@@ -135,15 +135,15 @@ export const actionSchema = z.discriminatedUnion('type', [
   setProviderActionSchema,
 ]);
 
-export const flowStepSchema = z.object({
+export const weaveFlowStepSchema = z.object({
   id: z.string(),
   conditions: z.array(conditionSchema).optional(),
   action: actionSchema,
 });
 
-export const pipelineSchema = z.object({
+export const weavePipelineSchema = z.object({
   id: z.string(),
-  steps: z.array(flowStepSchema),
+  steps: z.array(weaveFlowStepSchema),
   enabled: z.boolean(),
 });
 
@@ -151,11 +151,11 @@ export const eventSchema = z.object({
   id: z.string(),
   type: z.enum(['incomingRequest', 'response', 'requestFailed', 'timeout']),
   name: z.string(),
-  pipeline: pipelineSchema,
+  pipeline: weavePipelineSchema,
   enabled: z.boolean(),
 });
 
-export const flowSchema = z.object({
+export const weaveFlowSchema = z.object({
   id: z.string(),
   deploymentId: z.string(),
   events: z.array(eventSchema),

@@ -1,6 +1,9 @@
-import type { RequestContext } from '@genie-nexus/types';
+import type { WeaveRequestContext } from '@genie-nexus/types';
 
-export function getFieldValue(field: string, context: RequestContext): unknown {
+export function getFieldValue(
+  field: string,
+  context: WeaveRequestContext
+): unknown {
   const [section, key] = field.split('.');
   switch (section) {
     case 'request':

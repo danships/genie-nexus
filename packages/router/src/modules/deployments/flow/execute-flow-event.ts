@@ -1,13 +1,13 @@
-import type { Flow, RequestContext } from '@genie-nexus/types';
+import type { WeaveFlow, WeaveRequestContext } from '@genie-nexus/types';
 import { getLogger } from '../../../core/get-logger.js';
 import { evaluateConditions } from './evaluate-conditions.js';
 import { executeAction } from './execute-action.js';
 
 export async function executeFlowEvent(
-  flow: Flow,
+  flow: WeaveFlow,
   eventType: 'incomingRequest' | 'response',
-  context: RequestContext
-): Promise<RequestContext> {
+  context: WeaveRequestContext
+): Promise<WeaveRequestContext> {
   const logger = getLogger();
   logger.debug('Executing flow event', { flowId: flow.id, eventType });
 

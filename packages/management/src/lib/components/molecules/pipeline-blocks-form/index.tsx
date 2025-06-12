@@ -13,7 +13,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import type { Action, Condition, FlowStep } from '@genie-nexus/types';
+import type { Action, Condition, WeaveFlowStep } from '@genie-nexus/types';
 import { Button, Code, Group, Paper, Stack, Text } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -36,8 +36,8 @@ import { SortableBlock } from './sortable-block';
 import { getActionLabel } from './types';
 
 type PipelineBlocksFormProps = {
-  steps: FlowStep[];
-  onChange: (steps: FlowStep[]) => void;
+  steps: WeaveFlowStep[];
+  onChange: (steps: WeaveFlowStep[]) => void;
   eventType: 'request' | 'response';
 };
 
@@ -138,7 +138,7 @@ export function PipelineBlocksForm({
         break;
     }
 
-    const newStep: FlowStep = {
+    const newStep: WeaveFlowStep = {
       id: crypto.randomUUID(),
       action,
     };

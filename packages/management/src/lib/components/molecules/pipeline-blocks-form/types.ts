@@ -1,4 +1,4 @@
-import type { Action, Condition, FlowStep } from '@genie-nexus/types';
+import type { Action } from '@genie-nexus/types';
 import {
   IconCheck,
   IconClock,
@@ -6,8 +6,6 @@ import {
   IconListDetails,
   IconTransform,
 } from '@tabler/icons-react';
-
-export type { Action, Condition, FlowStep };
 
 export type BlockType = {
   type: Action['type'];

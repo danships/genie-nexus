@@ -1,10 +1,10 @@
 import { logger } from '@genie-nexus/logger';
-import type { Condition, RequestContext } from '@genie-nexus/types';
+import type { Condition, WeaveRequestContext } from '@genie-nexus/types';
 import { getFieldValue } from './get-field-value.js';
 
 export function evaluateCondition(
   condition: Condition,
-  context: RequestContext
+  context: WeaveRequestContext
 ): boolean {
   if (!condition) return true;
 

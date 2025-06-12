@@ -4,7 +4,7 @@ import { SuperSave } from 'supersave';
 import {
   ApiKey,
   Deployment,
-  Flow,
+  WeaveFlow,
   Migration,
   NextAuthUser,
   Provider,
@@ -46,7 +46,7 @@ export async function initialize({
   await db.addCollection(addHooksToCollection(Deployment, hooks));
   await db.addCollection(addHooksToCollection(ApiKey, hooks));
   await db.addCollection(addHooksToCollection(Tenant, hooks));
-  await db.addCollection(addHooksToCollection(Flow, hooks));
+  await db.addCollection(addHooksToCollection(WeaveFlow, hooks));
 
   await db.addCollection(addHooksToCollection(Migration, hooks));
 
