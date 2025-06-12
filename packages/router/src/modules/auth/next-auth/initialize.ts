@@ -1,12 +1,7 @@
-import { saltAndHashPassword } from '@genie-nexus/auth';
 import { getNextAuthUserRepository } from '@genie-nexus/database';
 import { getLogger } from '../../../core/get-logger.js';
 import { getConfiguration } from '../../configuration/get-configuration.js';
-import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
 import { DEFAULT_USER_EMAIL, DEFAULT_USER_ID } from '../constants.js';
-import { generatePassword } from './generate-password.js';
-
-const DEV_PASSWORD = 'Tester01';
 
 export async function initialize() {
   const userRepository = await getNextAuthUserRepository();
@@ -32,20 +27,6 @@ export async function initialize() {
   }
 
   if (users.length === 0 && !getConfiguration().multiTenant) {
-    logger.info('No users found, creating default user');
-    const password = getConfiguration().devMode
-      ? DEV_PASSWORD
-      : generatePassword();
-    await userRepository.create({
-      email: DEFAULT_USER_EMAIL,
-      password: await saltAndHashPassword(password),
-      created: new Date().toISOString(),
-      lastLogin: null,
-      tenantId: DEFAULT_TENANT_ID,
-    });
-    logger.info('Default user created', {
-      email: DEFAULT_USER_EMAIL,
-      password,
-    });
+    logger.info('No users found, user should create account first.');
   }
 }
