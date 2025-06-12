@@ -1,7 +1,7 @@
 import type { Deployment, Provider } from '@genie-nexus/database';
-import type { RequestContext } from '@genie-nexus/types';
+import type { WeaveRequestContext } from '@genie-nexus/types';
 import { getProviderRepository } from '../../core/db/index.js';
-import { getFlowRepository } from '../../core/db/index.js';
+import { getWeaveFlowRepository } from '../../core/db/index.js';
 import { proxyRequest } from '../../weave-providers/http-proxy/proxy.js';
 import { generateStaticResponse } from '../../weave-providers/static/generate-static-response.js';
 import type { ProviderResponse } from '../../weave-providers/types.js';
@@ -36,14 +36,14 @@ export async function executeForLlm(
 
 export async function executeForHttp(
   deployment: Deployment,
-  request: RequestContext
+  request: WeaveRequestContext
 ): Promise<{
   provider: Provider;
-  transformedRequest: RequestContext;
+  transformedRequest: WeaveRequestContext;
   providerResponse: ProviderResponse;
 }> {
   const providerRepository = await getProviderRepository();
-  const flowRepository = await getFlowRepository();
+  const flowRepository = await getWeaveFlowRepository();
 
   // Get the flow for this deployment
   const flow = await flowRepository.getOneByQuery(
@@ -88,7 +88,7 @@ export async function executeForHttp(
   }
 
   // Create a response context from the provider response
-  const responseContext: RequestContext = {
+  const responseContext: WeaveRequestContext = {
     ...transformedRequest,
     responseHeaders: providerResponse.headers,
     responseBody: providerResponse.body,

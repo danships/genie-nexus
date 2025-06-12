@@ -1,4 +1,4 @@
-import type { RequestContext } from '@genie-nexus/types';
+import type { WeaveRequestContext } from '@genie-nexus/types';
 import type { Request, Response } from 'express';
 import { checkApiKeyInRequest } from '../../api-key/check-api-key-in-request.js';
 import { ApiKeyNotPresentError } from '../../api-key/errors/api-key-not-present-error.js';
@@ -56,11 +56,20 @@ export async function processRequest(
   }
 
   const flattenedPath = Array.isArray(path) ? path.join('/') : (path ?? '');
+
   // Create the request context
-  const requestContext: RequestContext = {
+  const requestContext: WeaveRequestContext = {
     path: !flattenedPath.startsWith('/') ? `/${flattenedPath}` : flattenedPath,
     method: req.method,
-    requestHeaders: req.headers as Record<string, string>,
+    requestHeaders: Object.fromEntries(
+      Object.entries(req.headers).flatMap(([k, v]) =>
+        v === undefined
+          ? []
+          : Array.isArray(v)
+            ? v.map((val) => [k, val])
+            : [[k, v]]
+      )
+    ) as Record<string, string>,
     requestBody: req.body,
     responseHeaders: {},
     responseBody: undefined,

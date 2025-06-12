@@ -1,12 +1,12 @@
-import type { Flow, FlowCreate } from '@genie-nexus/types';
-import { createEntity, getEntityByQuery } from '@lib/api/server-api';
-import { redirect } from 'next/navigation';
-import { getDeployment } from '../page';
-import { FlowEditorClientPage } from './_page';
+import type { WeaveFlow, WeaveFlowCreate } from "@genie-nexus/types";
+import { createEntity, getEntityByQuery } from "@lib/api/server-api";
+import { redirect } from "next/navigation";
+import { getDeployment } from "../page";
+import { FlowEditorClientPage } from "./_page";
 
-async function getOrCreateFlow(deploymentId: string): Promise<Flow> {
-  const flow = await getEntityByQuery<Flow>(
-    'flows',
+async function getOrCreateFlow(deploymentId: string): Promise<WeaveFlow> {
+  const flow = await getEntityByQuery<WeaveFlow>(
+    "weaveflows",
     `deploymentId=${deploymentId}&isDeleted=false`
   );
   if (flow) {
@@ -28,8 +28,8 @@ export async function generateMetadata({
   };
 }
 
-async function createFlow(deploymentId: string): Promise<Flow> {
-  const flow = await createEntity<FlowCreate, Flow>('flows', {
+async function createFlow(deploymentId: string): Promise<WeaveFlow> {
+  const flow = await createEntity<WeaveFlowCreate, WeaveFlow>("weaveflows", {
     deploymentId,
     events: [],
     createdAt: new Date().toISOString(),
@@ -50,7 +50,7 @@ export default async function FlowEditorPage({
     getOrCreateFlow(id),
   ]);
 
-  if (deployment.type !== 'weave') {
+  if (deployment.type !== "weave") {
     redirect(`/app/deployments/${id}`);
   }
 

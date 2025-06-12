@@ -1,5 +1,5 @@
 import type { WeaveHttpProxyProvider } from '@genie-nexus/types';
-import type { RequestContext } from '@genie-nexus/types';
+import type { WeaveRequestContext } from '@genie-nexus/types';
 import { getLogger } from '../../core/get-logger.js';
 import { validateUrlDestination } from '../../core/utils/validate-url-destination.js';
 import type { ProviderResponse } from '../types.js';
@@ -8,7 +8,7 @@ export const NOT_ALLOWED_REQUEST_HEADERS = ['host', 'authorization'];
 
 export async function proxyRequest(
   provider: WeaveHttpProxyProvider,
-  request: RequestContext,
+  request: WeaveRequestContext,
   path: string
 ): Promise<ProviderResponse> {
   const logger = getLogger();

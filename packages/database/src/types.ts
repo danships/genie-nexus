@@ -21,7 +21,7 @@ export function isDeploymentLLM(
 export type ApiKey = dbTypes.ApiKey;
 
 export type Tenant = dbTypes.Tenant;
-export type Flow = dbTypes.Flow;
+export type WeaveFlow = dbTypes.WeaveFlow;
 
 export interface Migration extends BaseEntity {
   version: string;

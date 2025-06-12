@@ -92,8 +92,8 @@ export const NextAuthUser: EntityDefinition = {
   },
 };
 
-export const Flow: Collection = {
-  name: 'flow',
+export const WeaveFlow: Collection = {
+  name: 'weaveflow',
   relations: [],
   template: {},
   filterSortFields: {

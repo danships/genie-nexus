@@ -10,13 +10,13 @@ import type {
   equalsConditionSchema,
   eventSchema,
   filterActionSchema,
-  flowSchema,
-  flowStepSchema,
+  weaveFlowSchema,
+  weaveFlowStepSchema,
   isEmptyConditionSchema,
   isNotEmptyConditionSchema,
   logActionSchema,
   notEqualsConditionSchema,
-  pipelineSchema,
+  weavePipelineSchema,
   removeRequestHeaderActionSchema,
   removeResponseHeaderActionSchema,
   setProviderActionSchema,
@@ -68,10 +68,10 @@ export type LogAction = z.infer<typeof logActionSchema>;
 export type SetProviderAction = z.infer<typeof setProviderActionSchema>;
 export type Action = z.infer<typeof actionSchema>;
 
-export type FlowStep = z.infer<typeof flowStepSchema>;
-export type Flow = z.infer<typeof flowSchema>;
+export type WeaveFlowStep = z.infer<typeof weaveFlowStepSchema>;
+export type WeaveFlow = z.infer<typeof weaveFlowSchema>;
 
-export type RequestContext = {
+export type WeaveRequestContext = {
   path: string;
   method: string;
   requestHeaders: Record<string, string>;
@@ -82,7 +82,7 @@ export type RequestContext = {
   providerId: string;
 };
 
-export type Pipeline = z.infer<typeof pipelineSchema>;
-export type Event = z.infer<typeof eventSchema>;
+export type WeavePipeline = z.infer<typeof weavePipelineSchema>;
+export type WeaveEvent = z.infer<typeof eventSchema>;
 
-export type FlowCreate = Omit<Flow, 'id'>;
+export type WeaveFlowCreate = Omit<WeaveFlow, 'id'>;

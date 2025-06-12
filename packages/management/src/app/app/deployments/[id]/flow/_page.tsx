@@ -1,10 +1,15 @@
-'use client';
+"use client";
 
-import type { DeploymentApi, Event, Flow, FlowStep } from '@genie-nexus/types';
-import { useCudApi } from '@lib/api/use-api';
-import { ErrorNotification } from '@lib/components/atoms/error-notification';
-import { EmptyFlowState } from '@lib/components/molecules/empty-flow-state';
-import { PipelineBlocksForm } from '@lib/components/molecules/pipeline-blocks-form';
+import type {
+  DeploymentApi,
+  WeaveEvent,
+  WeaveFlow,
+  WeaveFlowStep,
+} from "@genie-nexus/types";
+import { useCudApi } from "@lib/api/use-api";
+import { ErrorNotification } from "@lib/components/atoms/error-notification";
+import { EmptyFlowState } from "@lib/components/molecules/empty-flow-state";
+import { PipelineBlocksForm } from "@lib/components/molecules/pipeline-blocks-form";
 import {
   Button,
   Grid,
@@ -17,8 +22,8 @@ import {
   Text,
   TextInput,
   Title,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
 import {
   IconAlertCircle,
   IconArrowLeft,
@@ -29,18 +34,18 @@ import {
   IconFilter,
   IconListDetails,
   IconTransform,
-} from '@tabler/icons-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+} from "@tabler/icons-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 type Properties = {
   deployment: DeploymentApi;
-  flow: Flow;
+  flow: WeaveFlow;
 };
 
 type FormValues = {
-  events: Event[];
+  events: WeaveEvent[];
 };
 
 export function FlowEditorClientPage({
@@ -48,7 +53,7 @@ export function FlowEditorClientPage({
   deployment,
 }: Properties) {
   const router = useRouter();
-  const [flow, setFlow] = useState<Flow>(originalFlow);
+  const [flow, setFlow] = useState<WeaveFlow>(originalFlow);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(
     null
@@ -74,7 +79,7 @@ export function FlowEditorClientPage({
 
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const link = target.closest('a');
+      const link = target.closest("a");
       if (link && link.href && !link.href.includes(window.location.pathname)) {
         if (hasUnsavedChanges) {
           e.preventDefault();
@@ -85,12 +90,12 @@ export function FlowEditorClientPage({
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('click', handleClick, true);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("click", handleClick, true);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('click', handleClick, true);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("click", handleClick, true);
     };
   }, [hasUnsavedChanges]);
 
@@ -110,8 +115,8 @@ export function FlowEditorClientPage({
   };
 
   const handleSave = useCallback(async () => {
-    const updatedFlow = await patch<{ data: Flow }>(
-      `/collections/flows/${flow.id}`,
+    const updatedFlow = await patch<{ data: WeaveFlow }>(
+      `/collections/weaveflows/${flow.id}`,
       {
         ...flow,
         events: form.values.events,
@@ -128,45 +133,48 @@ export function FlowEditorClientPage({
   const [selectedBlockType, setSelectedBlockType] = useState<string | null>(
     null
   );
-  const [modalStep, setModalStep] = useState<'block' | 'pipeline'>('block');
+  const [modalStep, setModalStep] = useState<"block" | "pipeline">("block");
 
   // Building block definitions
   const buildingBlocks = [
-    { label: 'Transform Data', icon: IconTransform, type: 'transform' },
-    { label: 'Validate', icon: IconCheck, type: 'validate' },
-    { label: 'Filter', icon: IconFilter, type: 'filter' },
-    { label: 'Add Delay', icon: IconClock, type: 'delay' },
-    { label: 'Log Data', icon: IconListDetails, type: 'log' },
+    { label: "Transform Data", icon: IconTransform, type: "transform" },
+    // { label: "Validate", icon: IconCheck, type: "validate" }, // TODO implement later
+    { label: "Filter", icon: IconFilter, type: "filter" },
+    { label: "Add Delay", icon: IconClock, type: "delay" },
+    { label: "Log Data", icon: IconListDetails, type: "log" },
   ];
 
   // Event type definitions
   const eventTypes = [
     {
-      label: 'Incoming Request',
+      label: "Incoming Request",
       icon: IconArrowRight,
-      type: 'incomingRequest' as const,
+      type: "incomingRequest" as const,
     },
     {
-      label: 'Response',
+      label: "Response",
       icon: IconCheck,
-      type: 'response' as const,
+      type: "response" as const,
     },
     {
-      label: 'Request Failed',
+      label: "Request Failed",
       icon: IconAlertCircle,
-      type: 'requestFailed' as const,
+      type: "requestFailed" as const,
     },
     {
-      label: 'Timeout',
+      label: "Timeout",
       icon: IconClockHour4,
-      type: 'timeout' as const,
+      type: "timeout" as const,
     },
   ];
 
   // Update pipeline steps
-  const handlePipelineStepsChange = (eventId: string, steps: FlowStep[]) => {
+  const handlePipelineStepsChange = (
+    eventId: string,
+    steps: WeaveFlowStep[]
+  ) => {
     form.setFieldValue(
-      'events',
+      "events",
       form.values.events.map((event) =>
         event.id === eventId
           ? {
@@ -180,41 +188,41 @@ export function FlowEditorClientPage({
 
   // Add block to a specific pipeline
   const handleAddBlock = (eventId: string, type: string) => {
-    let newStep: FlowStep;
+    let newStep: WeaveFlowStep;
     switch (type) {
-      case 'transform':
+      case "transform":
         newStep = {
           id: crypto.randomUUID(),
-          action: { type: 'transformData', expression: '' },
+          action: { type: "transformData", expression: "" },
         };
         break;
-      case 'filter':
+      case "filter":
         newStep = {
           id: crypto.randomUUID(),
-          action: { type: 'filter', expression: '' },
+          action: { type: "filter", expression: "" },
         };
         break;
-      case 'delay':
+      case "delay":
         newStep = {
           id: crypto.randomUUID(),
-          action: { type: 'delay', ms: 1000 },
+          action: { type: "delay", ms: 1000 },
         };
         break;
-      case 'log':
+      case "log":
         newStep = {
           id: crypto.randomUUID(),
-          action: { type: 'log', message: '' },
+          action: { type: "log", message: "" },
         };
         break;
       default:
         newStep = {
           id: crypto.randomUUID(),
-          action: { type: 'updateResponseBody', value: '' },
+          action: { type: "updateResponseBody", value: "" },
         };
     }
 
     form.setFieldValue(
-      'events',
+      "events",
       form.values.events.map((event) =>
         event.id === eventId
           ? {
@@ -235,7 +243,7 @@ export function FlowEditorClientPage({
       handleAddBlock(eventId, selectedBlockType);
       setModalOpened(false);
       setSelectedBlockType(null);
-      setModalStep('block');
+      setModalStep("block");
     }
   };
 
@@ -243,17 +251,17 @@ export function FlowEditorClientPage({
   const handleModalClose = () => {
     setModalOpened(false);
     setSelectedBlockType(null);
-    setModalStep('block');
+    setModalStep("block");
   };
 
   // Handle block type selection
   const handleBlockTypeSelect = (type: string) => {
     setSelectedBlockType(type);
-    setModalStep('pipeline');
+    setModalStep("pipeline");
   };
 
-  const handleAddEvent = (type: Event['type']) => {
-    const newEvent: Event = {
+  const handleAddEvent = (type: WeaveEvent["type"]) => {
+    const newEvent: WeaveEvent = {
       id: Math.random().toString(36).slice(2),
       type,
       name: `${type} ${form.values.events.length + 1}`,
@@ -264,7 +272,7 @@ export function FlowEditorClientPage({
       },
       enabled: true,
     };
-    form.setFieldValue('events', [...form.values.events, newEvent]);
+    form.setFieldValue("events", [...form.values.events, newEvent]);
   };
 
   return (
@@ -292,7 +300,7 @@ export function FlowEditorClientPage({
                               value={event.name}
                               onChange={(e) =>
                                 form.setFieldValue(
-                                  'events',
+                                  "events",
                                   form.values.events.map((ev) =>
                                     ev.id === event.id
                                       ? { ...ev, name: e.currentTarget.value }
@@ -301,14 +309,14 @@ export function FlowEditorClientPage({
                                 )
                               }
                               size="xs"
-                              style={{ width: '200px' }}
+                              style={{ width: "200px" }}
                             />
                             <Switch
                               checked={event.enabled}
-                              label={event.enabled ? 'Active' : 'Inactive'}
+                              label={event.enabled ? "Active" : "Inactive"}
                               onChange={(e) =>
                                 form.setFieldValue(
-                                  'events',
+                                  "events",
                                   form.values.events.map((ev) =>
                                     ev.id === event.id
                                       ? {
@@ -329,11 +337,11 @@ export function FlowEditorClientPage({
                               <Switch
                                 checked={event.pipeline.enabled}
                                 label={
-                                  event.pipeline.enabled ? 'Active' : 'Inactive'
+                                  event.pipeline.enabled ? "Active" : "Inactive"
                                 }
                                 onChange={(e) =>
                                   form.setFieldValue(
-                                    'events',
+                                    "events",
                                     form.values.events.map((ev) =>
                                       ev.id === event.id
                                         ? {
@@ -356,9 +364,9 @@ export function FlowEditorClientPage({
                               handlePipelineStepsChange(event.id, steps)
                             }
                             eventType={
-                              event.type === 'incomingRequest'
-                                ? 'request'
-                                : 'response'
+                              event.type === "incomingRequest"
+                                ? "request"
+                                : "response"
                             }
                           />
                         </Paper>
@@ -376,7 +384,7 @@ export function FlowEditorClientPage({
                   href={`/app/deployments/${deployment.id}`}
                   leftSection={<IconArrowLeft size={16} />}
                 >
-                  {' '}
+                  {" "}
                   Back
                 </Button>
                 <Paper p="md" withBorder>
@@ -444,12 +452,12 @@ export function FlowEditorClientPage({
           opened={modalOpened}
           onClose={handleModalClose}
           title={
-            modalStep === 'block' ? 'Select Block Type' : 'Select Pipeline'
+            modalStep === "block" ? "Select Block Type" : "Select Pipeline"
           }
           size="md"
         >
           <Stack>
-            {modalStep === 'block' ? (
+            {modalStep === "block" ? (
               <>
                 <Text size="sm">Select the type of block to add:</Text>
                 <Stack>
@@ -485,7 +493,7 @@ export function FlowEditorClientPage({
                 <Group justify="flex-end" mt="md">
                   <Button
                     variant="subtle"
-                    onClick={() => setModalStep('block')}
+                    onClick={() => setModalStep("block")}
                   >
                     Back
                   </Button>
