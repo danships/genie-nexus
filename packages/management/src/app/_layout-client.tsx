@@ -5,6 +5,8 @@ import '@lib/style/main.css';
 import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { isAuthOnboardingRedirectNeeded } from './_actions';
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -14,6 +16,11 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
   const [colorScheme, setColorScheme] = useState<'light' | 'dark' | 'auto'>(
     'auto'
   );
+  const [redirectToOnboardingChecked, setRedirectToOnboardingChecked] =
+    useState(false);
+
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const storedColorScheme = localStorage.getItem('mantine-color-scheme') as
@@ -24,6 +31,24 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
       setColorScheme(storedColorScheme);
     }
   }, []);
+  useEffect(() => {
+    if (
+      !pathname ||
+      pathname.startsWith('/onboarding') ||
+      pathname.startsWith('/api/auth') ||
+      pathname.startsWith('/sign-up')
+    ) {
+      return;
+    }
+
+    isAuthOnboardingRedirectNeeded(pathname).then((doRedirect) => {
+      if (doRedirect) {
+        router.push('/onboarding');
+        return;
+      }
+      setRedirectToOnboardingChecked(true);
+    });
+  }, [pathname, redirectToOnboardingChecked]);
 
   return (
     <html lang="en" suppressHydrationWarning>
