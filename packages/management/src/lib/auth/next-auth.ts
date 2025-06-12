@@ -28,7 +28,7 @@ async function createConfig(): Promise<NextAuthConfig> {
       },
     },
     providers:
-      environment.AUTH_METHOD === 'next-auth'
+      environment.AUTH_METHOD === 'credentials'
         ? [await createCredentialsProvider()]
         : [],
     callbacks: {
