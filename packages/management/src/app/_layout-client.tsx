@@ -33,6 +33,7 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
   }, []);
   useEffect(() => {
     if (
+      redirectToOnboardingChecked ||
       !pathname ||
       pathname.startsWith('/onboarding') ||
       pathname.startsWith('/api/auth') ||
