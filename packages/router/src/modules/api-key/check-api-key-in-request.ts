@@ -31,7 +31,7 @@ export async function checkApiKeyInRequest(
     const apiKeyRepository = await getApiKeyRepository();
     const storedApiKey = await apiKeyRepository.getById(keyId);
     if (!storedApiKey || storedApiKey.type !== type) {
-      logger.warn('Stored api key not found, or no matching type.', {
+      logger.warning('Stored api key not found, or no matching type.', {
         type: storedApiKey?.type,
         expected: type,
       });
@@ -44,7 +44,7 @@ export async function checkApiKeyInRequest(
       keySecret
     );
     if (!validApiKey) {
-      logger.warn('API Key validation failed.');
+      logger.warning('API Key validation failed.');
       throw new ApiKeyValidationError('Invalid API key');
     }
 
@@ -53,7 +53,7 @@ export async function checkApiKeyInRequest(
     if (error instanceof ValidationError) {
       throw new ApiKeyValidationError('Invalid API key');
     }
-    logger.warn('API Key validation failed because of an unknown error.', {
+    logger.warning('API Key validation failed because of an unknown error.', {
       error: error instanceof Error ? error.message : `${error}`,
     });
     throw error;

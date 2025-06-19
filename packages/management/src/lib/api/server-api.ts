@@ -130,7 +130,7 @@ export async function getConfiguration(): Promise<
       const { signIn } = await getNextAuth();
       await signIn();
     }
-    serverLogger.warn('Could not retrieve server configuration.');
+    serverLogger.warning('Could not retrieve server configuration.');
     throw new Error('Failed to fetch server configuration.');
   }
 

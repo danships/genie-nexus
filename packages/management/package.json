@@ -2,10 +2,11 @@
   "name": "@genie-nexus/management",
   "private": true,
   "scripts": {
-    "dev": "PORT=3001 NODE_OPTIONS=\"--require ./process-initialize.mjs\" next dev",
-    "build": "NODE_OPTIONS=\"--require ./process-initialize.mjs\" NEXT_BUILD=true next build",
-    "start": "NODE_OPTIONS=\"--require ./process-initialize.mjs\" next start",
-    "lint": "next lint"
+    "dev": "PORT=3001 NODE_OPTIONS=\"--require reflect-metadata\" next dev",
+    "build": "NODE_OPTIONS=\"--require reflect-metadata\" NEXT_BUILD=true next build",
+    "start": "NODE_OPTIONS=\"--require reflect-metadata\" next start",
+    "lint": "next lint",
+    "lint:tsc": "tsc --noEmit"
   },
   "packageManager": "pnpm@10.10.0",
   "type": "module",

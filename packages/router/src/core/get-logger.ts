@@ -1,6 +1,6 @@
-import { TYPE_SYMBOLS, container } from '@genie-nexus/container';
+import { TypeSymbols, container } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
 
 export function getLogger(): Logger {
-  return container.resolve<Logger>(TYPE_SYMBOLS.LOGGER);
+  return container.resolve<Logger>(TypeSymbols.LOGGER);
 }

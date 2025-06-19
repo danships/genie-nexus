@@ -30,7 +30,7 @@ export const checkApiKeyOrUser =
 
     const session = await getSession(req, res);
     if (!session?.user) {
-      logger.warn('Unauthorized, no user in session.');
+      logger.warning('Unauthorized, no user in session.');
       throw new ApplicationError('Unauthorized', 401);
     }
 

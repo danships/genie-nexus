@@ -30,7 +30,7 @@ export async function getSession(
     // @ts-expect-error TODO, cannot align the zod generated DB type for the name attribute (undefined/null)
     session.user = user;
   } else {
-    logger.warn('User not found', { email: session.user.email });
+    logger.warning('User not found', { email: session.user.email });
     return null;
   }
   return session;

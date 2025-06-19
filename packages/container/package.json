@@ -8,11 +8,10 @@
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc",
-    "format:biome": "biome format --write .",
+    "format:biome": "biome check --write .",
     "lint:biome": "biome lint ."
   },
   "dependencies": {
-    "@genie-nexus/logger": "workspace:*",
     "tsyringe": "^4.10.0"
   },
   "devDependencies": {

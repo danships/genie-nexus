@@ -11,7 +11,7 @@
     "dev": "tsc-watch --onSuccess \"node --enable-source-maps dist/server.js\"",
     "test": "vitest",
     "clean": "rimraf dist",
-    "format:biome": "biome format --write .",
+    "format:biome": "biome check --write .",
     "lint:biome": "biome lint ."
   },
   "dependencies": {
