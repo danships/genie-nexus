@@ -5,6 +5,16 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "files": ["dist"],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./winston": {
+      "import": "./dist/winston.js",
+      "types": "./dist/winston.d.ts"
+    }
+  },
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc"

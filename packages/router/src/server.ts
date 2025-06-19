@@ -1,18 +1,22 @@
 import 'reflect-metadata';
 import 'dotenv/config';
-import { TYPE_SYMBOLS, container } from '@genie-nexus/container';
-import { type Logger, configureLogger } from '@genie-nexus/logger';
-import express, {
-  type NextFunction,
-  type Request,
-  type Response,
-} from 'express';
-import { initialize as initializeDb } from './core/db/index.js';
+import {
+  TypeSymbols,
+  container,
+  inject,
+  singleton,
+} from '@genie-nexus/container';
+import type { Express, NextFunction, Request, Response } from 'express';
+import { initialize as initializeDependencyInjection } from './core/dependency-injection/initialize.js';
 import { isProduction } from './core/utils/is-production.js';
 import { initialize as initializeApiKey } from './modules/api-key/routes/index.js';
 import { initialize as initializeAuthentication } from './modules/auth/next-auth/initialize.js';
 import { initialize as initializeChatCompletions } from './modules/chat-completions/routes/index.js';
 
+import type { Logger } from '@genie-nexus/logger';
+import type { SuperSave } from 'supersave';
+import { RouterTypeSymbols } from './core/dependency-injection/router-type-symbols.js';
+import { uniqueIdMiddleware } from './core/http/unique-id-middleware.js';
 import {
   type Configuration,
   setConfiguration,
@@ -23,89 +27,89 @@ import { initializeUI } from './ui/initialize.cjs';
 
 export type StartServerOptions = {
   port: number;
-  dbConnectionString: string;
-  logLevel: string;
   integrateManagementInterface: boolean;
 } & Configuration;
 
-export async function startServer(
-  options: StartServerOptions
-): Promise<() => void> {
-  if (options.logLevel) {
-    configureLogger(options.logLevel);
-  }
+@singleton()
+export class GenieNexusServer {
+  constructor(
+    @inject(TypeSymbols.LOGGER) private readonly logger: Logger,
+    @inject(RouterTypeSymbols.EXPRESS_APP) private readonly app: Express,
+    @inject(TypeSymbols.DB) private readonly db: SuperSave
+  ) {}
 
-  setConfiguration({
-    multiTenant: options.multiTenant,
-    devMode: options.devMode,
-    authentication: options.authentication,
-  });
-
-  const app = express();
-  app.disable('x-powered-by');
-
-  const db = await initializeDb(options.dbConnectionString, app);
-
-  const logger = container.resolve<Logger>(TYPE_SYMBOLS.LOGGER);
-
-  if (options.devMode) {
-    app.use((req: Request, _res: Response, next: NextFunction) => {
-      logger.debug('req', { method: req.method, url: req.url });
-      next();
+  public async startServer(options: StartServerOptions): Promise<() => void> {
+    setConfiguration({
+      multiTenant: options.multiTenant,
+      devMode: options.devMode,
+      authentication: options.authentication,
     });
-  }
 
-  app.get('/_health', (_req: Request, res: Response) => {
-    res.send('OK');
-  });
+    this.app.disable('x-powered-by');
 
-  app.use(initializeChatCompletions());
-  app.use(initializeWeave());
-  app.use(initializeApiKey());
-  app.use(initializeConfiguration());
-
-  await initializeAuthentication();
-
-  // Link the next app
-  if (options.integrateManagementInterface) {
-    await initializeUI(app);
-  }
-
-  app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-    logger.error('Error:', { err: `${error}` });
-
-    if (res.headersSent) {
-      return next(error);
-    }
-
-    if ('statusCode' in error && typeof error.statusCode === 'number') {
-      res.status(error.statusCode);
-    } else {
-      res.status(500);
-    }
-
-    if (req.path.startsWith('/api')) {
-      res.setHeader('Content-Type', 'application/json');
-      res.json({
-        error: isProduction() ? 'An unexpected error occurred' : error,
+    if (options.devMode) {
+      this.app.use((req: Request, _res: Response, next: NextFunction) => {
+        this.logger.debug('req', { method: req.method, url: req.url });
+        next();
       });
-    } else {
-      res.send(
-        isProduction()
-          ? 'An unexpected error occurred'
-          : `${error.message}: ${error.stack}`
-      );
     }
-  });
 
-  app.listen(options.port, () => {
-    logger.info(`Server is running on port ${options.port}`);
-  });
+    this.app.use(uniqueIdMiddleware);
 
-  return () => {
-    app.listen().close();
-    void db?.close();
-  };
+    this.app.get('/_health', (_req: Request, res: Response) => {
+      res.send('OK');
+    });
+
+    this.app.use(initializeChatCompletions());
+    this.app.use(initializeWeave());
+    this.app.use(initializeApiKey());
+    this.app.use(initializeConfiguration());
+
+    await initializeAuthentication();
+
+    // Link the next app
+    if (options.integrateManagementInterface) {
+      await initializeUI(this.app);
+    }
+
+    this.app.use(
+      (error: Error, req: Request, res: Response, next: NextFunction) => {
+        this.logger.error('Error:', { err: `${error}` });
+
+        if (res.headersSent) {
+          return next(error);
+        }
+
+        if ('statusCode' in error && typeof error.statusCode === 'number') {
+          res.status(error.statusCode);
+        } else {
+          res.status(500);
+        }
+
+        if (req.path.startsWith('/api')) {
+          res.setHeader('Content-Type', 'application/json');
+          res.json({
+            error: isProduction() ? 'An unexpected error occurred' : error,
+          });
+        } else {
+          res.send(
+            isProduction()
+              ? 'An unexpected error occurred'
+              : `${error.message}: ${error.stack}`
+          );
+        }
+      }
+    );
+
+    this.app.listen(options.port, () => {
+      this.logger.info(`Server is running on port ${options.port}`);
+    });
+
+    return () => {
+      this.app.listen().close();
+      void this.db.close();
+    };
+  }
 }
 
 // This checks if this file is being run directly (e.g. with `node server.ts`)
@@ -114,10 +118,15 @@ export async function startServer(
 if (import.meta.url === new URL(process.argv[1] ?? '', 'file:').href) {
   void (async function () {
     const { environment } = await import('./core/environment.js');
-    await startServer({
-      port: environment.PORT,
-      dbConnectionString: environment.DB,
+    await initializeDependencyInjection({
       logLevel: environment.LOG_LEVEL,
+      dbConnectionString: environment.DB,
+    });
+
+    const server = container.resolve(GenieNexusServer);
+
+    await server.startServer({
+      port: environment.PORT,
       multiTenant: environment.MULTI_TENANT,
       integrateManagementInterface: environment.INTEGRATE_WEB,
       devMode: environment.isDevelopment || environment.DEBUG,

@@ -1,8 +1,9 @@
 import { Router } from 'express';
+import { getHandlerUsingContainer } from '../../../core/http/get-handler-using-container.js';
 import { URL_PARAM_DEPLOYMENT_SLUG } from '../../deployments/constants.js';
 import { getTenantPath } from '../../tenants/get-tentant-path.js';
 import { getTenant } from '../../tenants/middleware/get-tenant.js';
-import { processRequest } from './process-request.js';
+import { ProcessRequest } from './process-request.js';
 
 export function initialize(): Router {
   const router = Router();
@@ -12,12 +13,12 @@ export function initialize(): Router {
   router.all(
     `/weave/${tenantPath}:${URL_PARAM_DEPLOYMENT_SLUG}/*path`,
     getTenant,
-    processRequest
+    getHandlerUsingContainer(ProcessRequest)
   );
   router.all(
     `/weave/${tenantPath}:${URL_PARAM_DEPLOYMENT_SLUG}`,
     getTenant,
-    processRequest
+    getHandlerUsingContainer(ProcessRequest)
   );
 
   return router;

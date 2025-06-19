@@ -4,11 +4,11 @@ import { SuperSave } from 'supersave';
 import {
   ApiKey,
   Deployment,
-  WeaveFlow,
   Migration,
   NextAuthUser,
   Provider,
   Tenant,
+  WeaveFlow,
 } from './entities.js';
 import { migrate } from './migrate/index.js';
 

@@ -19,7 +19,7 @@ export default function (
 
   // Check if the item we are deleting belongs to this user.
   if (entity.tenantId !== tenant.id) {
-    logger.warn('Unauthorized, tenant id mismatch.', {
+    logger.warning('Unauthorized, tenant id mismatch.', {
       entityTenantId: entity.tenantId,
       tenantId: tenant.id,
     });

@@ -1,17 +1,33 @@
-import { logger } from '@genie-nexus/logger';
+import {
+  Lifecycle,
+  TypeSymbols,
+  inject,
+  scoped,
+  singleton,
+} from '@genie-nexus/container';
+import type { Logger } from '@genie-nexus/logger';
 import type { Condition, WeaveRequestContext } from '@genie-nexus/types';
-import { evaluateCondition } from './evaluate-condition.js';
+import type { EvaluateCondition } from './evaluate-condition.js';
 
-export function evaluateConditions(
-  conditions: Condition[],
-  context: WeaveRequestContext
-): boolean {
-  logger.debug('Evaluating conditions', { conditions, context });
-  for (const condition of conditions) {
-    if (!evaluateCondition(condition, context)) {
-      logger.debug('Condition not met', { condition, context });
-      return false;
+@singleton()
+@scoped(Lifecycle.ContainerScoped)
+export class EvaluateConditions {
+  constructor(
+    private readonly evaluateCondition: EvaluateCondition,
+    @inject(TypeSymbols.LOGGER) private readonly logger: Logger
+  ) {}
+
+  public evaluate(
+    conditions: Condition[],
+    context: WeaveRequestContext
+  ): boolean {
+    this.logger.debug('Evaluating conditions', { conditions, context });
+    for (const condition of conditions) {
+      if (!this.evaluateCondition.evaluate(condition, context)) {
+        this.logger.debug('Condition not met', { condition, context });
+        return false;
+      }
     }
+    return true;
   }
-  return true;
 }

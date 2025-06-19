@@ -3,17 +3,13 @@ import {
   generateManagementApiKey as generateManagementApiKeyFunction,
   generateLlmApiKey as generatePublicApiKeyFunction,
 } from './modules/api-key/generate-api-key.js';
-import { startServer as startServerFunction } from './server.js';
+import { GenieNexusServer as GenieNexusServerClass } from './server.js';
 
 export type { StartServerOptions } from './server.js';
 export * from '@genie-nexus/database';
 export { DEFAULT_TENANT_ID } from './modules/tenants/constants.js';
 
-export const startServer = isProduction()
-  ? () => {
-      throw new Error('StartServer is not exposed.');
-    }
-  : startServerFunction;
+export const GenieNexusServer = isProduction() ? null : GenieNexusServerClass;
 
 export const generatePublicApiKey = isProduction()
   ? () => {

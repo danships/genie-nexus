@@ -2,10 +2,10 @@ import type { Repository } from 'supersave';
 import {
   ApiKey,
   Deployment,
-  WeaveFlow,
   NextAuthUser,
   Provider,
   Tenant,
+  WeaveFlow,
 } from './entities.js';
 import { getDB } from './initialize.js';
 import type {
@@ -20,6 +20,7 @@ import type {
 export * from './initialize.js';
 export * from './types.js';
 
+export type ProviderRepository = Repository<ProviderType>;
 export async function getProviderRepository(): Promise<
   Repository<ProviderType>
 > {
@@ -27,6 +28,7 @@ export async function getProviderRepository(): Promise<
   return db.getRepository<ProviderType>(Provider.name);
 }
 
+export type DeploymentRepository = Repository<DeploymentType>;
 export async function getDeploymentRepository(): Promise<
   Repository<DeploymentType>
 > {
@@ -34,16 +36,19 @@ export async function getDeploymentRepository(): Promise<
   return db.getRepository<DeploymentType>(Deployment.name);
 }
 
+export type ApiKeyRepository = Repository<ApiKeyType>;
 export async function getApiKeyRepository(): Promise<Repository<ApiKeyType>> {
   const db = await getDB();
   return db.getRepository<ApiKeyType>(ApiKey.name);
 }
 
+export type TenantRepository = Repository<TenantType>;
 export async function getTenantRepository(): Promise<Repository<TenantType>> {
   const db = await getDB();
   return db.getRepository<TenantType>(Tenant.name);
 }
 
+export type NextAuthUserRepository = Repository<NextAuthUserType>;
 export async function getNextAuthUserRepository(): Promise<
   Repository<NextAuthUserType>
 > {
@@ -54,6 +59,7 @@ export async function getNextAuthUserRepository(): Promise<
   );
 }
 
+export type WeaveFlowRepository = Repository<FlowType>;
 export async function getWeaveFlowRepository() {
   const db = await getDB();
   return db.getRepository<FlowType>(WeaveFlow.name);

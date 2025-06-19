@@ -68,9 +68,6 @@ importers:
 
   packages/container:
     dependencies:
-      '@genie-nexus/logger':
-        specifier: workspace:*
-        version: link:../logger
       tsyringe:
         specifier: ^4.10.0
         version: 4.10.0

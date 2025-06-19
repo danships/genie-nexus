@@ -12,7 +12,7 @@
     "test": "vitest",
     "test:once": "vitest run",
     "clean": "rimraf dist",
-    "format:biome": "biome format --write .",
+    "format:biome": "biome check --write .",
     "lint:biome": "biome lint ."
   },
   "dependencies": {

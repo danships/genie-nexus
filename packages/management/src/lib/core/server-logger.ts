@@ -1,5 +1,6 @@
-import { TYPE_SYMBOLS, container } from '@genie-nexus/container';
+import { TypeSymbols } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
 import 'server-only';
+import { getContainer } from './get-container';
 
-export const serverLogger = container.resolve<Logger>(TYPE_SYMBOLS.LOGGER);
+export const serverLogger = getContainer().resolve<Logger>(TypeSymbols.LOGGER);
