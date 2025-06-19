@@ -1,12 +1,12 @@
-import type { SetRequestHeaderAction } from '@genie-nexus/types';
+import type { WeaveSetRequestHeaderAction } from '@genie-nexus/types';
 import { Group, TextInput } from '@mantine/core';
 
 export function SetRequestHeaderBlock({
   action,
   onChange,
 }: {
-  action: SetRequestHeaderAction;
-  onChange: (a: SetRequestHeaderAction) => void;
+  action: WeaveSetRequestHeaderAction;
+  onChange: (a: WeaveSetRequestHeaderAction) => void;
 }) {
   return (
     <Group grow>

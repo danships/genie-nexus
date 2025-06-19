@@ -6,7 +6,11 @@ import {
   singleton,
 } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
-import type { Condition, WeaveRequestContext } from '@genie-nexus/types';
+import type {
+  Condition,
+  LlmRequestContext,
+  WeaveRequestContext,
+} from '@genie-nexus/types';
 import type { EvaluateCondition } from './evaluate-condition.js';
 
 @singleton()
@@ -17,9 +21,9 @@ export class EvaluateConditions {
     @inject(TypeSymbols.LOGGER) private readonly logger: Logger
   ) {}
 
-  public evaluate(
+  public evaluate<T extends WeaveRequestContext | LlmRequestContext>(
     conditions: Condition[],
-    context: WeaveRequestContext
+    context: T
   ): boolean {
     this.logger.debug('Evaluating conditions', { conditions, context });
     for (const condition of conditions) {

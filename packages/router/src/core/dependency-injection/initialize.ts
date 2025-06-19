@@ -2,12 +2,14 @@ import { TypeSymbols, container } from '@genie-nexus/container';
 import {
   type ApiKeyRepository,
   type DeploymentRepository,
+  type LlmFlowRepository,
   type NextAuthUserRepository,
   type ProviderRepository,
   type TenantRepository,
   type WeaveFlowRepository,
   getApiKeyRepository,
   getDeploymentRepository,
+  getLlmFlowRepository,
   getNextAuthUserRepository,
   getTenantRepository,
   getWeaveFlowRepository,
@@ -77,5 +79,10 @@ export async function initialize(options: Options) {
   const weaveFlowRepository = await getWeaveFlowRepository();
   container.register<WeaveFlowRepository>(TypeSymbols.WEAVE_FLOW_REPOSITORY, {
     useValue: weaveFlowRepository,
+  });
+
+  const llmFlowRepository = await getLlmFlowRepository();
+  container.register<LlmFlowRepository>(TypeSymbols.LLM_FLOW_REPOSITORY, {
+    useValue: llmFlowRepository,
   });
 }

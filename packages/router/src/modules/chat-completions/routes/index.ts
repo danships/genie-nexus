@@ -1,9 +1,10 @@
 import cors from 'cors';
 import { Router, json } from 'express';
+import { getHandlerUsingContainer } from '../../../core/http/get-handler-using-container.js';
 import { checkApiKey } from '../../api-key/middleware/check-api-key.js';
 import { URL_PARAM_DEPLOYMENT_SLUG } from '../../deployments/constants.js';
 import { getTenantPath } from '../../tenants/get-tentant-path.js';
-import { handler } from './chat-completion.js';
+import { ChatCompletionHandler } from './chat-completion.js';
 
 export function initialize(): Router {
   const router = Router();
@@ -17,7 +18,7 @@ export function initialize(): Router {
     cors(),
     checkApiKey('llm-api-key'),
     json(),
-    handler
+    getHandlerUsingContainer(ChatCompletionHandler)
   );
 
   return router;

@@ -28,7 +28,7 @@ export function openAiToAiSdkRequestMapper(
     mappedParams['frequencyPenalty'] = request.frequency_penalty;
   }
   if (request.logit_bias !== undefined) {
-    mappedParams['responseFormat'] = request.logit_bias;
+    mappedParams['logitBias'] = request.logit_bias;
   }
   if (request.stop !== undefined) {
     mappedParams['stop'] = request.stop;

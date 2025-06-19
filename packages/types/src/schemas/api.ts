@@ -74,7 +74,7 @@ const baseDeploymentSchemaApi = z.object({
 
 export const deploymentLLMSchemaApi = baseDeploymentSchemaApi.extend({
   type: z.literal('llm'),
-  model: z.string(),
+  model: z.string().optional(),
 });
 
 export const deploymentWeaveSchemaApi = baseDeploymentSchemaApi.extend({

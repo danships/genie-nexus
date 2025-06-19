@@ -1,12 +1,12 @@
-import type { UpdateResponseBodyAction } from '@genie-nexus/types';
+import type { WeaveUpdateResponseBodyAction } from '@genie-nexus/types';
 import { TextInput } from '@mantine/core';
 
 export function UpdateResponseBodyBlock({
   action,
   onChange,
 }: {
-  action: UpdateResponseBodyAction;
-  onChange: (a: UpdateResponseBodyAction) => void;
+  action: WeaveUpdateResponseBodyAction;
+  onChange: (a: WeaveUpdateResponseBodyAction) => void;
 }) {
   return (
     <TextInput

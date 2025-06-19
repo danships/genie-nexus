@@ -1,4 +1,4 @@
-import type { Action } from '@genie-nexus/types';
+import type { WeaveAction } from '@genie-nexus/types';
 import {
   IconCheck,
   IconClock,
@@ -8,7 +8,7 @@ import {
 } from '@tabler/icons-react';
 
 export type BlockType = {
-  type: Action['type'];
+  type: WeaveAction['type'];
   label: string;
   icon: React.ComponentType<{ size: number }>;
   group: 'request' | 'response' | 'generic';
