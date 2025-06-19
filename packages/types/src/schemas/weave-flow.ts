@@ -92,7 +92,7 @@ export const weavePipelineSchema = z.object({
   enabled: z.boolean(),
 });
 
-export const llmEventSchema = z.object({
+export const weaveEventSchema = z.object({
   id: z.string(),
   type: z.enum(['incomingRequest', 'response', 'requestFailed', 'timeout']),
   name: z.string(),
@@ -103,7 +103,7 @@ export const llmEventSchema = z.object({
 export const weaveFlowSchema = z.object({
   id: z.string(),
   deploymentId: z.string(),
-  events: z.array(llmEventSchema),
+  events: z.array(weaveEventSchema),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   isDeleted: z.boolean().optional(),

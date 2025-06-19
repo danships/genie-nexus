@@ -119,7 +119,7 @@ export function PipelineBlocksForm({
         action = { type, value: '' };
         break;
       case 'updateResponseStatusCode':
-        action = { type, value: '' };
+        action = { type, value: 200 };
         break;
       case 'transformData':
         action = { type, expression: '' };

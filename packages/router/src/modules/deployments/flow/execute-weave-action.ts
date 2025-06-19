@@ -58,7 +58,7 @@ export class ExecuteWeaveAction {
         this.logger.debug('Updated response body', { value: action.value });
         break;
       case 'updateResponseStatusCode':
-        context.responseStatusCode = parseInt(action.value, 10);
+        context.responseStatusCode = action.value;
         this.logger.debug('Updated response status code', {
           statusCode: context.responseStatusCode,
         });

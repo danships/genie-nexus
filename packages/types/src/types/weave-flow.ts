@@ -4,7 +4,7 @@ import type {
   weaveAddRequestHeaderActionSchema,
   weaveAddResponseHeaderActionSchema,
   weaveDelayActionSchema,
-  llmEventSchema,
+  weaveEventSchema,
   weaveFilterActionSchema,
   weaveFlowSchema,
   weaveFlowStepSchema,
@@ -64,6 +64,6 @@ export type WeaveRequestContext = {
 };
 
 export type WeavePipeline = z.infer<typeof weavePipelineSchema>;
-export type WeaveEvent = z.infer<typeof llmEventSchema>;
+export type WeaveEvent = z.infer<typeof weaveEventSchema>;
 
 export type WeaveFlowCreate = Omit<WeaveFlow, 'id'>;

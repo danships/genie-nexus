@@ -12,7 +12,9 @@ export function UpdateResponseStatusCodeBlock({
     <TextInput
       label="Status Code"
       value={action.value}
-      onChange={(e) => onChange({ ...action, value: e.currentTarget.value })}
+      onChange={(e) =>
+        onChange({ ...action, value: Number.parseInt(e.currentTarget.value) })
+      }
     />
   );
 }

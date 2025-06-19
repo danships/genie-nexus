@@ -57,7 +57,6 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
         }
         return null;
       },
-      model: (value) => (!value.trim() ? 'Model is required' : null),
       defaultProviderId: (value) =>
         !value ? 'Default provider is required' : null,
     },
