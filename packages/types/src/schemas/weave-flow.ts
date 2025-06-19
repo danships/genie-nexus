@@ -46,7 +46,7 @@ export const weaveUpdateResponseBodyActionSchema = z.object({
 
 export const weaveUpdateResponseStatusCodeActionSchema = z.object({
   type: z.literal('updateResponseStatusCode'),
-  value: z.string(),
+  value: z.number().int().min(100).max(599),
 });
 
 export const weaveTransformDataActionSchema = z.object({
