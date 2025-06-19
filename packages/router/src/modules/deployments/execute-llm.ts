@@ -61,23 +61,30 @@ export class ExecuteLlm {
 
     // Update last user message if context has prompt
     if (context.prompt) {
-      const userMessageIndex = updatedMessages.findIndex(
-        (message) => message.role === 'user'
-      );
-      if (userMessageIndex !== -1 && updatedMessages[userMessageIndex]) {
-        updatedMessages[userMessageIndex] = {
-          ...updatedMessages[userMessageIndex],
-          content: context.prompt,
-        };
-      } else {
-        // Add user message if it doesn't exist
-        const userMessage: OpenAIChatMessage = {
-          role: 'user',
-          content: context.prompt,
-        };
-        updatedMessages.push(userMessage);
+      // Update last user message if context has prompt
+      if (context.prompt) {
+        // Find the last user message index
+        let userMessageIndex = -1;
+        for (let i = updatedMessages.length - 1; i >= 0; i--) {
+          if (updatedMessages[i].role === 'user') {
+            userMessageIndex = i;
+            break;
+          }
+        }
+        if (userMessageIndex !== -1 && updatedMessages[userMessageIndex]) {
+          updatedMessages[userMessageIndex] = {
+            ...updatedMessages[userMessageIndex],
+            content: context.prompt,
+          };
+        } else {
+          // Add user message if it doesn't exist
+          const userMessage: OpenAIChatMessage = {
+            role: 'user',
+            content: context.prompt,
+          };
+          updatedMessages.push(userMessage);
+        }
       }
-    }
 
     updatedRequest.messages = updatedMessages;
 
