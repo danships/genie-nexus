@@ -1,12 +1,12 @@
-import type { RemoveRequestHeaderAction } from '@genie-nexus/types';
+import type { WeaveRemoveRequestHeaderAction } from '@genie-nexus/types';
 import { TextInput } from '@mantine/core';
 
 export function RemoveRequestHeaderBlock({
   action,
   onChange,
 }: {
-  action: RemoveRequestHeaderAction;
-  onChange: (a: RemoveRequestHeaderAction) => void;
+  action: WeaveRemoveRequestHeaderAction;
+  onChange: (a: WeaveRemoveRequestHeaderAction) => void;
 }) {
   return (
     <TextInput

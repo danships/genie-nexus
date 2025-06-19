@@ -22,6 +22,7 @@ export type ApiKey = dbTypes.ApiKey;
 
 export type Tenant = dbTypes.Tenant;
 export type WeaveFlow = dbTypes.WeaveFlow;
+export type LlmFlow = dbTypes.LlmFlow;
 
 export interface Migration extends BaseEntity {
   version: string;

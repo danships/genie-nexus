@@ -1,12 +1,12 @@
-import type { AddResponseHeaderAction } from '@genie-nexus/types';
+import type { WeaveAddResponseHeaderAction } from '@genie-nexus/types';
 import { Group, TextInput } from '@mantine/core';
 
 export function AddResponseHeaderBlock({
   action,
   onChange,
 }: {
-  action: AddResponseHeaderAction;
-  onChange: (a: AddResponseHeaderAction) => void;
+  action: WeaveAddResponseHeaderAction;
+  onChange: (a: WeaveAddResponseHeaderAction) => void;
 }) {
   return (
     <Group grow>

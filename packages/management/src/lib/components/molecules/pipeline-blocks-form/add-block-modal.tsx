@@ -1,4 +1,4 @@
-import type { Action } from '@genie-nexus/types';
+import type { WeaveAction } from '@genie-nexus/types';
 import { Button, Collapse, Group, Modal, Stack, Text } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -7,7 +7,7 @@ import { BLOCK_TYPES } from './types';
 type AddBlockModalProps = {
   opened: boolean;
   onClose: () => void;
-  onAdd: (type: Action['type']) => void;
+  onAdd: (type: WeaveAction['type']) => void;
   eventType: 'request' | 'response';
 };
 

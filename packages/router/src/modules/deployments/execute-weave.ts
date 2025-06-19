@@ -46,7 +46,11 @@ export class ExecuteWeave {
 
     // Execute the incoming request event if it exists
     const transformedRequest = flow
-      ? await this.executeFlowEvent.execute(flow, 'incomingRequest', request)
+      ? await this.executeFlowEvent.executeForWeave(
+          flow,
+          'incomingRequest',
+          request
+        )
       : request;
 
     // Get the provider - either from the context or use the default
@@ -88,7 +92,11 @@ export class ExecuteWeave {
 
     // Execute the response event if it exists
     const finalContext = flow
-      ? await this.executeFlowEvent.execute(flow, 'response', responseContext)
+      ? await this.executeFlowEvent.executeForWeave(
+          flow,
+          'response',
+          responseContext
+        )
       : responseContext;
 
     return {

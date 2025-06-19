@@ -13,7 +13,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import type { Action, Condition, WeaveFlowStep } from '@genie-nexus/types';
+import type { WeaveAction, Condition, WeaveFlowStep } from '@genie-nexus/types';
 import { Button, Code, Group, Paper, Stack, Text } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -63,7 +63,7 @@ export function PipelineBlocksForm({
     }
   };
 
-  const handleBlockChange = (idx: number, action: Action) => {
+  const handleBlockChange = (idx: number, action: WeaveAction) => {
     const newSteps = [...steps];
     const step = newSteps[idx];
     if (!step) return;
@@ -94,8 +94,8 @@ export function PipelineBlocksForm({
     onChange(newSteps);
   };
 
-  const handleAdd = (type: Action['type']) => {
-    let action: Action;
+  const handleAdd = (type: WeaveAction['type']) => {
+    let action: WeaveAction;
     switch (type) {
       case 'addRequestHeader':
         action = { type, key: '', value: '' };

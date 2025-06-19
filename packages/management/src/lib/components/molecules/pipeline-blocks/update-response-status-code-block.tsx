@@ -1,12 +1,12 @@
-import type { UpdateResponseStatusCodeAction } from '@genie-nexus/types';
+import type { WeaveUpdateResponseStatusCodeAction } from '@genie-nexus/types';
 import { TextInput } from '@mantine/core';
 
 export function UpdateResponseStatusCodeBlock({
   action,
   onChange,
 }: {
-  action: UpdateResponseStatusCodeAction;
-  onChange: (a: UpdateResponseStatusCodeAction) => void;
+  action: WeaveUpdateResponseStatusCodeAction;
+  onChange: (a: WeaveUpdateResponseStatusCodeAction) => void;
 }) {
   return (
     <TextInput

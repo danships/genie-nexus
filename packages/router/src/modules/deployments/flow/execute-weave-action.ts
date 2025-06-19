@@ -6,18 +6,18 @@ import {
   singleton,
 } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
-import type { Action, WeaveRequestContext } from '@genie-nexus/types';
+import type { WeaveAction, WeaveRequestContext } from '@genie-nexus/types';
 
 // Maximum allowed delay in milliseconds (5 seconds)
 const MAX_DELAY_MS = 5000;
 
 @singleton()
 @scoped(Lifecycle.ContainerScoped)
-export class ExecuteAction {
+export class ExecuteWeaveAction {
   constructor(@inject(TypeSymbols.LOGGER) private readonly logger: Logger) {}
 
   public async execute(
-    action: Action,
+    action: WeaveAction,
     context: WeaveRequestContext
   ): Promise<void> {
     this.logger.debug('Executing action', {

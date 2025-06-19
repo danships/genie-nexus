@@ -6,20 +6,36 @@ import {
   singleton,
 } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
-import type { Condition, WeaveRequestContext } from '@genie-nexus/types';
-import { getFieldValue } from './get-field-value.js';
+import type {
+  Condition,
+  LlmRequestContext,
+  WeaveRequestContext,
+} from '@genie-nexus/types';
+import type { GetLlmFieldValue } from './get-llm-field-value.js';
+import type { GetWeaveFieldValue } from './get-weave-field-value.js';
 
 @singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class EvaluateCondition {
-  constructor(@inject(TypeSymbols.LOGGER) private readonly logger: Logger) {}
+  constructor(
+    @inject(TypeSymbols.LOGGER) private readonly logger: Logger,
+    private readonly getWeaveFieldValue: GetWeaveFieldValue,
+    private readonly getLlmFieldValue: GetLlmFieldValue
+  ) {}
 
-  public evaluate(condition: Condition, context: WeaveRequestContext): boolean {
+  public evaluate(
+    condition: Condition,
+    context: WeaveRequestContext | LlmRequestContext
+  ): boolean {
     if (!condition) {
       return true;
     }
 
-    const fieldValue = getFieldValue(condition.field, context);
+    const fieldValue =
+      'model' in context
+        ? this.getLlmFieldValue.getFieldValue(condition.field, context)
+        : this.getWeaveFieldValue.getFieldValue(condition.field, context);
+
     this.logger.debug('Evaluating condition', { condition, fieldValue });
     switch (condition.type) {
       case 'equals':

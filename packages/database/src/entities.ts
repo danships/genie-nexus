@@ -102,3 +102,14 @@ export const WeaveFlow: Collection = {
     isDeleted: 'boolean',
   },
 };
+
+export const LlmFlow: Collection = {
+  name: 'llmflow',
+  relations: [],
+  template: {},
+  filterSortFields: {
+    deploymentId: 'string',
+    tenantId: 'string',
+    isDeleted: 'boolean',
+  },
+};

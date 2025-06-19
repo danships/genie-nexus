@@ -6,9 +6,15 @@ import {
   singleton,
 } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
-import type { WeaveFlow, WeaveRequestContext } from '@genie-nexus/types';
-import { EvaluateConditions } from './evaluate-conditions.js';
-import { ExecuteAction } from './execute-action.js';
+import type {
+  LlmFlow,
+  LlmRequestContext,
+  WeaveFlow,
+  WeaveRequestContext,
+} from '@genie-nexus/types';
+import type { EvaluateConditions } from './evaluate-conditions.js';
+import type { ExecuteLlmAction } from './execute-llm-action.js';
+import type { ExecuteWeaveAction } from './execute-weave-action.js';
 
 @singleton()
 @scoped(Lifecycle.ContainerScoped)
@@ -16,15 +22,19 @@ export class ExecuteFlowEvent {
   constructor(
     private readonly evaluateConditions: EvaluateConditions,
     @inject(TypeSymbols.LOGGER) private readonly logger: Logger,
-    private readonly executeAction: ExecuteAction
+    private readonly executeWeaveAction: ExecuteWeaveAction,
+    private readonly executeLlmAction: ExecuteLlmAction
   ) {}
 
-  public async execute(
+  public async executeForWeave(
     flow: WeaveFlow,
     eventType: 'incomingRequest' | 'response',
     context: WeaveRequestContext
   ): Promise<WeaveRequestContext> {
-    this.logger.debug('Executing flow event', { flowId: flow.id, eventType });
+    this.logger.debug('Executing weave flow event', {
+      flowId: flow.id,
+      eventType,
+    });
 
     // Find the event for this type
     const event = flow.events?.find((e) => e.type === eventType && e.enabled);
@@ -50,46 +60,51 @@ export class ExecuteFlowEvent {
         }
 
         // Execute the action
-        await this.executeAction.execute(step.action, newContext);
+        await this.executeWeaveAction.execute(step.action, newContext);
       }
     }
 
     return newContext;
   }
-}
 
-// Function export for testing purposes
-export async function executeFlowEvent(
-  flow: WeaveFlow,
-  eventType: 'incomingRequest' | 'response',
-  context: WeaveRequestContext
-): Promise<WeaveRequestContext> {
-  // Create mock logger for testing
-  const mockLogger: Logger = {
-    debug: () => {},
-    info: () => {},
-    warning: () => {},
-    error: () => {},
-    setLogLevel: () => {},
-    setFixedMetadata: () => {},
-    child: () => mockLogger,
-    appendFixedMetadata: () => {},
-  };
+  public async executeForLlm(
+    flow: LlmFlow,
+    eventType: 'incomingRequest' | 'response',
+    context: LlmRequestContext
+  ): Promise<LlmRequestContext> {
+    this.logger.debug('Executing llm flow event', {
+      flowId: flow.id,
+      eventType,
+    });
 
-  // Create instances without dependency injection for testing
-  const executeAction = new ExecuteAction(mockLogger);
-  const evaluateCondition = new (
-    await import('./evaluate-condition.js')
-  ).EvaluateCondition(mockLogger);
-  const evaluateConditions = new EvaluateConditions(
-    evaluateCondition,
-    mockLogger
-  );
-  const executeFlowEvent = new ExecuteFlowEvent(
-    evaluateConditions,
-    mockLogger,
-    executeAction
-  );
+    // Find the event for this type
+    const event = flow.events?.find((e) => e.type === eventType && e.enabled);
+    if (!event) {
+      return context;
+    }
 
-  return executeFlowEvent.execute(flow, eventType, context);
+    // Create a copy of the context to modify
+    const newContext = { ...context };
+
+    // Execute each step in the event's pipeline if enabled
+    if (event.pipeline.enabled) {
+      for (const step of event.pipeline.steps) {
+        // Check condition if present
+        if (step.conditions) {
+          const shouldExecute = this.evaluateConditions.evaluate(
+            step.conditions,
+            newContext
+          );
+          if (!shouldExecute) {
+            continue;
+          }
+        }
+
+        // Execute the action
+        this.executeLlmAction.execute(step.action, newContext);
+      }
+    }
+
+    return newContext;
+  }
 }
