@@ -6,7 +6,8 @@
     "ignore": [
       "packages/management/.next/**/*.*",
       "**/pnpm-lock.yaml",
-      "**/dist"
+      "**/dist",
+      "**/site"
     ]
   },
   "formatter": {
