@@ -1,18 +1,33 @@
-import type { WeaveFlow, WeaveFlowCreate } from "@genie-nexus/types";
-import { createEntity, getEntityByQuery } from "@lib/api/server-api";
-import { redirect } from "next/navigation";
-import { getDeployment } from "../page";
-import { FlowEditorClientPage } from "./_page";
+import type {
+  LlmFlow,
+  LlmFlowCreate,
+  WeaveFlow,
+  WeaveFlowCreate,
+} from '@genie-nexus/types';
+import { createEntity, getEntityByQuery } from '@lib/api/server-api';
+import { getDeployment } from '../page';
+import { FlowEditorClientPage } from './_page';
 
-async function getOrCreateFlow(deploymentId: string): Promise<WeaveFlow> {
+async function getOrCreateWeaveFlow(deploymentId: string): Promise<WeaveFlow> {
   const flow = await getEntityByQuery<WeaveFlow>(
-    "weaveflows",
+    'weaveflows',
     `deploymentId=${deploymentId}&isDeleted=false`
   );
   if (flow) {
     return flow;
   }
-  return createFlow(deploymentId);
+  return createWeaveFlow(deploymentId);
+}
+
+async function getOrCreateLlmFlow(deploymentId: string): Promise<LlmFlow> {
+  const flow = await getEntityByQuery<LlmFlow>(
+    'llmflows',
+    `deploymentId=${deploymentId}&isDeleted=false`
+  );
+  if (flow) {
+    return flow;
+  }
+  return createLlmFlow(deploymentId);
 }
 
 export async function generateMetadata({
@@ -28,8 +43,18 @@ export async function generateMetadata({
   };
 }
 
-async function createFlow(deploymentId: string): Promise<WeaveFlow> {
-  const flow = await createEntity<WeaveFlowCreate, WeaveFlow>("weaveflows", {
+async function createWeaveFlow(deploymentId: string): Promise<WeaveFlow> {
+  const flow = await createEntity<WeaveFlowCreate, WeaveFlow>('weaveflows', {
+    deploymentId,
+    events: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  });
+  return flow;
+}
+
+async function createLlmFlow(deploymentId: string): Promise<LlmFlow> {
+  const flow = await createEntity<LlmFlowCreate, LlmFlow>('llmflows', {
     deploymentId,
     events: [],
     createdAt: new Date().toISOString(),
@@ -45,14 +70,12 @@ export default async function FlowEditorPage({
 }) {
   const { id } = await params;
 
-  const [deployment, flow] = await Promise.all([
-    getDeployment(id),
-    getOrCreateFlow(id),
-  ]);
+  const deployment = await getDeployment(id);
+  const flow = await (deployment.type === 'weave'
+    ? getOrCreateWeaveFlow(id)
+    : getOrCreateLlmFlow(id));
 
-  if (deployment.type !== "weave") {
-    redirect(`/app/deployments/${id}`);
-  }
-
-  return <FlowEditorClientPage deployment={deployment} flow={flow} />;
+  return (
+    <FlowEditorClientPage<typeof flow> deployment={deployment} flow={flow} />
+  );
 }

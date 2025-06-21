@@ -1,7 +1,7 @@
 import type { z } from 'zod';
 import type {
   llmUpdateModelActionSchema,
-  llmUpdatePromptSchema,
+  llmUpdatePromptActionSchema,
   llmActionSchema,
   llmFlowStepSchema,
   llmPipelineSchema,
@@ -10,7 +10,7 @@ import type {
 } from '../schemas/llm-flow.js';
 
 export type LlmUpdateModelAction = z.infer<typeof llmUpdateModelActionSchema>;
-export type LlmUpdatePrompt = z.infer<typeof llmUpdatePromptSchema>;
+export type LlmUpdatePromptAction = z.infer<typeof llmUpdatePromptActionSchema>;
 export type LlmAction = z.infer<typeof llmActionSchema>;
 export type LlmFlowStep = z.infer<typeof llmFlowStepSchema>;
 export type LlmEvent = z.infer<typeof llmEventSchema>;
