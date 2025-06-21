@@ -12,9 +12,13 @@ import type {
   WeaveFlow,
   WeaveRequestContext,
 } from '@genie-nexus/types';
-import type { EvaluateConditions } from './evaluate-conditions.js';
-import type { ExecuteLlmAction } from './execute-llm-action.js';
-import type { ExecuteWeaveAction } from './execute-weave-action.js';
+
+// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
+import { EvaluateConditions } from './evaluate-conditions.js';
+// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
+import { ExecuteLlmAction } from './execute-llm-action.js';
+// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
+import { ExecuteWeaveAction } from './execute-weave-action.js';
 
 @singleton()
 @scoped(Lifecycle.ContainerScoped)

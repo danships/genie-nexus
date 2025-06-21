@@ -1,23 +1,28 @@
 import { Button, Group, Paper, Stack, Title } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 type Properties = {
   deploymentId: string;
+  label?: ReactNode;
 };
 
-export function WeaveEditor({ deploymentId }: Properties) {
+export function FlowEditorCard({
+  deploymentId,
+  label = 'Configure Flow',
+}: Properties) {
   return (
     <Paper p="md" withBorder>
       <Group>
         <Stack gap="md">
-          <Title order={3}>Weave Configuration</Title>
+          <Title order={3}>Configuration</Title>
           <Button
             component={Link}
             href={`/app/deployments/${deploymentId}/flow`}
             rightSection={<IconArrowRight size={16} />}
           >
-            Configure Flow
+            {label}
           </Button>
         </Stack>
       </Group>

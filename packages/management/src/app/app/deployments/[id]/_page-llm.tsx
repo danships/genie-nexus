@@ -7,6 +7,7 @@ import { CodeHighlight } from '@lib/components/atoms/code-highlight';
 import { Loader } from '@lib/components/atoms/loader';
 import { PageTitle } from '@lib/components/atoms/page-title';
 import { DetailCard } from '@lib/components/molecules/detail-card';
+import { FlowEditorCard } from '@lib/components/molecules/flow-editor-card';
 import { useServerUrl } from '@lib/hooks/use-server-url';
 import {
   ActionIcon,
@@ -124,6 +125,9 @@ print(completion.choices[0].message)`;
         </Button>
       </Group>
       <Grid>
+        <Grid.Col span={12}>
+          <FlowEditorCard deploymentId={deployment.id} />
+        </Grid.Col>
         <Grid.Col span={12}>
           <DetailCard icon={IconBrain} title="Endpoint Details">
             <Table>
