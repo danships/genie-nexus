@@ -6,12 +6,14 @@ import type {
   Provider,
   ProviderRepository,
 } from '@genie-nexus/database';
+import type { Logger } from '@genie-nexus/logger';
 import type { DeploymentLLMApi, LlmRequestContext } from '@genie-nexus/types';
 import type {
   OpenAIChatCompletionRequest,
   OpenAIChatMessage,
 } from '../chat-completions/types/openai.js';
-import type { ExecuteFlowEvent } from './flow/execute-flow-event.js';
+// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
+import { ExecuteFlowEvent } from './flow/execute-flow-event.js';
 
 @singleton()
 @scoped(Lifecycle.ContainerScoped)
@@ -21,7 +23,8 @@ export class ExecuteLlm {
     private readonly providerRepository: ProviderRepository,
     @inject(TypeSymbols.LLM_FLOW_REPOSITORY)
     private readonly llmFlowRepository: LlmFlowRepository,
-    private readonly executeFlowEvent: ExecuteFlowEvent
+    private readonly executeFlowEvent: ExecuteFlowEvent,
+    @inject(TypeSymbols.LOGGER) private readonly logger: Logger
   ) {}
 
   private updateRequestWithContext(
@@ -109,6 +112,7 @@ export class ExecuteLlm {
     let transformedRequest = request;
     let updatedContext = context;
     if (flow) {
+      this.logger.info('Executing flow for LLM');
       updatedContext = await this.executeFlowEvent.executeForLlm(
         flow,
         'incomingRequest',
@@ -118,6 +122,8 @@ export class ExecuteLlm {
         request,
         updatedContext
       );
+    } else {
+      this.logger.info('No flow found for LLM, just executing the request.');
     }
 
     // Get the provider - either from the context or use the default

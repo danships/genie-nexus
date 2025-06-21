@@ -1,4 +1,4 @@
-import type { WeaveAction } from '@genie-nexus/types';
+import type { LlmAction, WeaveAction } from '@genie-nexus/types';
 import { Button, Collapse, Group, Modal, Stack, Text } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -7,8 +7,9 @@ import { BLOCK_TYPES } from './types';
 type AddBlockModalProps = {
   opened: boolean;
   onClose: () => void;
-  onAdd: (type: WeaveAction['type']) => void;
+  onAdd: (type: WeaveAction['type'] | LlmAction['type']) => void;
   eventType: 'request' | 'response';
+  flowType: 'weave' | 'llm';
 };
 
 type GroupType = 'request' | 'response' | 'generic';
@@ -18,6 +19,7 @@ export function AddBlockModal({
   onClose,
   onAdd,
   eventType,
+  flowType,
 }: AddBlockModalProps) {
   const [expandedGroups, setExpandedGroups] = useState<
     Record<GroupType, boolean>
@@ -35,13 +37,13 @@ export function AddBlockModal({
   };
 
   const requestBlocks = BLOCK_TYPES.filter(
-    (block) => block.group === 'request'
+    (block) => block.group === 'request' && block.flows.includes(flowType)
   );
   const responseBlocks = BLOCK_TYPES.filter(
-    (block) => block.group === 'response'
+    (block) => block.group === 'response' && block.flows.includes(flowType)
   );
   const genericBlocks = BLOCK_TYPES.filter(
-    (block) => block.group === 'generic'
+    (block) => block.group === 'generic' && block.flows.includes(flowType)
   );
 
   return (

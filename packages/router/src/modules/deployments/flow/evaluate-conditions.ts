@@ -11,7 +11,8 @@ import type {
   LlmRequestContext,
   WeaveRequestContext,
 } from '@genie-nexus/types';
-import type { EvaluateCondition } from './evaluate-condition.js';
+// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
+import { EvaluateCondition } from './evaluate-condition.js';
 
 @singleton()
 @scoped(Lifecycle.ContainerScoped)

@@ -6,7 +6,8 @@ import type { HttpRequestHandler } from '../../../core/http/get-handler-using-co
 import { checkApiKeyInRequest } from '../../api-key/check-api-key-in-request.js';
 import { ApiKeyNotPresentError } from '../../api-key/errors/api-key-not-present-error.js';
 import { ApiKeyValidationError } from '../../api-key/errors/api-key-validation-error.js';
-import type { ExecuteWeave } from '../../deployments/execute-weave.js';
+// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
+import { ExecuteWeave } from '../../deployments/execute-weave.js';
 import { getDeploymentBySlug } from '../../deployments/get-deployment-by-slug.js';
 import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
 import type { ResponseLocalsTenant } from '../../tenants/middleware/types.js';

@@ -10,14 +10,14 @@ export const llmUpdateModelActionSchema = z.object({
   modelName: z.string(),
 });
 
-export const llmUpdatePromptSchema = z.object({
+export const llmUpdatePromptActionSchema = z.object({
   type: z.literal('updatePrompt'),
   what: z.enum(['prompt', 'systemPrompt']),
   value: z.string(),
 });
 
 export const llmActionSchema = z.discriminatedUnion('type', [
-  llmUpdatePromptSchema,
+  llmUpdatePromptActionSchema,
   llmUpdateModelActionSchema,
   logActionSchema,
   setProviderActionSchema,
