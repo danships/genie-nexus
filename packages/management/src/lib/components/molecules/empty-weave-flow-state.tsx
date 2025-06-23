@@ -1,3 +1,4 @@
+import { WeaveEvent } from '@genie-nexus/types';
 import { Card, Container, Group, Stack, Text, Title } from '@mantine/core';
 import {
   IconArrowRight,
@@ -9,12 +10,10 @@ import {
 } from '@tabler/icons-react';
 
 type EmptyFlowStateProps = {
-  onAddEvent: (
-    type: 'incomingRequest' | 'response' | 'requestFailed' | 'timeout'
-  ) => void;
+  onAddEvent: (type: WeaveEvent['type']) => void;
 };
 
-export function EmptyFlowState({ onAddEvent }: EmptyFlowStateProps) {
+export function EmptyWeaveFlowState({ onAddEvent }: EmptyFlowStateProps) {
   const eventTypes = [
     {
       label: 'Incoming Request',

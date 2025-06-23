@@ -1,15 +1,23 @@
-"use client";
+'use client';
 
 import type {
   DeploymentApi,
+  LlmEvent,
+  LlmFlow,
+  LlmFlowStep,
+  LogAction,
+  WeaveDelayAction,
   WeaveEvent,
+  WeaveFilterAction,
   WeaveFlow,
   WeaveFlowStep,
-} from "@genie-nexus/types";
-import { useCudApi } from "@lib/api/use-api";
-import { ErrorNotification } from "@lib/components/atoms/error-notification";
-import { EmptyFlowState } from "@lib/components/molecules/empty-flow-state";
-import { PipelineBlocksForm } from "@lib/components/molecules/pipeline-blocks-form";
+  WeaveTransformDataAction,
+} from '@genie-nexus/types';
+import { useCudApi } from '@lib/api/use-api';
+import { ErrorNotification } from '@lib/components/atoms/error-notification';
+import { EmptyWeaveFlowState } from '@lib/components/molecules/empty-weave-flow-state';
+import { EmptyLlmFlowState } from '@lib/components/molecules/empty-llm-flow-state';
+import { PipelineBlocksForm } from '@lib/components/molecules/pipeline-blocks-form';
 import {
   Button,
   Grid,
@@ -22,8 +30,8 @@ import {
   Text,
   TextInput,
   Title,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
 import {
   IconAlertCircle,
   IconArrowLeft,
@@ -34,31 +42,39 @@ import {
   IconFilter,
   IconListDetails,
   IconTransform,
-} from "@tabler/icons-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+} from '@tabler/icons-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { generateRandomId } from '@lib/core/generate-random-id';
 
-type Properties = {
+type Properties<T extends WeaveFlow | LlmFlow> = {
   deployment: DeploymentApi;
-  flow: WeaveFlow;
+  flow: T;
 };
 
-type FormValues = {
-  events: WeaveEvent[];
+type FormValues<T extends WeaveFlow | LlmFlow> = {
+  events: T['events'];
 };
 
-export function FlowEditorClientPage({
+const EVENT_LABELS: Record<WeaveEvent['type'] | LlmEvent['type'], string> = {
+  incomingRequest: 'Incoming Request',
+  response: 'Response',
+  requestFailed: 'Request Failed',
+  timeout: 'Timeout',
+};
+
+export function FlowEditorClientPage<T extends WeaveFlow | LlmFlow>({
   flow: originalFlow,
   deployment,
-}: Properties) {
+}: Properties<T>) {
   const router = useRouter();
-  const [flow, setFlow] = useState<WeaveFlow>(originalFlow);
+  const [flow, setFlow] = useState<T>(originalFlow);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(
     null
   );
-  const form = useForm<FormValues>({
+  const form = useForm<FormValues<T>>({
     initialValues: {
       events: flow.events,
     },
@@ -79,7 +95,7 @@ export function FlowEditorClientPage({
 
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const link = target.closest("a");
+      const link = target.closest('a');
       if (link && link.href && !link.href.includes(window.location.pathname)) {
         if (hasUnsavedChanges) {
           e.preventDefault();
@@ -90,12 +106,12 @@ export function FlowEditorClientPage({
       }
     };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("click", handleClick, true);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('click', handleClick, true);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("click", handleClick, true);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('click', handleClick, true);
     };
   }, [hasUnsavedChanges]);
 
@@ -115,15 +131,27 @@ export function FlowEditorClientPage({
   };
 
   const handleSave = useCallback(async () => {
-    const updatedFlow = await patch<{ data: WeaveFlow }>(
-      `/collections/weaveflows/${flow.id}`,
-      {
-        ...flow,
-        events: form.values.events,
-        updatedAt: new Date().toISOString(),
-      }
-    );
-    setFlow(updatedFlow.data);
+    if (deployment.type === 'weave') {
+      const updatedFlow = await patch<{ data: WeaveFlow }>(
+        `/collections/weaveflows/${flow.id}`,
+        {
+          ...flow,
+          events: form.values.events,
+          updatedAt: new Date().toISOString(),
+        }
+      );
+      setFlow(updatedFlow.data as T);
+    } else {
+      const updatedFlow = await patch<{ data: LlmFlow }>(
+        `/collections/llmflows/${flow.id}`,
+        {
+          ...flow,
+          events: form.values.events,
+          updatedAt: new Date().toISOString(),
+        }
+      );
+      setFlow(updatedFlow.data as T);
+    }
     form.resetDirty();
     return;
   }, [flow, form, deployment, patch]);
@@ -133,48 +161,48 @@ export function FlowEditorClientPage({
   const [selectedBlockType, setSelectedBlockType] = useState<string | null>(
     null
   );
-  const [modalStep, setModalStep] = useState<"block" | "pipeline">("block");
+  const [modalStep, setModalStep] = useState<'block' | 'pipeline'>('block');
 
   // Building block definitions
   const buildingBlocks = [
-    { label: "Transform Data", icon: IconTransform, type: "transform" },
+    { label: 'Transform Data', icon: IconTransform, type: 'transform' },
     // { label: "Validate", icon: IconCheck, type: "validate" }, // TODO implement later
-    { label: "Filter", icon: IconFilter, type: "filter" },
-    { label: "Add Delay", icon: IconClock, type: "delay" },
-    { label: "Log Data", icon: IconListDetails, type: "log" },
+    { label: 'Filter', icon: IconFilter, type: 'filter' },
+    { label: 'Add Delay', icon: IconClock, type: 'delay' },
+    { label: 'Log Data', icon: IconListDetails, type: 'log' },
   ];
 
   // Event type definitions
   const eventTypes = [
     {
-      label: "Incoming Request",
+      label: 'Incoming Request',
       icon: IconArrowRight,
-      type: "incomingRequest" as const,
+      type: 'incomingRequest' as const,
     },
     {
-      label: "Response",
+      label: 'Response',
       icon: IconCheck,
-      type: "response" as const,
+      type: 'response' as const,
     },
     {
-      label: "Request Failed",
+      label: 'Request Failed',
       icon: IconAlertCircle,
-      type: "requestFailed" as const,
+      type: 'requestFailed' as const,
     },
     {
-      label: "Timeout",
+      label: 'Timeout',
       icon: IconClockHour4,
-      type: "timeout" as const,
+      type: 'timeout' as const,
     },
   ];
 
   // Update pipeline steps
   const handlePipelineStepsChange = (
     eventId: string,
-    steps: WeaveFlowStep[]
+    steps: WeaveFlowStep[] | LlmFlowStep[]
   ) => {
     form.setFieldValue(
-      "events",
+      'events',
       form.values.events.map((event) =>
         event.id === eventId
           ? {
@@ -182,47 +210,51 @@ export function FlowEditorClientPage({
               pipeline: { ...event.pipeline, steps },
             }
           : event
-      )
+      ) as T['events']
     );
   };
 
   // Add block to a specific pipeline
   const handleAddBlock = (eventId: string, type: string) => {
-    let newStep: WeaveFlowStep;
+    let newStep: WeaveFlowStep | LlmFlowStep | undefined;
     switch (type) {
-      case "transform":
+      case 'transform':
         newStep = {
-          id: crypto.randomUUID(),
-          action: { type: "transformData", expression: "" },
+          id: generateRandomId(),
+          action: {
+            type: 'transformData',
+            expression: '',
+          } satisfies WeaveTransformDataAction,
         };
         break;
-      case "filter":
+      case 'filter':
         newStep = {
-          id: crypto.randomUUID(),
-          action: { type: "filter", expression: "" },
+          id: generateRandomId(),
+          action: {
+            type: 'filter',
+            expression: '',
+          } satisfies WeaveFilterAction,
         };
         break;
-      case "delay":
+      case 'delay':
         newStep = {
-          id: crypto.randomUUID(),
-          action: { type: "delay", ms: 1000 },
+          id: generateRandomId(),
+          action: { type: 'delay', ms: 1000 } satisfies WeaveDelayAction,
         };
         break;
-      case "log":
+      case 'log':
         newStep = {
-          id: crypto.randomUUID(),
-          action: { type: "log", message: "" },
+          id: generateRandomId(),
+          action: { type: 'log', message: '' } satisfies LogAction,
         };
         break;
-      default:
-        newStep = {
-          id: crypto.randomUUID(),
-          action: { type: "updateResponseBody", value: "" },
-        };
     }
 
+    if (!newStep) {
+      return;
+    }
     form.setFieldValue(
-      "events",
+      'events',
       form.values.events.map((event) =>
         event.id === eventId
           ? {
@@ -233,53 +265,57 @@ export function FlowEditorClientPage({
               },
             }
           : event
-      )
+      ) as T['events']
     );
   };
 
-  // Handle modal confirm
   const handleModalConfirm = (eventId: string) => {
     if (selectedBlockType) {
       handleAddBlock(eventId, selectedBlockType);
       setModalOpened(false);
       setSelectedBlockType(null);
-      setModalStep("block");
+      setModalStep('block');
     }
   };
 
-  // Handle modal close
   const handleModalClose = () => {
     setModalOpened(false);
     setSelectedBlockType(null);
-    setModalStep("block");
+    setModalStep('block');
   };
 
-  // Handle block type selection
   const handleBlockTypeSelect = (type: string) => {
     setSelectedBlockType(type);
-    setModalStep("pipeline");
+    setModalStep('pipeline');
   };
 
-  const handleAddEvent = (type: WeaveEvent["type"]) => {
-    const newEvent: WeaveEvent = {
-      id: Math.random().toString(36).slice(2),
+  const handleAddEvent = (type: WeaveEvent['type'] | LlmEvent['type']) => {
+    const newEvent: WeaveEvent | LlmEvent = {
+      id: generateRandomId(),
       type,
-      name: `${type} ${form.values.events.length + 1}`,
+      name: `${EVENT_LABELS[type]} ${form.values.events.length + 1}`,
       pipeline: {
-        id: Math.random().toString(36).slice(2),
+        id: generateRandomId(),
         steps: [],
         enabled: true,
       },
       enabled: true,
     };
-    form.setFieldValue("events", [...form.values.events, newEvent]);
+    form.setFieldValue('events', [
+      ...form.values.events,
+      newEvent,
+    ] as T['events']);
   };
 
   return (
     <>
       <form onSubmit={form.onSubmit(handleSave)}>
         {form.values.events.length === 0 ? (
-          <EmptyFlowState onAddEvent={handleAddEvent} />
+          deployment.type === 'weave' ? (
+            <EmptyWeaveFlowState onAddEvent={handleAddEvent} />
+          ) : (
+            <EmptyLlmFlowState onAddEvent={handleAddEvent} />
+          )
         ) : (
           <Grid gutter="xl">
             <Grid.Col span={{ base: 12, md: 9 }}>
@@ -290,43 +326,26 @@ export function FlowEditorClientPage({
                     Events and Pipelines
                   </Title>
                   <Stack>
-                    {form.values.events.map((event) => (
+                    {form.values.events.map((event, index) => (
                       <Paper key={event.id} p="md" withBorder>
                         <Group justify="space-between" mb="md">
                           <Group>
-                            <Text fw={500}>Event: {event.type}</Text>
+                            <Text fw={500}>
+                              Event: {EVENT_LABELS[event.type]}
+                            </Text>
                             <TextInput
                               placeholder="Event name"
-                              value={event.name}
-                              onChange={(e) =>
-                                form.setFieldValue(
-                                  "events",
-                                  form.values.events.map((ev) =>
-                                    ev.id === event.id
-                                      ? { ...ev, name: e.currentTarget.value }
-                                      : ev
-                                  )
-                                )
-                              }
+                              {...form.getInputProps(`events.${index}.name`)}
                               size="xs"
-                              style={{ width: "200px" }}
+                              style={{ width: '200px' }}
                             />
                             <Switch
                               checked={event.enabled}
-                              label={event.enabled ? "Active" : "Inactive"}
-                              onChange={(e) =>
-                                form.setFieldValue(
-                                  "events",
-                                  form.values.events.map((ev) =>
-                                    ev.id === event.id
-                                      ? {
-                                          ...ev,
-                                          enabled: e.currentTarget.checked,
-                                        }
-                                      : ev
-                                  )
-                                )
-                              }
+                              label={event.enabled ? 'Active' : 'Inactive'}
+                              {...form.getInputProps(
+                                `events.${index}.enabled`,
+                                { type: 'checkbox' }
+                              )}
                             />
                           </Group>
                         </Group>
@@ -337,36 +356,28 @@ export function FlowEditorClientPage({
                               <Switch
                                 checked={event.pipeline.enabled}
                                 label={
-                                  event.pipeline.enabled ? "Active" : "Inactive"
+                                  event.pipeline.enabled ? 'Active' : 'Inactive'
                                 }
-                                onChange={(e) =>
-                                  form.setFieldValue(
-                                    "events",
-                                    form.values.events.map((ev) =>
-                                      ev.id === event.id
-                                        ? {
-                                            ...ev,
-                                            pipeline: {
-                                              ...ev.pipeline,
-                                              enabled: e.currentTarget.checked,
-                                            },
-                                          }
-                                        : ev
-                                    )
-                                  )
-                                }
+                                {...form.getInputProps(
+                                  `events.${index}.pipeline.enabled`,
+                                  { type: 'checkbox' }
+                                )}
                               />
                             </Group>
                           </Group>
                           <PipelineBlocksForm
                             steps={event.pipeline.steps}
                             onChange={(steps) =>
-                              handlePipelineStepsChange(event.id, steps)
+                              handlePipelineStepsChange(
+                                event.id,
+                                steps as WeaveFlowStep[] | LlmFlowStep[]
+                              )
                             }
+                            flowType={deployment.type}
                             eventType={
-                              event.type === "incomingRequest"
-                                ? "request"
-                                : "response"
+                              event.type === 'incomingRequest'
+                                ? 'request'
+                                : 'response'
                             }
                           />
                         </Paper>
@@ -384,7 +395,7 @@ export function FlowEditorClientPage({
                   href={`/app/deployments/${deployment.id}`}
                   leftSection={<IconArrowLeft size={16} />}
                 >
-                  {" "}
+                  {' '}
                   Back
                 </Button>
                 <Paper p="md" withBorder>
@@ -452,12 +463,12 @@ export function FlowEditorClientPage({
           opened={modalOpened}
           onClose={handleModalClose}
           title={
-            modalStep === "block" ? "Select Block Type" : "Select Pipeline"
+            modalStep === 'block' ? 'Select Block Type' : 'Select Pipeline'
           }
           size="md"
         >
           <Stack>
-            {modalStep === "block" ? (
+            {modalStep === 'block' ? (
               <>
                 <Text size="sm">Select the type of block to add:</Text>
                 <Stack>
@@ -493,7 +504,7 @@ export function FlowEditorClientPage({
                 <Group justify="flex-end" mt="md">
                   <Button
                     variant="subtle"
-                    onClick={() => setModalStep("block")}
+                    onClick={() => setModalStep('block')}
                   >
                     Back
                   </Button>

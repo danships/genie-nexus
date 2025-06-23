@@ -13,38 +13,51 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import type { WeaveAction, Condition, WeaveFlowStep } from '@genie-nexus/types';
+import type {
+  WeaveAction as WeaveActionType,
+  Condition,
+  WeaveFlowStep,
+  LlmFlowStep,
+  LlmAction as LlmActionType,
+  WeaveAddRequestHeaderAction,
+  WeaveRemoveRequestHeaderAction,
+  WeaveSetRequestHeaderAction,
+  WeaveAddResponseHeaderAction,
+  WeaveRemoveResponseHeaderAction,
+  WeaveSetResponseHeaderAction,
+  WeaveUpdateResponseStatusCodeAction,
+  WeaveUpdateResponseBodyAction,
+  WeaveTransformDataAction,
+  WeaveFilterAction,
+  WeaveDelayAction,
+  LogAction,
+  SetProviderAction,
+  LlmUpdatePromptAction,
+  LlmUpdateModelAction,
+} from '@genie-nexus/types';
 import { Button, Code, Group, Paper, Stack, Text } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
-import { AddRequestHeaderBlock } from '../pipeline-blocks/add-request-header-block';
-import { AddResponseHeaderBlock } from '../pipeline-blocks/add-response-header-block';
-import { DelayBlock } from '../pipeline-blocks/delay-block';
-import { FilterBlock } from '../pipeline-blocks/filter-block';
-import { LogBlock } from '../pipeline-blocks/log-block';
-import { RemoveRequestHeaderBlock } from '../pipeline-blocks/remove-request-header-block';
-import { RemoveResponseHeaderBlock } from '../pipeline-blocks/remove-response-header-block';
-import { SetProviderBlock } from '../pipeline-blocks/set-provider-block';
-import { SetRequestHeaderBlock } from '../pipeline-blocks/set-request-header-block';
-import { SetResponseHeaderBlock } from '../pipeline-blocks/set-response-header-block';
-import { TransformDataBlock } from '../pipeline-blocks/transform-data-block';
-import { UpdateResponseBodyBlock } from '../pipeline-blocks/update-response-body-block';
-import { UpdateResponseStatusCodeBlock } from '../pipeline-blocks/update-response-status-code-block';
 import { AddBlockModal } from './add-block-modal';
 import { ConditionEditor } from './condition-editor';
 import { SortableBlock } from './sortable-block';
 import { getActionLabel } from './types';
+import { generateRandomId } from '@lib/core/generate-random-id';
+import { WeaveAction } from './weave-action';
+import { LlmAction } from './llm-action';
 
 type PipelineBlocksFormProps = {
-  steps: WeaveFlowStep[];
-  onChange: (steps: WeaveFlowStep[]) => void;
+  steps: WeaveFlowStep[] | LlmFlowStep[];
+  onChange: (steps: WeaveFlowStep[] | LlmFlowStep[]) => void;
   eventType: 'request' | 'response';
+  flowType: 'weave' | 'llm';
 };
 
 export function PipelineBlocksForm({
   steps,
   onChange,
   eventType,
+  flowType,
 }: PipelineBlocksFormProps) {
   const [showAddModal, setShowAddModal] = useState(false);
   const sensors = useSensors(
@@ -59,14 +72,23 @@ export function PipelineBlocksForm({
     if (over && active.id !== over.id) {
       const oldIndex = steps.findIndex((step) => step.id === active.id);
       const newIndex = steps.findIndex((step) => step.id === over.id);
+      // @ts-expect-error, either weave or llm step
       onChange(arrayMove(steps, oldIndex, newIndex));
     }
   };
 
-  const handleBlockChange = (idx: number, action: WeaveAction) => {
-    const newSteps = [...steps];
+  const handleBlockChange = (
+    idx: number,
+    action: WeaveActionType | LlmActionType
+  ) => {
+    const newSteps: WeaveFlowStep[] | LlmFlowStep[] = [...steps] as
+      | WeaveFlowStep[]
+      | LlmFlowStep[];
     const step = newSteps[idx];
-    if (!step) return;
+    if (!step) {
+      return;
+    }
+    // @ts-expect-error, either weave or llm step
     newSteps[idx] = {
       ...step,
       action,
@@ -85,64 +107,128 @@ export function PipelineBlocksForm({
       ...step,
       conditions,
     };
-    onChange(newSteps);
+    onChange(newSteps as WeaveFlowStep[] | LlmFlowStep[]);
   };
 
   const handleDelete = (index: number) => {
     const newSteps = [...steps];
     newSteps.splice(index, 1);
-    onChange(newSteps);
+    onChange(newSteps as WeaveFlowStep[] | LlmFlowStep[]);
   };
 
-  const handleAdd = (type: WeaveAction['type']) => {
-    let action: WeaveAction;
+  const handleAddWeave = (type: WeaveActionType['type']) => {
+    let action: WeaveActionType;
     switch (type) {
       case 'addRequestHeader':
-        action = { type, key: '', value: '' };
+        action = {
+          type,
+          key: '',
+          value: '',
+        } satisfies WeaveAddRequestHeaderAction;
         break;
       case 'removeRequestHeader':
-        action = { type, key: '' };
+        action = { type, key: '' } satisfies WeaveRemoveRequestHeaderAction;
         break;
       case 'setRequestHeader':
-        action = { type, key: '', value: '' };
+        action = {
+          type,
+          key: '',
+          value: '',
+        } satisfies WeaveSetRequestHeaderAction;
         break;
       case 'addResponseHeader':
-        action = { type, key: '', value: '' };
+        action = {
+          type,
+          key: '',
+          value: '',
+        } satisfies WeaveAddResponseHeaderAction;
         break;
       case 'removeResponseHeader':
-        action = { type, key: '' };
+        action = { type, key: '' } satisfies WeaveRemoveResponseHeaderAction;
         break;
       case 'setResponseHeader':
-        action = { type, key: '', value: '' };
+        action = {
+          type,
+          key: '',
+          value: '',
+        } satisfies WeaveSetResponseHeaderAction;
         break;
       case 'updateResponseBody':
-        action = { type, value: '' };
+        action = { type, value: '' } satisfies WeaveUpdateResponseBodyAction;
         break;
       case 'updateResponseStatusCode':
-        action = { type, value: 200 };
+        action = {
+          type,
+          value: 200,
+        } satisfies WeaveUpdateResponseStatusCodeAction;
         break;
       case 'transformData':
-        action = { type, expression: '' };
+        action = { type, expression: '' } satisfies WeaveTransformDataAction;
         break;
       case 'filter':
-        action = { type, expression: '' };
+        action = { type, expression: '' } satisfies WeaveFilterAction;
         break;
       case 'delay':
-        action = { type, ms: 1000 };
+        action = { type, ms: 1000 } satisfies WeaveDelayAction;
         break;
       case 'log':
-        action = { type, message: '' };
+        action = { type, message: '' } satisfies LogAction;
         break;
       case 'setProvider':
-        action = { type, providerId: '' };
+        action = { type, providerId: '' } satisfies SetProviderAction;
         break;
+      default:
+        return;
     }
 
     const newStep: WeaveFlowStep = {
-      id: crypto.randomUUID(),
+      id: generateRandomId(),
       action,
     };
-    onChange([...steps, newStep]);
+    onChange([...steps, newStep] as WeaveFlowStep[] | LlmFlowStep[]);
+  };
+
+  const handleAddLlm = (type: LlmActionType['type']) => {
+    let action: LlmActionType;
+    switch (type) {
+      case 'log':
+        action = { type, message: '' } satisfies LogAction;
+        break;
+      case 'setProvider':
+        action = { type, providerId: '' } satisfies SetProviderAction;
+        break;
+      case 'updatePrompt':
+        action = {
+          type,
+          what: 'prompt',
+          value: '',
+        } satisfies LlmUpdatePromptAction;
+        break;
+      case 'updateModel':
+        action = {
+          type,
+          modelName: '',
+        } satisfies LlmUpdateModelAction;
+        break;
+      default:
+        return;
+    }
+
+    const newStep: LlmFlowStep = {
+      id: generateRandomId(),
+      action,
+    };
+    onChange([...steps, newStep] as WeaveFlowStep[] | LlmFlowStep[]);
+  };
+
+  const handleAdd = (type: WeaveActionType['type'] | LlmActionType['type']) => {
+    if (flowType === 'weave') {
+      handleAddWeave(type as WeaveActionType['type']);
+      setShowAddModal(false);
+      return;
+    }
+
+    handleAddLlm(type as LlmActionType['type']);
     setShowAddModal(false);
   };
 
@@ -181,108 +267,18 @@ export function PipelineBlocksForm({
                       handleConditionChange(index, conditions)
                     }
                   />
-                  {/* Render the correct block form */}
-                  {(() => {
-                    switch (step.action.type) {
-                      case 'addRequestHeader':
-                        return (
-                          <AddRequestHeaderBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'removeRequestHeader':
-                        return (
-                          <RemoveRequestHeaderBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'setRequestHeader':
-                        return (
-                          <SetRequestHeaderBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'addResponseHeader':
-                        return (
-                          <AddResponseHeaderBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'removeResponseHeader':
-                        return (
-                          <RemoveResponseHeaderBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'setResponseHeader':
-                        return (
-                          <SetResponseHeaderBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'updateResponseBody':
-                        return (
-                          <UpdateResponseBodyBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'updateResponseStatusCode':
-                        return (
-                          <UpdateResponseStatusCodeBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'transformData':
-                        return (
-                          <TransformDataBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'filter':
-                        return (
-                          <FilterBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'delay':
-                        return (
-                          <DelayBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'log':
-                        return (
-                          <LogBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      case 'setProvider':
-                        return (
-                          <SetProviderBlock
-                            action={step.action}
-                            onChange={(a) => handleBlockChange(index, a)}
-                          />
-                        );
-                      default:
-                        return (
-                          <Text c="dimmed">
-                            No editable fields for this action.
-                          </Text>
-                        );
-                    }
-                  })()}
+                  {flowType === 'weave' && (
+                    <WeaveAction
+                      action={step.action as WeaveActionType}
+                      onChange={(a) => handleBlockChange(index, a)}
+                    />
+                  )}
+                  {flowType === 'llm' && (
+                    <LlmAction
+                      action={step.action as LlmActionType}
+                      onChange={(a) => handleBlockChange(index, a)}
+                    />
+                  )}
                 </Stack>
               </Paper>
             </SortableBlock>
@@ -303,6 +299,7 @@ export function PipelineBlocksForm({
         onClose={() => setShowAddModal(false)}
         onAdd={handleAdd}
         eventType={eventType}
+        flowType={flowType}
       />
     </Stack>
   );

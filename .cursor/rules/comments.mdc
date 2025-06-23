@@ -1,0 +1,7 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Do not add comments to code, unless the code would be confusing to the reader without.
+Make sure that variable names and function names are self-explanatory.
