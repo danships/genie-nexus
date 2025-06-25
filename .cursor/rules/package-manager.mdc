@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+This repository is a monorepo and is managed with pnpm. Use pnpm for all package manager commands.
