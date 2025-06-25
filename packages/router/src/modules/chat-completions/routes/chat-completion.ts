@@ -27,7 +27,6 @@ import type { Logger } from '@genie-nexus/logger';
 import { type LlmRequestContext, isLlmApiKey } from '@genie-nexus/types';
 import type { HttpRequestHandler } from '../../../core/http/get-handler-using-container.js';
 import { getApiKeyFromResponse } from '../../api-key/middleware/get-api-key-from-response.js';
-// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
 import { ExecuteLlm } from '../../deployments/execute-llm.js';
 import { getDeploymentBySlug } from '../../deployments/get-deployment-by-slug.js';
 import { handleAiSdkStreamResponse } from '../handle-ai-sdk-stream-response.js';
@@ -38,7 +37,7 @@ import { handleAiSdkTextResponse } from '../handle-ai-sdk-text-response.js';
 export class ChatCompletionHandler implements HttpRequestHandler {
   constructor(
     @inject(TypeSymbols.LOGGER) private readonly logger: Logger,
-    private readonly executeLlm: ExecuteLlm
+    @inject(ExecuteLlm) private readonly executeLlm: ExecuteLlm
   ) {}
 
   public async handle(

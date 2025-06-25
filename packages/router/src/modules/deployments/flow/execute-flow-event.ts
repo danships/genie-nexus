@@ -12,21 +12,20 @@ import type {
   WeaveFlow,
   WeaveRequestContext,
 } from '@genie-nexus/types';
-
-// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
 import { EvaluateConditions } from './evaluate-conditions.js';
-// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
 import { ExecuteLlmAction } from './execute-llm-action.js';
-// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
 import { ExecuteWeaveAction } from './execute-weave-action.js';
 
 @singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class ExecuteFlowEvent {
   constructor(
+    @inject(EvaluateConditions)
     private readonly evaluateConditions: EvaluateConditions,
     @inject(TypeSymbols.LOGGER) private readonly logger: Logger,
+    @inject(ExecuteWeaveAction)
     private readonly executeWeaveAction: ExecuteWeaveAction,
+    @inject(ExecuteLlmAction)
     private readonly executeLlmAction: ExecuteLlmAction
   ) {}
 

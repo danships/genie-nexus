@@ -12,7 +12,6 @@ import type {
   OpenAIChatCompletionRequest,
   OpenAIChatMessage,
 } from '../chat-completions/types/openai.js';
-// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
 import { ExecuteFlowEvent } from './flow/execute-flow-event.js';
 
 @singleton()
@@ -23,6 +22,7 @@ export class ExecuteLlm {
     private readonly providerRepository: ProviderRepository,
     @inject(TypeSymbols.LLM_FLOW_REPOSITORY)
     private readonly llmFlowRepository: LlmFlowRepository,
+    @inject(ExecuteFlowEvent)
     private readonly executeFlowEvent: ExecuteFlowEvent,
     @inject(TypeSymbols.LOGGER) private readonly logger: Logger
   ) {}

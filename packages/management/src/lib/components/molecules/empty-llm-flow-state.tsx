@@ -1,4 +1,4 @@
-import { LlmEvent } from '@genie-nexus/types';
+import type { LlmEvent } from '@genie-nexus/types';
 import { Card, Container, Group, Stack, Text, Title } from '@mantine/core';
 import {
   IconBrain,

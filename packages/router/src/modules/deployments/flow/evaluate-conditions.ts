@@ -11,13 +11,13 @@ import type {
   LlmRequestContext,
   WeaveRequestContext,
 } from '@genie-nexus/types';
-// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
 import { EvaluateCondition } from './evaluate-condition.js';
 
 @singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class EvaluateConditions {
   constructor(
+    @inject(EvaluateCondition)
     private readonly evaluateCondition: EvaluateCondition,
     @inject(TypeSymbols.LOGGER) private readonly logger: Logger
   ) {}

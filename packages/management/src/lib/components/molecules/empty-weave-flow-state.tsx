@@ -1,4 +1,4 @@
-import { WeaveEvent } from '@genie-nexus/types';
+import type { WeaveEvent } from '@genie-nexus/types';
 import { Card, Container, Group, Stack, Text, Title } from '@mantine/core';
 import {
   IconArrowRight,
