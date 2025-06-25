@@ -1,0 +1,185 @@
+---
+description: 
+globs: *.ts
+alwaysApply: false
+---
+# Dependency Injection with Tsyringe
+
+This guide explains how dependency injection is implemented in the Genie Nexus project using [Tsyringe](mdc:https:/github.com/microsoft/tsyringe), a lightweight dependency injection container for TypeScript.
+
+## Overview
+
+The project uses Tsyringe for dependency injection to provide a clean separation of concerns and make components easily testable. The dependency injection system is configured in the `@genie-nexus/container` package and used throughout the router application.
+
+## Key Concepts
+
+### Container Structure
+
+The project uses a hierarchical container structure:
+
+- **Root Container**: Contains global dependencies like database connections, repositories, and the main logger
+- **Child Containers**: Created for each HTTP request to provide request-specific dependencies
+
+### Type Symbols
+
+Dependencies are registered using type symbols defined in [type-symbols.ts](mdc:packages/container/src/type-symbols.ts):
+
+## HTTP Request-Specific Dependencies
+
+### Child Containers
+
+For HTTP requests, child containers are created to provide request-specific dependencies. This is handled by the `getHandlerUsingContainer` function in [get-handler-using-container.ts](mdc:packages/router/src/core/http/get-handler-using-container.ts):
+
+This approach ensures that:
+
+- Each request gets its own logger instance with request-specific metadata (transaction ID, tenant ID)
+- Dependencies are properly scoped to the request lifecycle
+- No cross-contamination between concurrent requests
+
+### Request-Specific Logging
+
+The child container pattern is particularly important for logging, as it allows each request to have its own logger instance with contextual information:
+
+- **Transaction ID**: Unique identifier for each request
+- **Tenant ID**: For multi-tenant setups, identifies which tenant the request belongs to
+- **Request-specific metadata**: Any additional context needed for debugging
+
+## Explicit @inject Annotations
+
+### Why Explicit Annotations?
+
+Due to limitations in Biome's understanding of type vs non-type imports for `linter/rules/style/useImportType` rule, the project uses explicit `@inject()` annotations for all dependencies, even those that could be resolved automatically.
+
+### Annotation Pattern
+
+All injectable classes follow this pattern:
+
+```typescript
+import { inject, singleton, scoped, Lifecycle } from "@genie-nexus/container";
+import { TypeSymbols } from "@genie-nexus/container";
+
+@singleton()
+@scoped(Lifecycle.ContainerScoped)
+export class ChatCompletionHandler implements HttpRequestHandler {
+  constructor(
+    @inject(TypeSymbols.LOGGER) private readonly logger: Logger,
+    @inject(ExecuteLlm) private readonly executeLlm: ExecuteLlm
+  ) {}
+
+  // ... implementation
+}
+```
+
+### Lifecycle Scopes
+
+The project uses different lifecycle scopes:
+
+- **`@singleton()`**: Single instance for the entire application
+- **`@scoped(Lifecycle.ContainerScoped)`**: One instance per container (useful for request-scoped dependencies)
+
+## Dependency Registration
+
+### Initialization - Router
+
+Dependencies are registered during application startup in [initialize.ts](mdc:packages/router/src/core/dependency-injection/initialize.ts):
+
+### Next.js Management App Initialization
+
+The Next.js management app uses a simpler initialization approach compared to the router. The container is initialized on-demand using the `getContainer()` function in [get-container.ts](mdc:packages/management/src/lib/core/get-container.ts). The lazy approach is needed because next.js does not offer a
+single starting point where the container can be initialized and after that reliably used everywhere.
+
+This approach:
+
+- **Lazy Initialization**: The container is only initialized when first accessed
+- **Singleton Pattern**: Ensures the logger is registered only once across the application lifecycle
+- **Environment Configuration**: Uses `LOG_LEVEL` environment variable with 'info' as default
+- **App-Specific Context**: Uses 'gnxs-m' as the app identifier for the management interface
+
+## Best Practices
+
+### 1. Always Use @inject Annotations
+
+Even for dependencies that could be auto-resolved, use explicit `@inject()` annotations:
+
+```typescript
+// ✅ Correct
+constructor(
+  @inject(TypeSymbols.LOGGER) private readonly logger: Logger,
+  @inject(ExecuteLlm) private readonly executeLlm: ExecuteLlm
+) {}
+
+// ❌ Avoid (may not work with Biome, it will rewrite it to a type import, which tsyringe cannot resolve)
+constructor(
+  private readonly logger: Logger,
+  private readonly executeLlm: ExecuteLlm
+) {}
+```
+
+### 2. Use Appropriate Lifecycle Scopes
+
+- Use `@singleton()` for stateless services and repositories
+- Use `@scoped(Lifecycle.ContainerScoped)` for request-scoped dependencies
+- Avoid `@scoped(Lifecycle.ResolutionScoped)` unless specifically needed
+
+### 3. Register Dependencies in Initialize
+
+All dependencies should be registered during the initialization phase to ensure they're available when the application starts.
+
+### 4. Use Type Symbols for Registration
+
+Always use type symbols when registering dependencies to maintain consistency and avoid string literals:
+
+```typescript
+// ✅ Correct
+container.register<Logger>(TypeSymbols.LOGGER, {
+  useValue: logger,
+});
+
+// ❌ Avoid
+container.register("LOGGER", {
+  useValue: logger,
+});
+```
+
+## Testing
+
+### Mocking Dependencies
+
+When testing components that use dependency injection, you can create test containers with mocked dependencies:
+
+```typescript
+import { container } from "@genie-nexus/container";
+import { TypeSymbols } from "@genie-nexus/container";
+
+// Create a test container
+const testContainer = container.createChildContainer();
+
+// Register mock dependencies
+testContainer.register(TypeSymbols.LOGGER, {
+  useValue: mockLogger,
+});
+
+// Resolve the component under test
+const handler = testContainer.resolve(ChatCompletionHandler);
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Missing @inject Annotation**: If a dependency isn't being injected, ensure you have the `@inject()` annotation
+2. **Not Registered**: Check that the dependency is registered in the initialization phase
+3. **Wrong Lifecycle**: Ensure the lifecycle scope matches your use case
+4. **Circular Dependencies**: Avoid circular dependencies between services
+
+### Debugging
+
+Use the container's registration information to debug dependency issues:
+
+```typescript
+// Check if a dependency is registered
+console.log(container.isRegistered(TypeSymbols.LOGGER));
+
+// List all registered dependencies
+console.log(container.getAllRegistered());
+```

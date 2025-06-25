@@ -11,9 +11,7 @@ import type {
   LlmRequestContext,
   WeaveRequestContext,
 } from '@genie-nexus/types';
-// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
 import { GetLlmFieldValue } from './get-llm-field-value.js';
-// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
 import { GetWeaveFieldValue } from './get-weave-field-value.js';
 
 @singleton()
@@ -21,7 +19,9 @@ import { GetWeaveFieldValue } from './get-weave-field-value.js';
 export class EvaluateCondition {
   constructor(
     @inject(TypeSymbols.LOGGER) private readonly logger: Logger,
+    @inject(GetWeaveFieldValue)
     private readonly getWeaveFieldValue: GetWeaveFieldValue,
+    @inject(GetLlmFieldValue)
     private readonly getLlmFieldValue: GetLlmFieldValue
   ) {}
 

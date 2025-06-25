@@ -15,7 +15,6 @@ import type { WeaveRequestContext } from '@genie-nexus/types';
 import { proxyRequest } from '../../weave-providers/http-proxy/proxy.js';
 import { generateStaticResponse } from '../../weave-providers/static/generate-static-response.js';
 import type { ProviderResponse } from '../../weave-providers/types.js';
-// biome-ignore lint/style/useImportType: We need this to be the actual class, because of the DI.
 import { ExecuteFlowEvent } from './flow/execute-flow-event.js';
 
 @singleton()
@@ -26,6 +25,7 @@ export class ExecuteWeave {
     private readonly providerRepository: ProviderRepository,
     @inject(TypeSymbols.WEAVE_FLOW_REPOSITORY)
     private readonly flowRepository: WeaveFlowRepository,
+    @inject(ExecuteFlowEvent)
     private readonly executeFlowEvent: ExecuteFlowEvent
   ) {}
 
