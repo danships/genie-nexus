@@ -6,6 +6,7 @@ export * from './types/providers.js';
 export * from './types/deployments.js';
 export * from './types/api-keys.js';
 export * from './types/tenants.js';
+export * from './types/configuration.js';
 
 export * from './types/weave-flow.js';
 export * from './types/llm-flow.js';
