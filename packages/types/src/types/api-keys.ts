@@ -1,12 +1,12 @@
 import type { z } from 'zod';
 import type {
+  apiKeySchema,
+  apiKeySchemaApi,
   llmApiKeySchema,
+  llmApiKeySchemaApi,
   managementKeySchema,
   weaveApiKeySchema,
-  apiKeySchema,
-  llmApiKeySchemaApi,
   weaveApiKeySchemaApi,
-  apiKeySchemaApi,
 } from '../schemas/api-keys.js';
 import type { WithId } from './api.js';
 

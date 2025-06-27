@@ -30,7 +30,7 @@
         "noUnusedVariables": "error",
         "useArrayLiterals": "off",
         "noUnusedImports": "error",
-        "noUndeclaredDependencies": "off"
+        "noUndeclaredDependencies": "error"
       },
       "style": {
         "noNamespace": "error",

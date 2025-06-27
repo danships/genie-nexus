@@ -4,8 +4,8 @@ import '@mantine/notifications/styles.css';
 import '@lib/style/main.css';
 import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { isAuthOnboardingRedirectNeeded } from './_actions';
 
 const theme = createTheme({

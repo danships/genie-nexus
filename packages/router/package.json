@@ -11,8 +11,8 @@
     "dev": "tsc-watch --onSuccess \"node --enable-source-maps dist/server.js\"",
     "test": "vitest",
     "clean": "rimraf dist",
-    "format:biome": "biome check --write .",
-    "lint:biome": "biome lint ."
+    "format:biome": "biome check --write --config-path=biome.ci.json .",
+    "lint:biome": "biome check --config-path=biome.ci.json ."
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.18",

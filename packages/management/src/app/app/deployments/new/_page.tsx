@@ -8,6 +8,7 @@ import type {
 import { ENDPOINT_DEPLOYMENTS_OVERVIEW } from '@lib/api/swr-constants';
 import { useCudApi } from '@lib/api/use-api';
 import { disableSSR } from '@lib/components/atoms/disable-ssr';
+import { generateRandomId } from '@lib/core/generate-random-id';
 import { Button, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -33,6 +34,8 @@ export const NewDeploymentPage = disableSSR(function () {
         active: true,
         defaultProviderId: '', // we accept that it is empty for now
         model: 'to be filled in',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
       void mutate(ENDPOINT_DEPLOYMENTS_OVERVIEW);
       router.push(`/app/deployments/${llmDeploymentCreated.data.id}/edit`);
@@ -50,10 +53,12 @@ export const NewDeploymentPage = disableSSR(function () {
       >('/collections/deployments', {
         type: 'weave',
         name: 'New Weave Deployment',
-        slug: `weave-${crypto.randomUUID().split('-')[0]}`,
+        slug: `weave-${generateRandomId()}`,
         active: true,
         defaultProviderId: '', // we accept that it is empty for now
         requiresApiKey: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
       void mutate(ENDPOINT_DEPLOYMENTS_OVERVIEW);
       router.push(`/app/deployments/${weaveDeploymentCreated.data.id}/edit`);

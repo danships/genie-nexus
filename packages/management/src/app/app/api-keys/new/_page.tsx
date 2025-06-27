@@ -121,7 +121,7 @@ export const NewApiKeyPage = disableSSR(function () {
         <Stack>
           <Text>
             Your API key has been created successfully. Please copy it now as
-            you won&quot;t be able to see it again.
+            you won&apos;t be able to see it again.
           </Text>
 
           {createdKey && (
@@ -140,12 +140,12 @@ export const NewApiKeyPage = disableSSR(function () {
           )}
 
           <Text size="sm" c="dimmed">
-            Make sure to store this key in a secure location. You won&quot;t be
+            Make sure to store this key in a secure location. You won&apos;t be
             able to see it again after closing this dialog.
           </Text>
 
           <Group justify="flex-end" mt="md">
-            <Button onClick={handleCloseModal}>I&quot;ve copied the key</Button>
+            <Button onClick={handleCloseModal}>I&apos;ve copied the key</Button>
           </Group>
         </Stack>
       </Modal>

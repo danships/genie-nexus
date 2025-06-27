@@ -1,13 +1,5 @@
 import { z } from 'zod';
-
-// Base schemas
-const baseEntitySchema = z.object({
-  id: z.string(),
-});
-
-const entityWithTenantIdSchema = baseEntitySchema.extend({
-  tenantId: z.string(),
-});
+import { entityWithTenantIdSchema } from './shared.js';
 
 // API Deployment schemas (without id and tenantId)
 const baseDeploymentSchemaApi = z.object({
@@ -24,6 +16,8 @@ const baseDeploymentSchemaApi = z.object({
   defaultProviderId: z.string(),
   isDeleted: z.boolean().optional(),
   deletedAt: z.string().datetime().optional(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
 });
 
 export const deploymentLLMSchemaApi = baseDeploymentSchemaApi.extend({

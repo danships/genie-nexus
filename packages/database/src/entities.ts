@@ -10,6 +10,7 @@ export const Provider: Collection = {
     tenantId: 'string',
     isDeleted: 'boolean',
     type: 'string',
+    updatedAt: 'string',
   },
   hooks: [
     {
@@ -35,6 +36,7 @@ export const Deployment: Collection = {
     tenantId: 'string',
     isDeleted: 'boolean',
     type: 'string',
+    updatedAt: 'string',
   },
 };
 
@@ -46,6 +48,7 @@ export const ApiKey: Collection = {
     label: 'string',
     key: 'string',
     tenantId: 'string',
+    createdAt: 'string',
   },
   hooks: [
     {

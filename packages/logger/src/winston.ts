@@ -1,8 +1,8 @@
 import {
+  type Logger as WinstonLogger,
   createLogger,
   format,
   transports,
-  type Logger as WinstonLogger,
 } from 'winston';
 import type { Logger } from './index.js';
 

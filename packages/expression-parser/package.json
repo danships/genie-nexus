@@ -12,8 +12,8 @@
     "test": "vitest",
     "test:once": "vitest run",
     "clean": "rimraf dist",
-    "format:biome": "biome check --write .",
-    "lint:biome": "biome lint ."
+    "format:biome": "biome check --write --config-path=biome.ci.json .",
+    "lint:biome": "biome check --config-path=biome.ci.json ."
   },
   "dependencies": {
     "acorn": "^8.14.1",

@@ -7,12 +7,12 @@ import type {
   equalsConditionSchema,
   isEmptyConditionSchema,
   isNotEmptyConditionSchema,
-  notEqualsConditionSchema,
   logActionSchema,
+  notEqualsConditionSchema,
   setProviderActionSchema,
 } from '../schemas/flow.js';
-import type { WeaveAction, WeaveFlow } from './weave-flow.js';
 import type { LlmAction, LlmFlow } from './llm-flow.js';
+import type { WeaveAction, WeaveFlow } from './weave-flow.js';
 
 export type EqualsCondition = z.infer<typeof equalsConditionSchema>;
 export type NotEqualsCondition = z.infer<typeof notEqualsConditionSchema>;

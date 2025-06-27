@@ -5,5 +5,6 @@ export function generateDefaultTenant(): Tenant {
   return {
     id: DEFAULT_TENANT_ID,
     name: 'Default',
+    createdAt: new Date().toISOString(),
   };
 }

@@ -9,8 +9,8 @@
     "dev": "tsc -w",
     "build": "tsc",
     "clean": "rimraf dist",
-    "format:biome": "biome check --write .",
-    "lint:biome": "biome lint ."
+    "format:biome": "biome check --write --config-path=biome.ci.json .",
+    "lint:biome": "biome check --config-path=biome.ci.json ."
   },
   "dependencies": {
     "debug": "^4.4.1",

@@ -6,8 +6,8 @@ import { useApi } from '@lib/api/use-api';
 import { Loader } from '@lib/components/atoms/loader';
 import { PageTitle } from '@lib/components/atoms/page-title';
 import { WeaveIcon } from '@lib/components/atoms/weave-icon';
-import { FlowEditorCard } from '@lib/components/molecules/flow-editor-card';
 import { DetailCard } from '@lib/components/molecules/detail-card';
+import { FlowEditorCard } from '@lib/components/molecules/flow-editor-card';
 import { useServerUrl } from '@lib/hooks/use-server-url';
 import {
   ActionIcon,

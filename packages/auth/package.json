@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc",
-    "format:biome": "biome check --write .",
-    "lint:biome": "biome lint ."
+    "format:biome": "biome check --write --config-path=biome.ci.json .",
+    "lint:biome": "biome check --config-path=biome.ci.json ."
   },
   "files": ["dist"],
   "devDependencies": {

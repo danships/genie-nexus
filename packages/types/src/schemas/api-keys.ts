@@ -1,13 +1,5 @@
 import { z } from 'zod';
-
-// Base schemas
-const baseEntitySchema = z.object({
-  id: z.string(),
-});
-
-const entityWithTenantIdSchema = baseEntitySchema.extend({
-  tenantId: z.string(),
-});
+import { entityWithTenantIdSchema } from './shared.js';
 
 // API API Key schemas (without id and tenantId)
 const baseApiKeySchemaApi = z.object({

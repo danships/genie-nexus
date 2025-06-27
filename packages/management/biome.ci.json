@@ -1,0 +1,14 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "extends": ["../../biome.ci.json"],
+  "files": {
+    "ignore": [".next/**/*.*", "dist/**/*.*"]
+  },
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noUndeclaredDependencies": "off"
+      }
+    }
+  }
+}

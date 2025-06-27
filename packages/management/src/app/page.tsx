@@ -1,18 +1,20 @@
-import { Button, Container, Text, Title } from '@mantine/core';
-import Link from 'next/link';
+import { getAuthMethod } from '@lib/auth/get-auth-method';
+import { getNextAuth } from '@lib/auth/next-auth';
+import { redirect } from 'next/navigation';
+import { HomePageClient } from './_page';
 
-export default function HomePage() {
-  return (
-    <Container size="md" py="xl">
-      <Title order={1} ta="center" mb="lg">
-        Welcome to Genie Nexus
-      </Title>
-      <Text size="lg" ta="center" c="dimmed">
-        Your AI-powered management interface
-      </Text>
-      <Button component={Link} href="/app">
-        Manage
-      </Button>
-    </Container>
-  );
+export default async function HomePage() {
+  if ((await getAuthMethod()) === 'none') {
+    redirect('/app');
+  }
+
+  const { auth } = await getNextAuth();
+  const session = await auth();
+  const authorized = !!session?.user;
+
+  if (authorized) {
+    redirect('/app');
+  }
+
+  return <HomePageClient />;
 }
