@@ -39,6 +39,8 @@ export default function NewProviderClientPage() {
             name: values.name,
             apiKey: 'sk-',
             baseURL: 'https://api.openai.com/v1',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           };
           const openaiCreateResponse = await post<
             { data: Provider },
@@ -50,6 +52,8 @@ export default function NewProviderClientPage() {
           const staticProvider: StaticLlmProviderApi = {
             type: 'static',
             name: values.name,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           };
           const response = await post<{ data: Provider }, StaticLlmProviderApi>(
             ENDPOINT_PROVIDERS_OVERVIEW,
@@ -62,6 +66,8 @@ export default function NewProviderClientPage() {
             type: 'http-proxy',
             name: values.name,
             baseUrl: 'https://',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           };
           const httpProxyCreateResponse = await post<
             { data: Provider },
@@ -73,6 +79,8 @@ export default function NewProviderClientPage() {
           const httpStaticProvider: WeaveHttpStaticProviderApi = {
             type: 'http-static',
             name: values.name,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           };
           const httpStaticCreateResponse = await post<
             { data: Provider },
@@ -85,6 +93,8 @@ export default function NewProviderClientPage() {
             type: 'google',
             name: values.name,
             apiKey: '',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           };
           const googleCreateResponse = await post<
             { data: Provider },

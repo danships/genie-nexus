@@ -9,7 +9,15 @@ import {
   UnstyledButton,
 } from '@mantine/core';
 import { useMantineColorScheme } from '@mantine/core';
-import { IconMoon, IconSettings, IconSun } from '@tabler/icons-react';
+import {
+  IconDashboard,
+  IconKey,
+  IconMoon,
+  IconRocket,
+  IconServer,
+  IconSettings,
+  IconSun,
+} from '@tabler/icons-react';
 import Link from 'next/link';
 import { useCallback } from 'react';
 
@@ -26,14 +34,29 @@ export const Navbar = ({ authMethod }: { authMethod: AuthMethod }) => {
     <Stack h="100%" justify="space-between">
       <ScrollAreaAutosize>
         <Stack>
+          <UnstyledButton component={Link} href="/app">
+            <Group gap="sm">
+              <IconDashboard size={18} />
+              <Text fw={500}>Dashboard</Text>
+            </Group>
+          </UnstyledButton>
           <UnstyledButton component={Link} href="/app/deployments">
-            <Text fw={500}>Deployments</Text>
+            <Group gap="sm">
+              <IconRocket size={18} />
+              <Text fw={500}>Deployments</Text>
+            </Group>
           </UnstyledButton>
           <UnstyledButton component={Link} href="/app/providers">
-            <Text fw={500}>Providers</Text>
+            <Group gap="sm">
+              <IconServer size={18} />
+              <Text fw={500}>Providers</Text>
+            </Group>
           </UnstyledButton>
           <UnstyledButton component={Link} href="/app/api-keys">
-            <Text fw={500}>API Keys</Text>
+            <Group gap="sm">
+              <IconKey size={18} />
+              <Text fw={500}>API Keys</Text>
+            </Group>
           </UnstyledButton>
         </Stack>
       </ScrollAreaAutosize>

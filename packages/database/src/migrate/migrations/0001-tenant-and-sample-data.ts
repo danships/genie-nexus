@@ -18,13 +18,16 @@ const DEFAULT_TENANT_ID = 'default';
 
 export const tenantAndSampleData: MigrationDefinition = {
   migrate: async function migration0001(superSave: SuperSave) {
+    const currentTimestamp = new Date().toISOString();
+
     const tenantRepository = superSave.getRepository<TenantType>(Tenant.name);
 
     await tenantRepository.create({
       // @ts-expect-error - Supersave allows specifying the id, but does not reflect that in the typings.
       id: DEFAULT_TENANT_ID,
       name: 'Default Tenant',
-    } satisfies Omit<TenantType, 'id'>);
+      createdAt: currentTimestamp,
+    } satisfies TenantType);
 
     const providerRepository = superSave.getRepository<ProviderType>(
       Provider.name
@@ -33,6 +36,8 @@ export const tenantAndSampleData: MigrationDefinition = {
       name: 'Static Echo Provider',
       tenantId: DEFAULT_TENANT_ID,
       type: 'static',
+      createdAt: currentTimestamp,
+      updatedAt: currentTimestamp,
     } satisfies Omit<ProviderType, 'id'>);
 
     const deploymentRepository = superSave.getRepository<DeploymentType>(
@@ -46,6 +51,8 @@ export const tenantAndSampleData: MigrationDefinition = {
       defaultProviderId: createdLlmProvider.id,
       model: 'static',
       type: 'llm',
+      createdAt: currentTimestamp,
+      updatedAt: currentTimestamp,
     };
     await deploymentRepository.create(staticEchoDeployment);
 
@@ -67,6 +74,8 @@ export const tenantAndSampleData: MigrationDefinition = {
           value: 'it is done.',
         },
       ],
+      createdAt: currentTimestamp,
+      updatedAt: currentTimestamp,
     };
     const staticHttpProvider = await providerRepository.create(
       staticHttpProviderToCreate
@@ -82,6 +91,8 @@ export const tenantAndSampleData: MigrationDefinition = {
       // @ts-expect-error TODO the discriminated union does not work with the zod schemas
       requiresApiKey: false,
       supportedMethods: ['get'],
+      createdAt: currentTimestamp,
+      updatedAt: currentTimestamp,
     } satisfies Omit<DeploymentWeave, 'id'>);
 
     const proxyHttpProviderToCreate: Omit<WeaveHttpProxyProvider, 'id'> = {
@@ -96,6 +107,8 @@ export const tenantAndSampleData: MigrationDefinition = {
           value: 'application/json',
         },
       ],
+      createdAt: currentTimestamp,
+      updatedAt: currentTimestamp,
     };
     const proxyHttpProvider = await providerRepository.create(
       proxyHttpProviderToCreate
@@ -110,6 +123,8 @@ export const tenantAndSampleData: MigrationDefinition = {
       type: 'weave',
       requiresApiKey: false,
       supportedMethods: ['get'],
+      createdAt: currentTimestamp,
+      updatedAt: currentTimestamp,
     };
     await deploymentRepository.create(deploymentToCreate);
   },

@@ -1,11 +1,11 @@
 import type { z } from 'zod';
 import type {
   deploymentLLMSchema,
-  deploymentWeaveSchema,
-  deploymentSchema,
   deploymentLLMSchemaApi,
-  deploymentWeaveSchemaApi,
+  deploymentSchema,
   deploymentSchemaApi,
+  deploymentWeaveSchema,
+  deploymentWeaveSchemaApi,
 } from '../schemas/deployments.js';
 import type { WithId } from './api.js';
 

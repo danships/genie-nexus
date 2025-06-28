@@ -6,7 +6,9 @@
     "build": "NODE_OPTIONS=\"--require reflect-metadata\" NEXT_BUILD=true next build",
     "start": "NODE_OPTIONS=\"--require reflect-metadata\" next start",
     "lint": "next lint",
-    "lint:tsc": "tsc --noEmit"
+    "lint:tsc": "tsc --noEmit",
+    "format:biome": "biome check --write --config-path=biome.ci.json .",
+    "lint:biome": "biome check --config-path=biome.ci.json ."
   },
   "packageManager": "pnpm@10.10.0",
   "type": "module",

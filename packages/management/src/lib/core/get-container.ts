@@ -1,5 +1,5 @@
+import { TypeSymbols, container } from '@genie-nexus/container';
 import { LoggerImplementation } from '@genie-nexus/logger/winston';
-import { container, TypeSymbols } from '@genie-nexus/container';
 
 export function getContainer() {
   if (!container.isRegistered(TypeSymbols.LOGGER)) {

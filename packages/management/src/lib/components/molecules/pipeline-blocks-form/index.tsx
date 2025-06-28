@@ -14,37 +14,37 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import type {
-  WeaveAction as WeaveActionType,
   Condition,
-  WeaveFlowStep,
-  LlmFlowStep,
   LlmAction as LlmActionType,
-  WeaveAddRequestHeaderAction,
-  WeaveRemoveRequestHeaderAction,
-  WeaveSetRequestHeaderAction,
-  WeaveAddResponseHeaderAction,
-  WeaveRemoveResponseHeaderAction,
-  WeaveSetResponseHeaderAction,
-  WeaveUpdateResponseStatusCodeAction,
-  WeaveUpdateResponseBodyAction,
-  WeaveTransformDataAction,
-  WeaveFilterAction,
-  WeaveDelayAction,
+  LlmFlowStep,
+  LlmUpdateModelAction,
+  LlmUpdatePromptAction,
   LogAction,
   SetProviderAction,
-  LlmUpdatePromptAction,
-  LlmUpdateModelAction,
+  WeaveAction as WeaveActionType,
+  WeaveAddRequestHeaderAction,
+  WeaveAddResponseHeaderAction,
+  WeaveDelayAction,
+  WeaveFilterAction,
+  WeaveFlowStep,
+  WeaveRemoveRequestHeaderAction,
+  WeaveRemoveResponseHeaderAction,
+  WeaveSetRequestHeaderAction,
+  WeaveSetResponseHeaderAction,
+  WeaveTransformDataAction,
+  WeaveUpdateResponseBodyAction,
+  WeaveUpdateResponseStatusCodeAction,
 } from '@genie-nexus/types';
+import { generateRandomId } from '@lib/core/generate-random-id';
 import { Button, Code, Group, Paper, Stack, Text } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
 import { AddBlockModal } from './add-block-modal';
 import { ConditionEditor } from './condition-editor';
+import { LlmAction } from './llm-action';
 import { SortableBlock } from './sortable-block';
 import { getActionLabel } from './types';
-import { generateRandomId } from '@lib/core/generate-random-id';
 import { WeaveAction } from './weave-action';
-import { LlmAction } from './llm-action';
 
 type PipelineBlocksFormProps = {
   steps: WeaveFlowStep[] | LlmFlowStep[];

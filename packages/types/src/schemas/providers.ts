@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { entityWithTenantIdSchema } from './shared.js';
 
 // Header Definition schema (used by providers)
 export const headerDefinitionSchema = z.object({
@@ -7,17 +8,10 @@ export const headerDefinitionSchema = z.object({
   value: z.string().optional(),
 });
 
-// Base schemas
-const baseEntitySchema = z.object({
-  id: z.string(),
-});
-
-const entityWithTenantIdSchema = baseEntitySchema.extend({
-  tenantId: z.string(),
-});
-
 const baseProviderSchema = z.object({
   name: z.string(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
   isDeleted: z.boolean().optional(),
   deletedAt: z.string().datetime().optional(),
 });

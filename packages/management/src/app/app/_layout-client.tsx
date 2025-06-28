@@ -7,6 +7,7 @@ import { AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { SessionProvider } from 'next-auth/react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const AppLayoutClient = ({
   children,
@@ -41,13 +42,15 @@ const AppLayoutClient = ({
               hiddenFrom="sm"
               size="sm"
             />
-            <Image
-              src="/icons/genie-nexus.svg"
-              alt="Genie Nexus"
-              width="48"
-              height="48"
-              priority
-            />
+            <Link href="/app">
+              <Image
+                src="/icons/genie-nexus.svg"
+                alt="Genie Nexus"
+                width="48"
+                height="48"
+                priority
+              />
+            </Link>
           </Group>
         </AppShell.Header>
         <AppShell.Navbar p="md">

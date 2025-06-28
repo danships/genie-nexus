@@ -31,7 +31,9 @@ type Properties = {
 };
 
 export function DeploymentLlmFormClientPage({ deployment }: Properties) {
-  const form = useForm<Omit<DeploymentLLMApi, 'id'>>({
+  const form = useForm<
+    Omit<DeploymentLLMApi, 'id' | 'createdAt' | 'updatedAt'>
+  >({
     initialValues: {
       type: 'llm',
       name: deployment.name,
@@ -78,12 +80,17 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
     );
   }, [providers]);
 
-  const handleSubmit = async (values: Omit<DeploymentLLMApi, 'id'>) => {
+  const handleSubmit = async (
+    values: Omit<DeploymentLLMApi, 'id' | 'updatedAt' | 'createdAt'>
+  ) => {
     try {
-      await patch<{ data: Deployment }, Omit<DeploymentLLMApi, 'id'>>(
-        `/collections/deployments/${deployment.id}`,
-        values
-      );
+      await patch<
+        { data: Deployment },
+        Omit<DeploymentLLMApi, 'id' | 'createdAt'>
+      >(`/collections/deployments/${deployment.id}`, {
+        ...values,
+        updatedAt: new Date().toISOString(),
+      });
       void mutate(ENDPOINT_DEPLOYMENTS_OVERVIEW);
       notifications.show({
         title: 'Success',
