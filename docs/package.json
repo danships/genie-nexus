@@ -1,0 +1,11 @@
+{
+  "name": "@genie-nexus/docs",
+  "private": true,
+  "scripts": {
+    "dev": "docmd dev",
+    "build": "docmd build"
+  },
+  "devDependencies": {
+    "@mgks/docmd": "^0.1.4"
+  }
+}
