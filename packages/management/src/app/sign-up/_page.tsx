@@ -4,11 +4,14 @@ import { ErrorNotification } from '@lib/components/atoms/error-notification';
 import { PageTitle } from '@lib/components/atoms/page-title';
 import { useChangeData } from '@lib/hooks/use-change-data';
 import {
+  Anchor,
   Button,
+  Checkbox,
   Container,
   Paper,
   PasswordInput,
   Stack,
+  Text,
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -20,6 +23,7 @@ type FormValues = {
   email: string;
   password: string;
   confirmPassword: string;
+  acceptTerms: boolean;
 };
 
 export function SignUpClientPage() {
@@ -32,6 +36,11 @@ export function SignUpClientPage() {
       email: '',
       password: '',
       confirmPassword: '',
+      acceptTerms: false,
+    },
+    validate: {
+      acceptTerms: (value) =>
+        !value ? 'You must accept the terms and conditions' : null,
     },
   });
 
@@ -73,6 +82,29 @@ export function SignUpClientPage() {
               label="Confirm Password"
               required
               {...form.getInputProps('confirmPassword')}
+            />
+            <Checkbox
+              label={
+                <Text size="sm">
+                  I accept the Genie Nexus{' '}
+                  <Anchor
+                    href="https://www.gnxs.io/pages/terms?ref=sh-sign-up"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Terms & Conditions
+                  </Anchor>{' '}
+                  and{' '}
+                  <Anchor
+                    href="https://www.gnxs.io/pages/privacy?ref=sh-sign-up"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Privacy Policy
+                  </Anchor>
+                </Text>
+              }
+              {...form.getInputProps('acceptTerms', { type: 'checkbox' })}
             />
             {error && <ErrorNotification>{error}</ErrorNotification>}
             <Button type="submit" loading={inProgress}>
