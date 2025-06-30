@@ -15,22 +15,11 @@ function getServerConfigurationValue<T>(
     return defaultValue;
   }
 
-function getServerConfigurationValue<T>(
-  configuration: StoredConfiguration | null,
-  key: SERVER_CONFIGURATION_KEYS,
-  defaultValue: T
-): T {
-  if (configuration?.values[key] === undefined) {
-    return defaultValue;
-  }
-
   const value = configuration?.values[key];
-  // Add basic type validation based on defaultValue type
   if (typeof value !== typeof defaultValue) {
     return defaultValue;
   }
   return value as T;
-}
 }
 
 export async function getServerConfiguration(
