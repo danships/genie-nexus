@@ -1,6 +1,8 @@
-import { serverLogger } from '@lib/core/server-logger';
 import { getNextAuth } from '../next-auth';
 import 'server-only';
+import { TypeSymbols } from '@genie-nexus/container';
+import type { Logger } from '@genie-nexus/logger';
+import { getContainer } from '@lib/core/get-container';
 
 export function useUserIsRequired() {
   return async function () {
@@ -8,7 +10,9 @@ export function useUserIsRequired() {
     const session = await auth();
 
     if (!session?.user?.email) {
-      serverLogger.error('No user details set in session.');
+      const logger = (await getContainer()).resolve<Logger>(TypeSymbols.LOGGER);
+
+      logger.error('No user details set in session.');
       await signIn();
       return;
     }

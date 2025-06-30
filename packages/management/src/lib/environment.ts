@@ -19,4 +19,5 @@ export const environment = cleanEnv(process.env, {
     choices: ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'],
     default: 'INFO',
   }),
+  HOST_PREFIX: str({ default: 'http://localhost:3000' }),
 });

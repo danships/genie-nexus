@@ -6,3 +6,17 @@ export type ConfigurationResponse = DataWrapper<{
   defaultTenant: boolean;
   authentication: 'none' | 'credentials';
 }>;
+
+export type StoredConfiguration = {
+  tenantId?: string;
+  key: string;
+  values: Record<string, string | boolean | number>;
+};
+
+/**
+ * Configuration values specifically for the server.
+ */
+export type ServerConfiguration = {
+  telemetryEnabled: boolean;
+  registrationEnabled: boolean;
+};

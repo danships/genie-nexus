@@ -5,12 +5,14 @@ import {
   type LlmFlowRepository,
   type NextAuthUserRepository,
   type ProviderRepository,
+  type StoredConfigurationRepository,
   type TenantRepository,
   type WeaveFlowRepository,
   getApiKeyRepository,
   getDeploymentRepository,
   getLlmFlowRepository,
   getNextAuthUserRepository,
+  getStoredConfigurationRepository,
   getTenantRepository,
   getWeaveFlowRepository,
 } from '@genie-nexus/database';
@@ -85,4 +87,13 @@ export async function initialize(options: Options) {
   container.register<LlmFlowRepository>(TypeSymbols.LLM_FLOW_REPOSITORY, {
     useValue: llmFlowRepository,
   });
+
+  const storedConfigurationRepository =
+    await getStoredConfigurationRepository();
+  container.register<StoredConfigurationRepository>(
+    TypeSymbols.STORED_CONFIGURATION_REPOSITORY,
+    {
+      useValue: storedConfigurationRepository,
+    }
+  );
 }
