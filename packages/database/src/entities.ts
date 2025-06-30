@@ -116,3 +116,13 @@ export const LlmFlow: Collection = {
     isDeleted: 'boolean',
   },
 };
+
+export const StoredConfiguration: EntityDefinition = {
+  name: 'storedconfiguration',
+  relations: [],
+  template: {},
+  filterSortFields: {
+    tenantId: 'string',
+    key: 'string',
+  },
+};

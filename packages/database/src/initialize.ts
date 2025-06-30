@@ -8,6 +8,7 @@ import {
   Migration,
   NextAuthUser,
   Provider,
+  StoredConfiguration,
   Tenant,
   WeaveFlow,
 } from './entities.js';
@@ -53,6 +54,7 @@ export async function initialize({
   await db.addCollection(addHooksToCollection(Migration, hooks));
 
   await db.addEntity(NextAuthUser);
+  await db.addEntity(StoredConfiguration);
 
   if (executeMigrations) {
     await migrate(db);

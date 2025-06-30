@@ -29,3 +29,5 @@ export interface Migration extends BaseEntity {
 }
 
 export type NextAuthUser = dbTypes.NextAuthUser;
+
+export type StoredConfiguration = dbTypes.StoredConfiguration;

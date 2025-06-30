@@ -1,0 +1,21 @@
+{
+  "name": "@genie-nexus/configuration",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "format:biome": "biome check --write --config-path=biome.ci.json .",
+    "lint:biome": "biome check --config-path=biome.ci.json ."
+  },
+  "files": ["dist"],
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "@genie-nexus/database": "workspace:*",
+    "@genie-nexus/types": "workspace:*"
+  }
+}

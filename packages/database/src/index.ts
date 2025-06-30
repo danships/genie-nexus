@@ -5,6 +5,7 @@ import {
   LlmFlow,
   NextAuthUser,
   Provider,
+  StoredConfiguration,
   Tenant,
   WeaveFlow,
 } from './entities.js';
@@ -15,6 +16,7 @@ import type {
   LlmFlow as LlmFlowType,
   NextAuthUser as NextAuthUserType,
   Provider as ProviderType,
+  StoredConfiguration as StoredConfigurationType,
   Tenant as TenantType,
   WeaveFlow as WeaveFlowType,
 } from './types.js';
@@ -71,4 +73,12 @@ export type LlmFlowRepository = Repository<LlmFlowType>;
 export async function getLlmFlowRepository(): Promise<LlmFlowRepository> {
   const db = await getDB();
   return db.getRepository<LlmFlowType>(LlmFlow.name);
+}
+
+export type StoredConfigurationRepository = Repository<StoredConfigurationType>;
+export async function getStoredConfigurationRepository(): Promise<
+  Repository<StoredConfigurationType>
+> {
+  const db = await getDB();
+  return db.getRepository<StoredConfigurationType>(StoredConfiguration.name);
 }

@@ -5,6 +5,8 @@ import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
 import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
 import { getTenant } from '../../tenants/middleware/get-tenant.js';
 import { getConfiguration } from '../get-configuration.js';
+import { getServerConfiguration } from './get-server-configuration.js';
+import { updateServerConfigurationHandler } from './update-server-configuration.js';
 
 export function initialize(): express.Router {
   const router = express.Router();
@@ -24,6 +26,14 @@ export function initialize(): express.Router {
         },
       } satisfies ConfigurationResponse);
     }
+  );
+
+  router.get('/api/v1/configuration/server', getServerConfiguration);
+  router.post(
+    '/api/v1/configuration/server',
+    checkApiKeyOrUser('management-key'),
+    getTenant,
+    updateServerConfigurationHandler
   );
 
   return router;
