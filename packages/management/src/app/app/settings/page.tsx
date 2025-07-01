@@ -4,6 +4,7 @@ import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import type { ServerConfiguration } from '@genie-nexus/types';
 import { getResponseFromApi } from '@lib/api/server-api';
 import { DEFAULT_TENANT_ID } from '@lib/auth/constants';
+import { getAuthMethod } from '@lib/auth/get-auth-method';
 import { UserRequired } from '@lib/components/molecules/user-required';
 import { getContainer } from '@lib/core/get-container';
 import { environment } from '@lib/environment';
@@ -33,10 +34,14 @@ async function getStoredServerConfiguration(): Promise<ServerConfiguration> {
 
 export default async function SettingsPage() {
   const configuration = await getStoredServerConfiguration();
+  const authMethod = await getAuthMethod();
 
   return (
     <UserRequired>
-      <SettingsClientPage serverConfiguration={configuration} />
+      <SettingsClientPage
+        serverConfiguration={configuration}
+        showRegistration={!environment.MULTI_TENANT && authMethod !== 'none'}
+      />
     </UserRequired>
   );
 }
