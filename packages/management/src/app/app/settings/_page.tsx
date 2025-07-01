@@ -20,9 +20,13 @@ import { notifications } from '@mantine/notifications';
 
 type Properties = {
   serverConfiguration: ServerConfiguration;
+  showRegistration: boolean;
 };
 
-export function SettingsClientPage({ serverConfiguration }: Properties) {
+export function SettingsClientPage({
+  serverConfiguration,
+  showRegistration,
+}: Properties) {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const { post, inProgress } = useCudApi();
 
@@ -85,18 +89,19 @@ export function SettingsClientPage({ serverConfiguration }: Properties) {
           </Text>
 
           <form onSubmit={form.onSubmit(handleServerConfigurationChange)}>
+            {showRegistration && (
+              <Switch
+                label="Enable Registration"
+                description="Allow new users to create accounts"
+                {...form.getInputProps('registrationEnabled', {
+                  type: 'checkbox',
+                })}
+              />
+            )}
             <Switch
               label="Enable Telemetry"
               description="Allow the server to collect usage analytics and performance data"
               {...form.getInputProps('telemetryEnabled', { type: 'checkbox' })}
-            />
-
-            <Switch
-              label="Enable Registration"
-              description="Allow new users to create accounts"
-              {...form.getInputProps('registrationEnabled', {
-                type: 'checkbox',
-              })}
             />
 
             <Group justify="flex-end">
