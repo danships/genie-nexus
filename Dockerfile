@@ -39,6 +39,7 @@ COPY --chown=node: --from=build /app/packages/management/public ./public
 EXPOSE 3000
 
 ENV NODE_ENV=production
+ENV RUNTIME_ENVIRONMENT=docker
 ENV PORT=3000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \

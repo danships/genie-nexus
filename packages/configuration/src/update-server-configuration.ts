@@ -35,6 +35,12 @@ export async function updateServerConfiguration(
     );
   }
 
+  if (configuration.server !== undefined) {
+    updatedValues[SERVER_CONFIGURATION_KEYS.SERVER_IDENTIFIER] = String(
+      configuration.server
+    );
+  }
+
   if (existingConfiguration) {
     await storedConfigurationRepository.update({
       ...existingConfiguration,
@@ -55,5 +61,11 @@ export async function updateServerConfiguration(
     registrationEnabled: Boolean(
       updatedValues[SERVER_CONFIGURATION_KEYS.REGISTRATION_ENABLED]
     ),
+    server:
+      String(updatedValues[SERVER_CONFIGURATION_KEYS.SERVER_IDENTIFIER]) ??
+      existingConfiguration?.values[
+        SERVER_CONFIGURATION_KEYS.SERVER_IDENTIFIER
+      ] ??
+      '',
   };
 }

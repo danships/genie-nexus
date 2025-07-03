@@ -19,4 +19,10 @@ export type StoredConfiguration = {
 export type ServerConfiguration = {
   telemetryEnabled: boolean;
   registrationEnabled: boolean;
+  identifier: string;
 };
+
+export type ServerConfigurationResponse = Omit<
+  ServerConfiguration,
+  'identifier'
+>;

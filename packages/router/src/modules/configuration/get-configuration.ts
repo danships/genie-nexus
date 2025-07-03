@@ -6,6 +6,12 @@ export type Configuration = {
         type: 'none';
       }
     | { type: 'credentials' };
+  telemetry: {
+    websiteId: string;
+    hostUrl: string;
+  };
+  runtimeEnvironment: 'cli' | 'docker';
+  db: 'sqlite' | 'mysql';
 };
 
 let configuration: Configuration | null = null;

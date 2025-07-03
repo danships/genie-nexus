@@ -24,4 +24,14 @@ export const environment = cleanEnv(process.env, {
     choices: ['none', 'credentials'],
     default: 'credentials',
   }),
+  TELEMETRY_SITE_ID: str({
+    default: '09eab260-0866-4cbc-b2d7-5914d7136066',
+  }),
+  TELEMETRY_HOST_URL: str({
+    default: 'https://a.debuggingdan.com',
+  }),
+  RUNTIME_ENVIRONMENT: str({
+    default: 'cli',
+    choices: ['cli', 'docker'],
+  }),
 });

@@ -42,8 +42,30 @@ export function SettingsClientPage({
   const handleServerConfigurationChange = async (
     values: ServerConfiguration
   ) => {
+    const changedValues: Partial<ServerConfiguration> = {};
+
+    if (values.telemetryEnabled !== serverConfiguration.telemetryEnabled) {
+      changedValues.telemetryEnabled = values.telemetryEnabled;
+    }
+
+    if (
+      showRegistration &&
+      values.registrationEnabled !== serverConfiguration.registrationEnabled
+    ) {
+      changedValues.registrationEnabled = values.registrationEnabled;
+    }
+
+    if (Object.keys(changedValues).length === 0) {
+      notifications.show({
+        title: 'No Changes',
+        message: 'No configuration changes detected',
+        color: 'blue',
+      });
+      return;
+    }
+
     try {
-      await post('/configuration/server', values);
+      await post('/configuration/server', changedValues);
       notifications.show({
         title: 'Success',
         message: 'Server configuration updated successfully',

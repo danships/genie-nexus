@@ -1,12 +1,13 @@
 import type { ConfigurationResponse } from '@genie-nexus/types';
 import express from 'express';
+import { getHandlerUsingContainer } from '../../../core/http/get-handler-using-container.js';
 import { checkApiKeyOrUser } from '../../api-key/middleware/check-api-key-or-user.js';
 import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
 import { getTenantFromResponse } from '../../tenants/get-tenant-from-response.js';
 import { getTenant } from '../../tenants/middleware/get-tenant.js';
 import { getConfiguration } from '../get-configuration.js';
-import { getServerConfiguration } from './get-server-configuration.js';
-import { updateServerConfigurationHandler } from './update-server-configuration.js';
+import { GetServerConfiguration } from './get-server-configuration.js';
+import { UpdateServerConfiguration } from './update-server-configuration.js';
 
 export function initialize(): express.Router {
   const router = express.Router();
@@ -28,12 +29,15 @@ export function initialize(): express.Router {
     }
   );
 
-  router.get('/api/v1/configuration/server', getServerConfiguration);
+  router.get(
+    '/api/v1/configuration/server',
+    getHandlerUsingContainer(GetServerConfiguration)
+  );
   router.post(
     '/api/v1/configuration/server',
     checkApiKeyOrUser('management-key'),
     getTenant,
-    updateServerConfigurationHandler
+    getHandlerUsingContainer(UpdateServerConfiguration)
   );
 
   return router;

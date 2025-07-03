@@ -21,6 +21,7 @@ import type {
   WeaveFlow as WeaveFlowType,
 } from './types.js';
 
+export * as entities from './entities.js';
 export * from './initialize.js';
 export * from './types.js';
 

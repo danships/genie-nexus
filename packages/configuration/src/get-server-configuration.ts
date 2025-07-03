@@ -5,6 +5,7 @@ import type {
 } from '@genie-nexus/types';
 import { SERVER_CONFIGURATION_KEY } from './constants/keys.js';
 import { SERVER_CONFIGURATION_KEYS } from './types.js';
+import { updateServerConfiguration } from './update-server-configuration.js';
 
 function getServerConfigurationValue<T>(
   configuration: StoredConfiguration | null,
@@ -33,6 +34,15 @@ export async function getServerConfiguration(
       .eq('key', SERVER_CONFIGURATION_KEY)
   );
 
+  let generatedServerIdentifier: string | undefined;
+  if (!configuration?.values[SERVER_CONFIGURATION_KEYS.SERVER_IDENTIFIER]) {
+    // generate an identifier
+    generatedServerIdentifier = crypto.randomUUID();
+    await updateServerConfiguration(storedConfigurationRepository, tenantId, {
+      server: generatedServerIdentifier,
+    });
+  }
+
   return {
     telemetryEnabled: getServerConfigurationValue(
       configuration,
@@ -44,5 +54,11 @@ export async function getServerConfiguration(
       SERVER_CONFIGURATION_KEYS.REGISTRATION_ENABLED,
       true
     ),
+    server:
+      generatedServerIdentifier ??
+      String(
+        configuration?.values[SERVER_CONFIGURATION_KEYS.SERVER_IDENTIFIER]
+      ) ??
+      '',
   };
 }

@@ -27,19 +27,35 @@ export class LoggerImplementation implements Logger {
   }
 
   public debug(message: string, ...meta: unknown[]) {
-    internalLogger.debug(message, { ...this.fixedMetadata, ...meta });
+    const metadata =
+      meta[0] && typeof meta[0] === 'object' && meta[0] !== null
+        ? { ...this.fixedMetadata, ...meta[0] }
+        : this.fixedMetadata;
+    internalLogger.debug(message, metadata);
   }
 
   public info(message: string, ...meta: unknown[]) {
-    internalLogger.info(message, { ...this.fixedMetadata, ...meta });
+    const metadata =
+      meta[0] && typeof meta[0] === 'object' && meta[0] !== null
+        ? { ...this.fixedMetadata, ...meta[0] }
+        : this.fixedMetadata;
+    internalLogger.info(message, metadata);
   }
 
   public error(message: string, ...meta: unknown[]) {
-    internalLogger.error(message, { ...this.fixedMetadata, ...meta });
+    const metadata =
+      meta[0] && typeof meta[0] === 'object' && meta[0] !== null
+        ? { ...this.fixedMetadata, ...meta[0] }
+        : this.fixedMetadata;
+    internalLogger.error(message, metadata);
   }
 
   public warning(message: string, ...meta: unknown[]) {
-    internalLogger.warn(message, { ...this.fixedMetadata, ...meta });
+    const metadata =
+      meta[0] && typeof meta[0] === 'object' && meta[0] !== null
+        ? { ...this.fixedMetadata, ...meta[0] }
+        : this.fixedMetadata;
+    internalLogger.warn(message, metadata);
   }
 
   public setLogLevel(level: string): void {
