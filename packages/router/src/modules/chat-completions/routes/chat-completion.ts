@@ -16,13 +16,7 @@ import type {
   OpenAIChatCompletionResponse,
 } from '../types/openai.js';
 
-import {
-  Lifecycle,
-  TypeSymbols,
-  inject,
-  scoped,
-  singleton,
-} from '@genie-nexus/container';
+import { Lifecycle, TypeSymbols, inject, scoped } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
 import { type LlmRequestContext, isLlmApiKey } from '@genie-nexus/types';
 import type { HttpRequestHandler } from '../../../core/http/get-handler-using-container.js';
@@ -32,7 +26,6 @@ import { getDeploymentBySlug } from '../../deployments/get-deployment-by-slug.js
 import { handleAiSdkStreamResponse } from '../handle-ai-sdk-stream-response.js';
 import { handleAiSdkTextResponse } from '../handle-ai-sdk-text-response.js';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class ChatCompletionHandler implements HttpRequestHandler {
   constructor(

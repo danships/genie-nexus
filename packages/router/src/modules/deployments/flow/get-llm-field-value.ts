@@ -1,7 +1,6 @@
-import { Lifecycle, scoped, singleton } from '@genie-nexus/container';
+import { Lifecycle, scoped } from '@genie-nexus/container';
 import type { LlmRequestContext } from '@genie-nexus/types';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class GetLlmFieldValue {
   public getFieldValue(field: string, context: LlmRequestContext): unknown {

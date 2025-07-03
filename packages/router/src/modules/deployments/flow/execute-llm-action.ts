@@ -1,14 +1,7 @@
-import {
-  Lifecycle,
-  TypeSymbols,
-  inject,
-  scoped,
-  singleton,
-} from '@genie-nexus/container';
+import { Lifecycle, TypeSymbols, inject, scoped } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
 import type { LlmAction, LlmRequestContext } from '@genie-nexus/types';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class ExecuteLlmAction {
   constructor(@inject(TypeSymbols.LOGGER) private readonly logger: Logger) {}

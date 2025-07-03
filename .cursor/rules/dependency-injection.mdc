@@ -58,7 +58,6 @@ All injectable classes follow this pattern:
 import { inject, singleton, scoped, Lifecycle } from "@genie-nexus/container";
 import { TypeSymbols } from "@genie-nexus/container";
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class ChatCompletionHandler implements HttpRequestHandler {
   constructor(

@@ -1,5 +1,4 @@
 import { Lifecycle, TypeSymbols, inject, scoped } from '@genie-nexus/container';
-import { singleton } from '@genie-nexus/container';
 import type {
   Deployment,
   LlmFlowRepository,
@@ -14,7 +13,6 @@ import type {
 } from '../chat-completions/types/openai.js';
 import { ExecuteFlowEvent } from './flow/execute-flow-event.js';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class ExecuteLlm {
   constructor(

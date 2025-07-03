@@ -31,7 +31,7 @@ export class LoggerImplementation implements Logger {
       meta[0] && typeof meta[0] === 'object' && meta[0] !== null
         ? { ...this.fixedMetadata, ...meta[0] }
         : this.fixedMetadata;
-    internalLogger.debug(message, metadata);
+    this.logger.debug(message, metadata);
   }
 
   public info(message: string, ...meta: unknown[]) {
@@ -39,7 +39,7 @@ export class LoggerImplementation implements Logger {
       meta[0] && typeof meta[0] === 'object' && meta[0] !== null
         ? { ...this.fixedMetadata, ...meta[0] }
         : this.fixedMetadata;
-    internalLogger.info(message, metadata);
+    this.logger.info(message, metadata);
   }
 
   public error(message: string, ...meta: unknown[]) {
@@ -47,7 +47,7 @@ export class LoggerImplementation implements Logger {
       meta[0] && typeof meta[0] === 'object' && meta[0] !== null
         ? { ...this.fixedMetadata, ...meta[0] }
         : this.fixedMetadata;
-    internalLogger.error(message, metadata);
+    this.logger.error(message, metadata);
   }
 
   public warning(message: string, ...meta: unknown[]) {
@@ -55,11 +55,11 @@ export class LoggerImplementation implements Logger {
       meta[0] && typeof meta[0] === 'object' && meta[0] !== null
         ? { ...this.fixedMetadata, ...meta[0] }
         : this.fixedMetadata;
-    internalLogger.warn(message, metadata);
+    this.logger.warn(message, metadata);
   }
 
   public setLogLevel(level: string): void {
-    internalLogger.level = level;
+    this.logger.level = level;
   }
 
   public setFixedMetadata(metadata: Record<string, unknown>): void {

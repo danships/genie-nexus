@@ -1,10 +1,4 @@
-import {
-  Lifecycle,
-  TypeSymbols,
-  inject,
-  scoped,
-  singleton,
-} from '@genie-nexus/container';
+import { Lifecycle, TypeSymbols, inject, scoped } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
 import type {
   Condition,
@@ -13,7 +7,6 @@ import type {
 } from '@genie-nexus/types';
 import { EvaluateCondition } from './evaluate-condition.js';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class EvaluateConditions {
   constructor(

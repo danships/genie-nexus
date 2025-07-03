@@ -4,7 +4,6 @@ import {
   TypeSymbols,
   container,
   scoped,
-  singleton,
 } from '@genie-nexus/container';
 import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import type { ServerConfigurationResponse } from '@genie-nexus/types';
@@ -14,7 +13,6 @@ import type { HttpRequestHandler } from '../../../core/http/get-handler-using-co
 import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
 import { getConfiguration } from '../get-configuration.js';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class GetServerConfiguration implements HttpRequestHandler {
   public async handle(_req: Request, res: Response) {

@@ -1,10 +1,4 @@
-import {
-  Lifecycle,
-  TypeSymbols,
-  inject,
-  scoped,
-  singleton,
-} from '@genie-nexus/container';
+import { Lifecycle, TypeSymbols, inject, scoped } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
 import type {
   Condition,
@@ -14,7 +8,6 @@ import type {
 import { GetLlmFieldValue } from './get-llm-field-value.js';
 import { GetWeaveFieldValue } from './get-weave-field-value.js';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class EvaluateCondition {
   constructor(

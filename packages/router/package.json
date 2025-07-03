@@ -31,7 +31,7 @@
     "envalid": "^8.0.0",
     "exponential-backoff": "^3.1.2",
     "express": "^5.1.0",
-    "next": "15.3.1",
+    "next": "^15.3.4",
     "reflect-metadata": "^0.2.2",
     "request-ip": "^3.3.0",
     "supersave": "^0.16.0",

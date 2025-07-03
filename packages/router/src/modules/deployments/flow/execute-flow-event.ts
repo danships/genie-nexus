@@ -1,10 +1,4 @@
-import {
-  Lifecycle,
-  TypeSymbols,
-  inject,
-  scoped,
-  singleton,
-} from '@genie-nexus/container';
+import { Lifecycle, TypeSymbols, inject, scoped } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
 import type {
   LlmFlow,
@@ -16,7 +10,6 @@ import { EvaluateConditions } from './evaluate-conditions.js';
 import { ExecuteLlmAction } from './execute-llm-action.js';
 import { ExecuteWeaveAction } from './execute-weave-action.js';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class ExecuteFlowEvent {
   constructor(

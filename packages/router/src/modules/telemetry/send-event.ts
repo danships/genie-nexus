@@ -1,12 +1,6 @@
 import { arch, platform, release } from 'os';
 import { getServerConfiguration } from '@genie-nexus/configuration';
-import {
-  Lifecycle,
-  TypeSymbols,
-  inject,
-  scoped,
-  singleton,
-} from '@genie-nexus/container';
+import { Lifecycle, TypeSymbols, inject, scoped } from '@genie-nexus/container';
 import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import type { Logger } from '@genie-nexus/logger';
 import { backOff } from 'exponential-backoff';
@@ -15,7 +9,6 @@ import { DEFAULT_TENANT_ID } from '../../index.js';
 import { getConfiguration } from '../configuration/get-configuration.js';
 import type { Events, TelemetryEvent } from './types.js';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class SendTelemetryEvent {
   constructor(
@@ -88,14 +81,14 @@ export class SendTelemetryEvent {
 
       this.logger.debug('Sending telemetry event', { event: telemetryEvent });
 
-      backOff(
+      await backOff(
         async () => {
           const response = await fetch('https://www.gnxs.io/api/tm/send', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(event),
+            body: JSON.stringify(telemetryEvent),
           });
 
           if (!response.ok) {
