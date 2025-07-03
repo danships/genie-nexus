@@ -51,6 +51,25 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
     });
   }, [pathname, redirectToOnboardingChecked]);
 
+  useEffect(() => {
+    const hostUrl = `${window.location.protocol}//${window.location.host}`;
+
+    const script = document.createElement('script');
+    script.src = '/tm/tm.js';
+    script.defer = true;
+    script.setAttribute('data-website-id', 'abcd');
+    script.setAttribute('data-host-url', `${hostUrl}/api/v1/tm`);
+    script.setAttribute('data-tag', 'sh');
+
+    document.head.appendChild(script);
+
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

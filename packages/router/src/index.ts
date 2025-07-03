@@ -9,7 +9,9 @@ export type { StartServerOptions } from './server.js';
 export * from '@genie-nexus/database';
 export { DEFAULT_TENANT_ID } from './modules/tenants/constants.js';
 
-export const GenieNexusServer = isProduction() ? null : GenieNexusServerClass;
+export function getGenieNexusServer() {
+  return isProduction() ? null : GenieNexusServerClass;
+}
 
 export const generatePublicApiKey = isProduction()
   ? () => {
