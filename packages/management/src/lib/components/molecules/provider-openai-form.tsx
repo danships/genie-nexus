@@ -55,7 +55,9 @@ export function ProviderOpenAIForm({ provider, submit }: Properties) {
           {...form.getInputProps('baseURL')}
         />
 
-        <Button type="submit">Save</Button>
+        <Button type="submit" data-umami-event="provider-openai-save">
+          Save
+        </Button>
       </Stack>
     </form>
   );

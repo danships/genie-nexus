@@ -107,7 +107,9 @@ export const NewApiKeyPage = disableSSR(function () {
               {...form.getInputProps('type')}
             />
 
-            <Button type="submit">Create API Key</Button>
+            <Button type="submit" data-umami-event="api-keys-create-submit">
+              Create API Key
+            </Button>
           </Stack>
         </form>
       )}
@@ -145,7 +147,12 @@ export const NewApiKeyPage = disableSSR(function () {
           </Text>
 
           <Group justify="flex-end" mt="md">
-            <Button onClick={handleCloseModal}>I&apos;ve copied the key</Button>
+            <Button
+              onClick={handleCloseModal}
+              data-umami-event="api-keys-create-confirm"
+            >
+              I&apos;ve copied the key
+            </Button>
           </Group>
         </Stack>
       </Modal>

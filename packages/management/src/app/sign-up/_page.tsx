@@ -107,7 +107,11 @@ export function SignUpClientPage() {
               {...form.getInputProps('acceptTerms', { type: 'checkbox' })}
             />
             {error && <ErrorNotification>{error}</ErrorNotification>}
-            <Button type="submit" loading={inProgress}>
+            <Button
+              type="submit"
+              loading={inProgress}
+              data-umami-event="signup-submit"
+            >
               Sign Up
             </Button>
           </Stack>
@@ -115,7 +119,12 @@ export function SignUpClientPage() {
       </form>
       <Paper className="is-half-size" mt="md">
         <Stack>
-          <Button component="a" href="/sign-in" variant="subtle">
+          <Button
+            component="a"
+            href="/sign-in"
+            variant="subtle"
+            data-umami-event="signup-navigate-to-signin"
+          >
             Already have an account? Sign in
           </Button>
         </Stack>

@@ -86,6 +86,7 @@ export const NewDeploymentPage = disableSSR(function () {
               variant="light"
               onClick={() => void createLlmDeployment()}
               loading={inProgress && creatingType === 'llm'}
+              data-umami-event="deployments-create-llm"
             >
               Create LLM Deployment
             </Button>
@@ -103,6 +104,7 @@ export const NewDeploymentPage = disableSSR(function () {
               variant="light"
               onClick={() => void createWeaveDeployment()}
               loading={inProgress && creatingType === 'http'}
+              data-umami-event="deployments-create-weave"
             >
               Create HTTP Deployment
             </Button>

@@ -17,7 +17,12 @@ export function UserClientPage({ session }: { session: Session }) {
             {session?.user.name} ({session?.user.email})
           </DetailCard>
         )}
-        <Button component={Link} href="/sign-out" variant="primary">
+        <Button
+          component={Link}
+          href="/sign-out"
+          variant="primary"
+          data-umami-event="user-sign-out"
+        >
           Sign Out user
         </Button>
       </Stack>

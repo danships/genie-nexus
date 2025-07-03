@@ -52,7 +52,12 @@ export function LoginClientPage({ error }: { error?: string }) {
             <input type="hidden" name="csrfToken" value={csrfToken} />
             <TextInput label="Email" type="email" name="email" required />
             <PasswordInput label="Password" name="password" required />
-            <Button type="submit" mt="md" fullWidth>
+            <Button
+              type="submit"
+              mt="md"
+              fullWidth
+              data-umami-event="login-submit"
+            >
               Login
             </Button>
           </form>
@@ -60,7 +65,13 @@ export function LoginClientPage({ error }: { error?: string }) {
       </Paper>
       <Paper className="is-half-size" mt="md" w={400}>
         <Stack>
-          <Button component="a" href="/sign-up" variant="subtle" fullWidth>
+          <Button
+            component="a"
+            href="/sign-up"
+            variant="subtle"
+            fullWidth
+            data-umami-event="login-navigate-to-signup"
+          >
             Don&apos;t have an account? Sign up
           </Button>
         </Stack>

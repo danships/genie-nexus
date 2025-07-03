@@ -125,6 +125,7 @@ export function ConditionEditor({
                   variant="subtle"
                   color="red"
                   onClick={() => handleRemoveCondition(index)}
+                  data-umami-event="condition-editor-remove"
                 >
                   Remove
                 </Button>
@@ -169,6 +170,7 @@ export function ConditionEditor({
             leftSection={<IconPlus size={16} />}
             variant="light"
             onClick={handleAddCondition}
+            data-umami-event="condition-editor-add"
           >
             Add Condition
           </Button>

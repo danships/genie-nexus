@@ -100,7 +100,12 @@ export const ProvidersClientPage = disableSSR(function () {
           maw={200}
           mb="md"
         />
-        <Button component={Link} href="/app/providers/new" variant="light">
+        <Button
+          component={Link}
+          href="/app/providers/new"
+          variant="light"
+          data-umami-event="providers-create-new"
+        >
           Create Provider
         </Button>
       </Group>
@@ -169,6 +174,7 @@ export const ProvidersClientPage = disableSSR(function () {
                   color="red"
                   size="xs"
                   onClick={(e) => openDeleteModal(provider, e)}
+                  data-umami-event="providers-delete"
                 >
                   Delete
                 </Button>
@@ -188,10 +194,19 @@ export const ProvidersClientPage = disableSSR(function () {
       >
         <Text>Are you sure you want to delete {providerToDelete?.name}?</Text>
         <Group justify="flex-end" mt="md">
-          <Button variant="light" onClick={() => setDeleteModalOpen(false)}>
+          <Button
+            variant="light"
+            onClick={() => setDeleteModalOpen(false)}
+            data-umami-event="providers-delete-cancel"
+          >
             Cancel
           </Button>
-          <Button color="red" size="xs" onClick={() => void handleDelete()}>
+          <Button
+            color="red"
+            size="xs"
+            onClick={() => void handleDelete()}
+            data-umami-event="providers-delete-confirm"
+          >
             Delete
           </Button>
         </Group>

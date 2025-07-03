@@ -40,6 +40,7 @@ export function ApiKeyToggle<T extends BaseApiKey>({
       onClick={handleToggleActive}
       loading={inProgress}
       mb="md"
+      data-umami-event="api-key-toggle"
     >
       {apiKey.active ? 'Disable API Key' : 'Enable API Key'}
     </Button>

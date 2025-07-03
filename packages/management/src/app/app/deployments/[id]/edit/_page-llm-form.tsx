@@ -116,6 +116,7 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
           href={`/app/deployments/${deployment.id}`}
           variant="subtle"
           size="sm"
+          data-umami-event="deployment-llm-edit-back"
         >
           Back to Details
         </Button>
@@ -169,7 +170,11 @@ export function DeploymentLlmFormClientPage({ deployment }: Properties) {
               {...form.getInputProps('active', { type: 'checkbox' })}
             />
 
-            <Button type="submit" loading={inProgress}>
+            <Button
+              type="submit"
+              loading={inProgress}
+              data-umami-event="deployment-llm-edit-save"
+            >
               Save Changes
             </Button>
           </Stack>

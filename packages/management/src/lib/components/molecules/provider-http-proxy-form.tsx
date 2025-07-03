@@ -78,6 +78,7 @@ export function ProviderHttpProxyForm({ provider, submit }: Properties) {
               leftSection={<IconPlus size={16} />}
               onClick={() => addHeader('requestHeaders')}
               variant="light"
+              data-umami-event="provider-http-proxy-add-request-header"
             >
               Add Header
             </Button>
@@ -121,6 +122,7 @@ export function ProviderHttpProxyForm({ provider, submit }: Properties) {
               leftSection={<IconPlus size={16} />}
               onClick={() => addHeader('responseHeaders')}
               variant="light"
+              data-umami-event="provider-http-proxy-add-response-header"
             >
               Add Header
             </Button>
@@ -151,7 +153,9 @@ export function ProviderHttpProxyForm({ provider, submit }: Properties) {
           </Stack>
         </Paper>
 
-        <Button type="submit">Save</Button>
+        <Button type="submit" data-umami-event="provider-http-proxy-save">
+          Save
+        </Button>
       </Stack>
     </form>
   );

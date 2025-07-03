@@ -256,6 +256,7 @@ export function PipelineBlocksForm({
                     color="red"
                     onClick={() => handleDelete(index)}
                     leftSection={<IconTrash size={16} />}
+                    data-umami-event="pipeline-blocks-remove"
                   >
                     Remove
                   </Button>
@@ -290,6 +291,7 @@ export function PipelineBlocksForm({
         leftSection={<IconPlus size={16} />}
         variant="light"
         onClick={() => setShowAddModal(true)}
+        data-umami-event="pipeline-blocks-add"
       >
         Add Block
       </Button>

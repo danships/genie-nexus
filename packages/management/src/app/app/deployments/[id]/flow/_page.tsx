@@ -394,6 +394,7 @@ export function FlowEditorClientPage<T extends WeaveFlow | LlmFlow>({
                   component={Link}
                   href={`/app/deployments/${deployment.id}`}
                   leftSection={<IconArrowLeft size={16} />}
+                  data-umami-event="flow-editor-back"
                 >
                   {' '}
                   Back
@@ -407,6 +408,7 @@ export function FlowEditorClientPage<T extends WeaveFlow | LlmFlow>({
                         leftSection={<eventType.icon size={16} />}
                         variant="light"
                         onClick={() => handleAddEvent(eventType.type)}
+                        data-umami-event="flow-editor-add-event"
                       >
                         {eventType.label}
                       </Button>
@@ -448,6 +450,7 @@ export function FlowEditorClientPage<T extends WeaveFlow | LlmFlow>({
                     fullWidth
                     type="submit"
                     loading={inProgress}
+                    data-umami-event="flow-editor-save"
                   >
                     Save
                   </Button>
@@ -478,6 +481,7 @@ export function FlowEditorClientPage<T extends WeaveFlow | LlmFlow>({
                       leftSection={<block.icon size={16} />}
                       variant="light"
                       onClick={() => handleBlockTypeSelect(block.type)}
+                      data-umami-event="flow-editor-add-block"
                     >
                       {block.label}
                     </Button>
@@ -505,6 +509,7 @@ export function FlowEditorClientPage<T extends WeaveFlow | LlmFlow>({
                   <Button
                     variant="subtle"
                     onClick={() => setModalStep('block')}
+                    data-umami-event="flow-editor-modal-back"
                   >
                     Back
                   </Button>
@@ -525,10 +530,18 @@ export function FlowEditorClientPage<T extends WeaveFlow | LlmFlow>({
           You have unsaved changes. Are you sure you want to leave this page?
         </Text>
         <Group justify="flex-end">
-          <Button variant="default" onClick={handleCancelNavigation}>
+          <Button
+            variant="default"
+            onClick={handleCancelNavigation}
+            data-umami-event="flow-editor-navigation-stay"
+          >
             Stay
           </Button>
-          <Button variant="filled" onClick={handleConfirmNavigation}>
+          <Button
+            variant="filled"
+            onClick={handleConfirmNavigation}
+            data-umami-event="flow-editor-navigation-leave"
+          >
             Leave
           </Button>
         </Group>
