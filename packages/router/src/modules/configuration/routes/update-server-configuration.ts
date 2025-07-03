@@ -8,7 +8,6 @@ import {
   container,
   inject,
   scoped,
-  singleton,
 } from '@genie-nexus/container';
 import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import type { ServerConfiguration } from '@genie-nexus/types';
@@ -25,7 +24,6 @@ const requestValidator = z.object({
   registrationEnabled: z.boolean().optional(),
 });
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class UpdateServerConfiguration implements HttpRequestHandler {
   constructor(

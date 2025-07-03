@@ -1,10 +1,4 @@
-import {
-  Lifecycle,
-  TypeSymbols,
-  inject,
-  scoped,
-  singleton,
-} from '@genie-nexus/container';
+import { Lifecycle, TypeSymbols, inject, scoped } from '@genie-nexus/container';
 import type {
   Deployment,
   Provider,
@@ -17,7 +11,6 @@ import { generateStaticResponse } from '../../weave-providers/static/generate-st
 import type { ProviderResponse } from '../../weave-providers/types.js';
 import { ExecuteFlowEvent } from './flow/execute-flow-event.js';
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class ExecuteWeave {
   constructor(

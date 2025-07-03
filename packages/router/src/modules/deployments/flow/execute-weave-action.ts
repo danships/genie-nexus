@@ -1,17 +1,10 @@
-import {
-  Lifecycle,
-  TypeSymbols,
-  inject,
-  scoped,
-  singleton,
-} from '@genie-nexus/container';
+import { Lifecycle, TypeSymbols, inject, scoped } from '@genie-nexus/container';
 import type { Logger } from '@genie-nexus/logger';
 import type { WeaveAction, WeaveRequestContext } from '@genie-nexus/types';
 
 // Maximum allowed delay in milliseconds (5 seconds)
 const MAX_DELAY_MS = 5000;
 
-@singleton()
 @scoped(Lifecycle.ContainerScoped)
 export class ExecuteWeaveAction {
   constructor(@inject(TypeSymbols.LOGGER) private readonly logger: Logger) {}
