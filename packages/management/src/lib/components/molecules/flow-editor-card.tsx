@@ -21,6 +21,7 @@ export function FlowEditorCard({
             component={Link}
             href={`/app/deployments/${deploymentId}/flow`}
             rightSection={<IconArrowRight size={16} />}
+            data-umami-event="flow-editor-card-configure"
           >
             {label}
           </Button>

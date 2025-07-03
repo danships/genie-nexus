@@ -75,7 +75,12 @@ export function DeploymentsList({
           ))}
         </Stack>
 
-        <Button type="submit" loading={inProgress} mt="md">
+        <Button
+          type="submit"
+          loading={inProgress}
+          mt="md"
+          data-umami-event="deployments-list-save"
+        >
           Save Changes
         </Button>
       </DetailCard>

@@ -116,6 +116,7 @@ export function DeploymentWeaveFormClientPage({ deployment }: Properties) {
           href={`/app/deployments/${deployment.id}`}
           variant="subtle"
           size="sm"
+          data-umami-event="deployment-weave-edit-back"
         >
           Back to Details
         </Button>
@@ -194,7 +195,11 @@ export function DeploymentWeaveFormClientPage({ deployment }: Properties) {
               ]}
             />
 
-            <Button type="submit" loading={inProgress}>
+            <Button
+              type="submit"
+              loading={inProgress}
+              data-umami-event="deployment-weave-edit-save"
+            >
               Save Changes
             </Button>
           </Stack>

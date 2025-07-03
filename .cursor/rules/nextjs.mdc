@@ -19,6 +19,7 @@ Technical preferences:
 - Always add loading and error states to data fetching components
 - Implement error handling and error logging
 - Use semantic HTML elements where possible
+- Every button needs to be tagged with _data-umami-event="{event-name}"_ for tracking purposes.
 
 General preferences:
 

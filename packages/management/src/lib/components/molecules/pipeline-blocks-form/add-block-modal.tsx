@@ -76,6 +76,7 @@ export function AddBlockModal({
                     leftSection={<block.icon size={16} />}
                     variant="light"
                     onClick={() => onAdd(block.type)}
+                    data-umami-event="pipeline-blocks-modal-add"
                   >
                     {block.label}
                   </Button>
@@ -107,6 +108,7 @@ export function AddBlockModal({
                     leftSection={<block.icon size={16} />}
                     variant="light"
                     onClick={() => onAdd(block.type)}
+                    data-umami-event="pipeline-blocks-modal-add"
                   >
                     {block.label}
                   </Button>
@@ -136,6 +138,7 @@ export function AddBlockModal({
                 leftSection={<block.icon size={16} />}
                 variant="light"
                 onClick={() => onAdd(block.type)}
+                data-umami-event="pipeline-blocks-modal-add"
               >
                 {block.label}
               </Button>

@@ -127,7 +127,11 @@ export function SettingsClientPage({
             />
 
             <Group justify="flex-end">
-              <Button type="submit" loading={inProgress}>
+              <Button
+                type="submit"
+                loading={inProgress}
+                data-umami-event="settings-save-changes"
+              >
                 Save Changes
               </Button>
             </Group>

@@ -23,7 +23,11 @@ export function ProviderGoogleForm({ provider, submit }: Properties) {
           description="Fill in to replace the current API key"
           {...form.getInputProps('apiKey')}
         />
-        <Button type="submit" variant="light">
+        <Button
+          type="submit"
+          variant="light"
+          data-umami-event="provider-google-save"
+        >
           Save
         </Button>
       </Stack>

@@ -1,6 +1,9 @@
+import { getServerConfiguration } from '@genie-nexus/configuration';
+import { getStoredConfigurationRepository } from '@genie-nexus/database';
 import { Router, json } from 'express';
 import { getIp } from '../../../core/utils/get-ip.js';
 import { getConfiguration } from '../../configuration/get-configuration.js';
+import { DEFAULT_TENANT_ID } from '../../tenants/constants.js';
 
 export function initialize(): Router {
   const router = Router();
@@ -12,6 +15,18 @@ export function initialize(): Router {
     if (configuration.devMode) {
       // don't forward the tracking
       res.json({ beep: 'boop' });
+      return;
+    }
+    if (
+      !(
+        await getServerConfiguration(
+          await getStoredConfigurationRepository(),
+          DEFAULT_TENANT_ID
+        )
+      ).telemetryEnabled
+    ) {
+      // don't forward the tracking
+      res.json({ beep: 'boop-nope' });
       return;
     }
 

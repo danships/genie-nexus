@@ -120,6 +120,7 @@ print(completion.choices[0].message)`;
           component={Link}
           href={`/app/deployments/${deployment.id}/edit`}
           variant="light"
+          data-umami-event="deployment-llm-edit"
         >
           Edit Deployment
         </Button>
@@ -160,6 +161,7 @@ print(completion.choices[0].message)`;
               onClick={() => setSdkModalOpen(true)}
               variant="light"
               mt="md"
+              data-umami-event="deployment-llm-view-sdk"
             >
               View SDK Examples
             </Button>
@@ -209,6 +211,7 @@ print(completion.choices[0].message)`;
                   }
                   onClick={copy}
                   mt="md"
+                  data-umami-event="deployment-llm-copy-typescript"
                 >
                   {copied ? 'Copied!' : 'Copy Code'}
                 </Button>
@@ -227,6 +230,7 @@ print(completion.choices[0].message)`;
                   }
                   onClick={copy}
                   mt="md"
+                  data-umami-event="deployment-llm-copy-javascript"
                 >
                   {copied ? 'Copied!' : 'Copy Code'}
                 </Button>
@@ -245,6 +249,7 @@ print(completion.choices[0].message)`;
                   }
                   onClick={copy}
                   mt="md"
+                  data-umami-event="deployment-llm-copy-python"
                 >
                   {copied ? 'Copied!' : 'Copy Code'}
                 </Button>

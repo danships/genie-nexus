@@ -60,6 +60,7 @@ export function DeploymentWeaveDetailClientPage({ deployment }: Properties) {
           component={Link}
           href={`/app/deployments/${deployment.id}/edit`}
           variant="light"
+          data-umami-event="deployment-weave-edit"
         >
           Edit Deployment
         </Button>

@@ -17,6 +17,7 @@ import {
   Title,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -79,7 +80,11 @@ export const DeploymentsClientPage = disableSSR(function () {
     <Stack>
       <Group justify="space-between" align="center">
         <Title order={1}>Deployments</Title>
-        <Button onClick={() => router.push('/app/deployments/new')}>
+        <Button
+          component={Link}
+          href="/app/deployments/new"
+          data-umami-event="deployments-create-new"
+        >
           New Deployment
         </Button>
       </Group>
@@ -153,6 +158,7 @@ export const DeploymentsClientPage = disableSSR(function () {
                   color="red"
                   size="xs"
                   onClick={(e) => openDeleteModal(deployment, e)}
+                  data-umami-event="deployments-delete"
                 >
                   Delete
                 </Button>
@@ -172,10 +178,19 @@ export const DeploymentsClientPage = disableSSR(function () {
       >
         <Text>Are you sure you want to delete {deploymentToDelete?.name}?</Text>
         <Group justify="flex-end" mt="md">
-          <Button variant="light" onClick={() => setDeleteModalOpen(false)}>
+          <Button
+            variant="light"
+            onClick={() => setDeleteModalOpen(false)}
+            data-umami-event="deployments-delete-cancel"
+          >
             Cancel
           </Button>
-          <Button color="red" size="xs" onClick={() => void handleDelete()}>
+          <Button
+            color="red"
+            size="xs"
+            onClick={() => void handleDelete()}
+            data-umami-event="deployments-delete-confirm"
+          >
             Delete
           </Button>
         </Group>

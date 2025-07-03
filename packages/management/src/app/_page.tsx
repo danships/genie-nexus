@@ -27,7 +27,13 @@ export function HomePageClient() {
           failover, rate limiting, and LLM-aware routing.
         </Text>
         <Group>
-          <Button component={Link} href="/sign-in" size="lg" radius="md">
+          <Button
+            component={Link}
+            href="/sign-in"
+            size="lg"
+            radius="md"
+            data-umami-event="home-login"
+          >
             Login
           </Button>
           <Button
@@ -36,6 +42,7 @@ export function HomePageClient() {
             variant="outline"
             size="lg"
             radius="md"
+            data-umami-event="home-signup"
           >
             Sign Up
           </Button>

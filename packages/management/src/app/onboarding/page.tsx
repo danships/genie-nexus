@@ -11,7 +11,11 @@ export default function OnboardingPage() {
         After that account has been created you can choose to disable
         self-registration for new accounts.
       </Text>
-      <Button component={Link} href="/sign-up">
+      <Button
+        component={Link}
+        href="/sign-up"
+        data-umami-event="onboarding-create-account"
+      >
         Create account
       </Button>
     </Container>

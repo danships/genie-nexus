@@ -78,6 +78,7 @@ export function ProviderHttpStaticForm({ provider, submit }: Properties) {
               leftSection={<IconPlus size={16} />}
               onClick={addHeader}
               variant="light"
+              data-umami-event="provider-http-static-add-header"
             >
               Add Header
             </Button>
@@ -118,7 +119,9 @@ export function ProviderHttpStaticForm({ provider, submit }: Properties) {
           </Stack>
         </Paper>
 
-        <Button type="submit">Save</Button>
+        <Button type="submit" data-umami-event="provider-http-static-save">
+          Save
+        </Button>
       </Stack>
     </form>
   );

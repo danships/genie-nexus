@@ -34,7 +34,9 @@ export function ProviderGenericForm({ name, submit }: Properties) {
           required
           {...form.getInputProps('name')}
         />
-        <Button type="submit">Save</Button>
+        <Button type="submit" data-umami-event="provider-generic-save">
+          Save
+        </Button>
       </Stack>
     </form>
   );

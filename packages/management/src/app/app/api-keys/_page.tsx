@@ -20,6 +20,7 @@ import {
   Title,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -77,7 +78,11 @@ export const ApiKeysClientPage = disableSSR(function () {
     <Stack>
       <Group justify="space-between" align="center">
         <Title order={1}>API Keys</Title>
-        <Button onClick={() => void router.push('/app/api-keys/new')}>
+        <Button
+          component={Link}
+          href="/app/api-keys/new"
+          data-umami-event="api-keys-create-new"
+        >
           New API Key
         </Button>
       </Group>
@@ -130,6 +135,7 @@ export const ApiKeysClientPage = disableSSR(function () {
                   color="red"
                   size="xs"
                   onClick={(e) => openDeleteModal(apiKey, e)}
+                  data-umami-event="api-keys-delete"
                 >
                   Delete
                 </Button>
@@ -152,10 +158,18 @@ export const ApiKeysClientPage = disableSSR(function () {
       >
         <Text>Are you sure you want to delete this API key?</Text>
         <Group justify="flex-end" mt="md">
-          <Button variant="light" onClick={() => setDeleteModalOpen(false)}>
+          <Button
+            variant="light"
+            onClick={() => setDeleteModalOpen(false)}
+            data-umami-event="api-keys-delete-cancel"
+          >
             Cancel
           </Button>
-          <Button color="red" onClick={handleDelete}>
+          <Button
+            color="red"
+            onClick={handleDelete}
+            data-umami-event="api-keys-delete-confirm"
+          >
             Delete
           </Button>
         </Group>
