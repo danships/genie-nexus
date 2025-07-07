@@ -10,15 +10,45 @@
     "format:biome": "biome check --write --config-path=biome.ci.json .",
     "lint:biome": "biome check --config-path=biome.ci.json ."
   },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./express": {
+      "import": "./dist/express/index.js",
+      "types": "./dist/express/index.d.ts"
+    },
+    "./nextjs": {
+      "import": "./dist/nextjs/index.js",
+      "types": "./dist/nextjs/index.d.ts"
+    }
+  },
   "files": ["dist"],
+  "peerDependencies": {
+    "@auth/express": "^0.10.0",
+    "next-auth": "5.0.0-beta.27"
+  },
+  "peerDependenciesMeta": {
+    "@auth/express": {
+      "optional": true
+    },
+    "next-auth": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@auth/express": "^0.10.0",
     "next-auth": "5.0.0-beta.27",
     "supersave": "^0.16.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "@genie-nexus/logger": "workspace:*"
   },
   "dependencies": {
+    "@genie-nexus/container": "workspace:*",
     "@genie-nexus/database": "workspace:*",
     "argon2": "^0.41.1",
+    "reflect-metadata": "^0.2.2",
     "zod": "^3.25.56"
   }
 }

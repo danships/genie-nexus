@@ -6,7 +6,6 @@ export const environment = cleanEnv(process.env, {
     choices: ['development', 'production', 'test'],
     default: 'development',
   }),
-  AUTH_SECRET: str({ default: '' }),
   DB: str({ default: 'sqlite://db.sqlite' }),
   MULTI_TENANT: bool({
     default: false,
@@ -15,9 +14,13 @@ export const environment = cleanEnv(process.env, {
     choices: ['none', 'credentials'],
     default: 'credentials',
   }),
+  GNXS_RUNTIME_ENVIRONMENT: str({
+    default: 'cli',
+    choices: ['cli', 'docker'],
+  }),
   LOG_LEVEL: str({
-    choices: ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'],
-    default: 'INFO',
+    choices: ['debug', 'info', 'warn', 'error', 'fatal'],
+    default: 'info',
   }),
   HOST_PREFIX: str({ default: 'http://localhost:3000' }),
 });

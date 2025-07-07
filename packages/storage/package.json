@@ -1,0 +1,19 @@
+{
+  "name": "@genie-nexus/storage",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "dependencies": {
+    "@genie-nexus/container": "workspace:*",
+    "reflect-metadata": "^0.2.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w",
+    "clean": "rimraf dist",
+    "format:biome": "biome check --write --config-path=biome.ci.json .",
+    "lint:biome": "biome check --config-path=biome.ci.json ."
+  }
+}

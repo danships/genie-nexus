@@ -1,4 +1,4 @@
-export const COOKIE_NAME = 'genie-nexus.st';
+import 'reflect-metadata';
 
-export * from './credentials.js';
+export * from './constants.js';
 export { saltAndHashPassword } from './utils.js';

@@ -21,6 +21,7 @@
     "@genie-nexus/container": "workspace:*",
     "@genie-nexus/database": "workspace:*",
     "@genie-nexus/logger": "workspace:*",
+    "@genie-nexus/storage": "workspace:*",
     "@genie-nexus/types": "workspace:*",
     "@mantine/core": "^7.5.0",
     "@mantine/form": "^8.0.1",

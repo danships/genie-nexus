@@ -29,11 +29,11 @@ export const getCredentialsAuthorize =
       }
 
       if (!(await verifyUsingHashedPassword(input.password, user.password))) {
-        logger('Invalid password', { email: input.email });
+        // logger('Invalid password', { email: input.email });
         return null;
       }
 
-      logger('User signed in', { email: input.email });
+      // logger('User signed in', { email: input.email });
       return user;
     } catch (error) {
       if (error instanceof ZodError) {
