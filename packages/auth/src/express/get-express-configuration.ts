@@ -23,7 +23,7 @@ export class GetExpressConfiguration {
 
     const { secret } = await this.getConfiguration.getConfiguration();
 
-    return {
+    this.configuration = {
       secret,
       cookies: {
         sessionToken: {
@@ -54,5 +54,7 @@ export class GetExpressConfiguration {
         },
       },
     };
+    
+    return this.configuration;
   }
 }
