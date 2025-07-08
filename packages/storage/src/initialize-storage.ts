@@ -3,7 +3,7 @@ import path from 'node:path';
 import { cwd } from 'node:process';
 import { Lifecycle, scoped } from '@genie-nexus/container';
 
-@scoped(Lifecycle.ContainerScoped)
+@singleton()
 export class InitializeStorage {
   private getPathForDocker() {
     return '/gnxs-data';
