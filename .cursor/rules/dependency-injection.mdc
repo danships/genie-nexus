@@ -73,7 +73,6 @@ export class ChatCompletionHandler implements HttpRequestHandler {
 
 The project uses different lifecycle scopes:
 
-- **`@singleton()`**: Single instance for the entire application
 - **`@scoped(Lifecycle.ContainerScoped)`**: One instance per container (useful for request-scoped dependencies)
 
 ## Dependency Registration

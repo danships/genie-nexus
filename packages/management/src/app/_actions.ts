@@ -1,7 +1,9 @@
 'use server';
 
+import { TypeSymbols } from '@genie-nexus/container';
+import type { NextAuthUserRepository } from '@genie-nexus/database';
 import { getAuthMethod } from '@lib/auth/get-auth-method';
-import { getNextAuthUserRepository } from '@lib/core/db';
+import { getContainer } from '@lib/core/get-container';
 
 let cachedUserExists: true | null = null;
 
@@ -22,7 +24,9 @@ export async function isAuthOnboardingRedirectNeeded(path: string) {
     return false;
   }
 
-  const userRepository = await getNextAuthUserRepository();
+  const userRepository = (await getContainer()).resolve<NextAuthUserRepository>(
+    TypeSymbols.NEXT_AUTH_USER_REPOSITORY
+  );
   const users = await userRepository.getByQuery(
     userRepository.createQuery().limit(1)
   );

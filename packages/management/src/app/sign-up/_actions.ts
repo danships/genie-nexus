@@ -3,10 +3,12 @@
 import { saltAndHashPassword } from '@genie-nexus/auth';
 import { getServerConfiguration } from '@genie-nexus/configuration';
 import { TypeSymbols } from '@genie-nexus/container';
-import type { StoredConfigurationRepository } from '@genie-nexus/database';
+import type {
+  NextAuthUserRepository,
+  StoredConfigurationRepository,
+} from '@genie-nexus/database';
 import { DEFAULT_TENANT_ID } from '@lib/auth/constants';
 import { getAuthMethod } from '@lib/auth/get-auth-method';
-import { getNextAuthUserRepository } from '@lib/core/db';
 import { getContainer } from '@lib/core/get-container';
 
 export async function doSignUp(name: string, email: string, password: string) {
@@ -24,7 +26,9 @@ export async function doSignUp(name: string, email: string, password: string) {
       throw new Error('Sign up is not enabled');
     }
   }
-  const userRepository = await getNextAuthUserRepository();
+  const userRepository = (await getContainer()).resolve<NextAuthUserRepository>(
+    TypeSymbols.NEXT_AUTH_USER_REPOSITORY
+  );
 
   const existingUser = await userRepository.getOneByQuery(
     userRepository.createQuery().eq('email', email)

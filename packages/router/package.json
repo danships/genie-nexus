@@ -23,6 +23,7 @@
     "@genie-nexus/container": "workspace:*",
     "@genie-nexus/database": "workspace:*",
     "@genie-nexus/logger": "workspace:*",
+    "@genie-nexus/storage": "workspace:*",
     "@genie-nexus/types": "workspace:*",
     "ai": "^4.3.9",
     "argon2": "^0.41.1",

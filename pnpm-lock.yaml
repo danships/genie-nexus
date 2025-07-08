@@ -46,16 +46,28 @@ importers:
 
   packages/auth:
     dependencies:
+      '@genie-nexus/container':
+        specifier: workspace:*
+        version: link:../container
       '@genie-nexus/database':
         specifier: workspace:*
         version: link:../database
       argon2:
         specifier: ^0.41.1
         version: 0.41.1
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
       zod:
         specifier: ^3.25.56
         version: 3.25.56
     devDependencies:
+      '@auth/express':
+        specifier: ^0.10.0
+        version: 0.10.1(express@5.1.0)
+      '@genie-nexus/logger':
+        specifier: workspace:*
+        version: link:../logger
       next-auth:
         specifier: 5.0.0-beta.27
         version: 5.0.0-beta.27(next@15.3.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
@@ -178,6 +190,9 @@ importers:
       '@genie-nexus/logger':
         specifier: workspace:*
         version: link:../logger
+      '@genie-nexus/storage':
+        specifier: workspace:*
+        version: link:../storage
       '@genie-nexus/types':
         specifier: workspace:*
         version: link:../types
@@ -299,6 +314,9 @@ importers:
       '@genie-nexus/logger':
         specifier: workspace:*
         version: link:../logger
+      '@genie-nexus/storage':
+        specifier: workspace:*
+        version: link:../storage
       '@genie-nexus/types':
         specifier: workspace:*
         version: link:../types
@@ -363,6 +381,15 @@ importers:
       vitest:
         specifier: ^3.1.2
         version: 3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(jiti@2.4.2)(sugarss@4.0.1(postcss@8.5.4))(yaml@2.8.0)
+
+  packages/storage:
+    dependencies:
+      '@genie-nexus/container':
+        specifier: workspace:*
+        version: link:../container
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
 
   packages/types:
     dependencies:

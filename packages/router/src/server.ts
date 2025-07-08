@@ -15,6 +15,7 @@ import { initialize as initializeChatCompletions } from './modules/chat-completi
 import { initialize as initializeTelemetry } from './modules/telemetry/routes/index.js';
 
 import type { Logger } from '@genie-nexus/logger';
+import { InitializeStorage } from '@genie-nexus/storage';
 import type { SuperSave } from 'supersave';
 import { RouterTypeSymbols } from './core/dependency-injection/router-type-symbols.js';
 import { GetApplicationInformation } from './core/get-application-information.js';
@@ -155,9 +156,24 @@ export class GenieNexusServer {
 if (import.meta.url === new URL(process.argv[1] ?? '', 'file:').href) {
   void (async function () {
     const { environment } = await import('./core/environment.js');
+
+    let dbConnectionString = environment.DB;
+    if (
+      environment.DB.startsWith('sqlite') &&
+      environment.DB === 'sqlite://db.sqlite'
+    ) {
+      // The default db, we write that to a specific path. We cannot use DI yet to set up the storage path,
+      // as that has not been initialized yet.
+      const initializeStorage = new InitializeStorage();
+      const storagePath = await initializeStorage.initialize(
+        environment.GNXS_RUNTIME_ENVIRONMENT === 'docker'
+      );
+      dbConnectionString = `sqlite://${storagePath}/db.sqlite`;
+    }
+
     await initializeDependencyInjection({
       logLevel: environment.LOG_LEVEL,
-      dbConnectionString: environment.DB,
+      dbConnectionString,
     });
 
     const server = container.resolve(GenieNexusServer);
@@ -174,7 +190,7 @@ if (import.meta.url === new URL(process.argv[1] ?? '', 'file:').href) {
         websiteId: environment.TELEMETRY_SITE_ID,
         hostUrl: environment.TELEMETRY_HOST_URL,
       },
-      runtimeEnvironment: environment.RUNTIME_ENVIRONMENT,
+      runtimeEnvironment: environment.GNXS_RUNTIME_ENVIRONMENT,
       db: environment.DB.startsWith('mysql') ? 'mysql' : 'sqlite',
     });
   })();

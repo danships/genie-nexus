@@ -30,7 +30,7 @@ export const environment = cleanEnv(process.env, {
   TELEMETRY_HOST_URL: str({
     default: 'https://a.debuggingdan.com',
   }),
-  RUNTIME_ENVIRONMENT: str({
+  GNXS_RUNTIME_ENVIRONMENT: str({
     default: 'cli',
     choices: ['cli', 'docker'],
   }),

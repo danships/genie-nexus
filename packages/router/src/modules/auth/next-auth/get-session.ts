@@ -1,8 +1,9 @@
 import { type Session, getSession as getSessionAuth } from '@auth/express';
+import { GetExpressConfiguration } from '@genie-nexus/auth/express';
+import { container } from '@genie-nexus/container';
 import { getNextAuthUserRepository } from '@genie-nexus/database';
 import type { Request, Response } from 'express';
 import { getLogger } from '../../../core/get-logger.js';
-import { getNextAuthConfig } from './get-next-auth-config.js';
 import { isResponseLocalsNextAuthSession } from './types.js';
 
 export async function getSession(
@@ -14,7 +15,10 @@ export async function getSession(
   }
 
   const logger = getLogger();
-  const session = await getSessionAuth(req, await getNextAuthConfig());
+  const session = await getSessionAuth(
+    req,
+    await container.resolve(GetExpressConfiguration).getExpressConfiguration()
+  );
   if (session === null) {
     return null;
   }

@@ -5,7 +5,8 @@
     "dev": "PORT=3001 NODE_OPTIONS=\"--require reflect-metadata\" next dev",
     "build": "NODE_OPTIONS=\"--require reflect-metadata\" NEXT_BUILD=true next build",
     "start": "NODE_OPTIONS=\"--require reflect-metadata\" next start",
-    "lint": "next lint",
+    "lint": "concurrently --kill-others-on-fail \"pnpm:lint:*\"",
+    "lint:next": "next lint",
     "lint:tsc": "tsc --noEmit",
     "format:biome": "biome check --write --config-path=biome.ci.json .",
     "lint:biome": "biome check --config-path=biome.ci.json ."
@@ -21,6 +22,7 @@
     "@genie-nexus/container": "workspace:*",
     "@genie-nexus/database": "workspace:*",
     "@genie-nexus/logger": "workspace:*",
+    "@genie-nexus/storage": "workspace:*",
     "@genie-nexus/types": "workspace:*",
     "@mantine/core": "^7.5.0",
     "@mantine/form": "^8.0.1",
