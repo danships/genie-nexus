@@ -23,4 +23,5 @@ export const environment = cleanEnv(process.env, {
     default: 'info',
   }),
   HOST_PREFIX: str({ default: 'http://localhost:3000' }),
+  NEWSLETTER_HOST: str({ default: 'https://www.gnxs.io' }),
 });
