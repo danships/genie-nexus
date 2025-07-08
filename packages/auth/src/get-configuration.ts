@@ -24,39 +24,66 @@ export class GetConfiguration {
     return `${stringSecret.slice(0, 2)}...${stringSecret.slice(-1)}`;
   }
 
-  public async getConfiguration() {
-    const configuration =
-      await this.storedConfigurationRepository.getOneByQuery(
-        this.storedConfigurationRepository
-          .createQuery()
-          .eq('key', CONFIGURATION_KEY)
-      );
+  // Add a promise to prevent concurrent initializations
+  private initializationPromise: Promise<GeneralConfiguration> | null = null;
 
-    const secret = configuration?.values['secret'];
-    if (secret) {
-      const stringSecret = String(secret);
-
-      this.logger.debug('Using existing secret', {
-        secret: this.getAnonymizedSecret(stringSecret),
-      });
-      this.configuration = { secret: String(secret) };
+  public async getConfiguration(): Promise<GeneralConfiguration> {
+    if (this.configuration) {
       return this.configuration;
     }
 
-    const generatedSecret = crypto.randomBytes(32).toString('hex');
+    if (this.initializationPromise) {
+      return this.initializationPromise;
+    }
 
-    this.logger.debug('Generating new secret', {
-      secret: this.getAnonymizedSecret(generatedSecret),
-    });
+    this.initializationPromise = this.initializeConfiguration();
+    try {
+      this.configuration = await this.initializationPromise;
+      return this.configuration;
+    } finally {
+      this.initializationPromise = null;
+    }
+  }
 
-    await this.storedConfigurationRepository.create({
-      key: CONFIGURATION_KEY,
-      values: {
-        secret: generatedSecret,
-      },
-    });
+  private async initializeConfiguration(): Promise<GeneralConfiguration> {
+    try {
+      const configuration =
+        await this.storedConfigurationRepository.getOneByQuery(
+          this.storedConfigurationRepository
+            .createQuery()
+            .eq('key', CONFIGURATION_KEY)
+        );
 
-    this.configuration = { secret: generatedSecret };
-    return this.configuration;
+      const secret = configuration?.values['secret'];
+      if (secret) {
+        const stringSecret = String(secret);
+
+        this.logger.debug('Using existing secret', {
+          secret: this.getAnonymizedSecret(stringSecret),
+        });
+        return { secret: stringSecret };
+      }
+
+      const generatedSecret = crypto.randomBytes(32).toString('hex');
+
+      this.logger.debug('Generating new secret', {
+        secret: this.getAnonymizedSecret(generatedSecret),
+      });
+
+      await this.storedConfigurationRepository.create({
+        key: CONFIGURATION_KEY,
+        values: {
+          secret: generatedSecret,
+        },
+      });
+
+      return { secret: generatedSecret };
+    } catch (error) {
+      this.logger.error(
+        'Failed to get or create authentication configuration',
+        { error }
+      );
+      throw new Error('Authentication configuration initialization failed');
+    }
   }
 }
