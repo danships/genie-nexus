@@ -24,6 +24,7 @@ type FormValues = {
   password: string;
   confirmPassword: string;
   acceptTerms: boolean;
+  newsletter: boolean;
 };
 
 export function SignUpClientPage() {
@@ -37,6 +38,7 @@ export function SignUpClientPage() {
       password: '',
       confirmPassword: '',
       acceptTerms: false,
+      newsletter: false,
     },
     validate: {
       acceptTerms: (value) =>
@@ -53,7 +55,12 @@ export function SignUpClientPage() {
     }
 
     await changeData(async () => {
-      await doSignUp(values.name, values.email, values.password);
+      await doSignUp(
+        values.name,
+        values.email,
+        values.password,
+        values.newsletter
+      );
       router.push('/sign-in');
     });
   };
@@ -84,6 +91,7 @@ export function SignUpClientPage() {
               {...form.getInputProps('confirmPassword')}
             />
             <Checkbox
+              required
               label={
                 <Text size="sm">
                   I accept the Genie Nexus{' '}
@@ -105,6 +113,15 @@ export function SignUpClientPage() {
                 </Text>
               }
               {...form.getInputProps('acceptTerms', { type: 'checkbox' })}
+            />
+            <Checkbox
+              label={
+                <Text size="sm">
+                  I want to subscribe to the Genie Nexus newsletter (to get
+                  product updates, tips, and exclusive offers)
+                </Text>
+              }
+              {...form.getInputProps('newsletter', { type: 'checkbox' })}
             />
             {error && <ErrorNotification>{error}</ErrorNotification>}
             <Button
