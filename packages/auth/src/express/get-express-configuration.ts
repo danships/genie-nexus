@@ -54,7 +54,7 @@ export class GetExpressConfiguration {
         },
       },
     };
-    
+
     return this.configuration;
   }
 }

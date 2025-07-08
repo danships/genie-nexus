@@ -33,17 +33,19 @@ export async function getContainer(): Promise<typeof container> {
       if (environment.isDevelopment && process.env['DB_DEV']) {
         // When developing, we want to point to the dev db at the router package
         dbConnectionString = process.env['DB_DEV'];
-      } else if (
-        environment.DB.startsWith('sqlite') &&
-        environment.DB === 'sqlite://db.sqlite'
-      ) {
+      } else if (environment.DB === 'sqlite://db.sqlite') {
         // The default db, we write that to a specific path. We cannot use DI yet to set up the storage path,
         // as that has not been initialized yet.
-        const initializeStorage = new InitializeStorage();
-        const storagePath = await initializeStorage.initialize(
-          environment.GNXS_RUNTIME_ENVIRONMENT === 'docker'
-        );
-        dbConnectionString = `sqlite://${storagePath}/db.sqlite`;
+        try {
+          const initializeStorage = new InitializeStorage();
+          const storagePath = await initializeStorage.initialize(
+            environment.GNXS_RUNTIME_ENVIRONMENT === 'docker'
+          );
+          dbConnectionString = `sqlite://${storagePath}/db.sqlite`;
+        } catch (error) {
+          logger.error('Failed to initialize storage path', { error });
+          throw new Error('Storage initialization failed');
+        }
       }
 
       const db = await initializeDb({

@@ -6,12 +6,5 @@
     "noEmit": false
   },
   "include": ["src/**/*.ts"],
-// packages/storage/tsconfig.json
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    // ... your existing compiler options
-  }
-  // (removed the invalid "dependencies" field)
-}
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
