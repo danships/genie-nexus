@@ -14,10 +14,14 @@ export class InitializeStorage {
   }
 
   public async initialize(docker: boolean): Promise<string> {
-    const path = docker ? this.getPathForDocker() : this.getPathForCli();
+    const storagePath = docker ? this.getPathForDocker() : this.getPathForCli();
 
-    await mkdir(path, { recursive: true });
+    try {
+      await mkdir(storagePath, { recursive: true });
+    } catch (error) {
+      throw new Error(`Failed to create storage directory at ${storagePath}: ${error}`);
+    }
 
-    return path;
+    return storagePath;
   }
 }
