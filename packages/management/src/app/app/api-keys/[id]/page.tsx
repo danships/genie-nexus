@@ -1,6 +1,7 @@
 import type { ApiKeyApi, DeploymentApi } from '@genie-nexus/types';
 import { getEntities, getEntity } from '@lib/api/server-api';
 import { UserRequired } from '@lib/components/molecules/user-required';
+import { connection } from 'next/server';
 import { ApiKeyLlmDetailClientPage } from './_page-llm';
 import { ApiKeyWeaveDetailClientPage } from './_page-weave';
 
@@ -27,6 +28,8 @@ export default async function ApiKeyDetailsPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await connection();
+
   const { id } = await params;
 
   const [apiKey, deployments] = await Promise.all([

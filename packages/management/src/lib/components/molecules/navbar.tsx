@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { useMantineColorScheme } from '@mantine/core';
 import {
+  IconChartBar,
   IconDashboard,
   IconKey,
   IconMoon,
@@ -50,6 +51,12 @@ export const Navbar = ({ authMethod }: { authMethod: AuthMethod }) => {
             <Group gap="sm">
               <IconServer size={18} />
               <Text fw={500}>Providers</Text>
+            </Group>
+          </UnstyledButton>
+          <UnstyledButton component={Link} href="/app/insights">
+            <Group gap="sm">
+              <IconChartBar size={18} />
+              <Text fw={500}>Insights</Text>
             </Group>
           </UnstyledButton>
           <UnstyledButton component={Link} href="/app/api-keys">
