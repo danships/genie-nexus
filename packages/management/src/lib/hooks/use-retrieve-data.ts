@@ -1,5 +1,5 @@
 import { debugLogger } from '@lib/core/debug-logger';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type Options = {
   autoStart?: boolean;
@@ -10,18 +10,22 @@ export function useRetrieveData<T>(
   fetcher: () => Promise<T>,
   providedOptions?: Options
 ) {
-  const options = {
-    autoStart: true,
-    clearDataOnRefresh: false,
-    ...providedOptions,
-  };
+  const options = useMemo(
+    () => ({
+      autoStart: true,
+      clearDataOnRefresh: false,
+      ...providedOptions,
+    }),
+    [providedOptions]
+  );
+
   debugLogger('useRetrieveData initialized with options:', options);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<T | null>(null);
 
-  async function retrieveData() {
+  const retrieveData = useCallback(async () => {
     if (options.clearDataOnRefresh) {
       debugLogger('Clearing data due to clearDataOnRefresh option');
       setData(null);
@@ -47,14 +51,14 @@ export function useRetrieveData<T>(
       debugLogger('Data retrieval completed, loading state set to false');
       setLoading(false);
     }
-  }
+  }, [fetcher, options.clearDataOnRefresh]);
 
   useEffect(() => {
     if (options.autoStart) {
       debugLogger('Auto-starting data retrieval due to autoStart option');
       void retrieveData();
     }
-  }, [fetcher, options.autoStart, retrieveData]);
+  }, [options.autoStart, retrieveData]);
 
   return {
     error,
