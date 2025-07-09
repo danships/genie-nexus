@@ -24,4 +24,7 @@ export const environment = cleanEnv(process.env, {
   }),
   HOST_PREFIX: str({ default: 'http://localhost:3000' }),
   NEWSLETTER_HOST: str({ default: 'https://www.gnxs.io' }),
+  GITHUB_RELEASES_URL: str({
+    default: 'https://api.github.com/repos/danships/genie-nexus/releases',
+  }),
 });

@@ -1,0 +1,12 @@
+---
+alwaysApply: false
+---
+
+To implement the requested feature, follow these steps:
+
+1. Create a plan
+2. Share the plan with the user and ask for confirmation or feedback
+   2a. Update the plan based on the user's feedback
+3. Implement the first step of the plan
+4. After the first step is implemented, ask for confirmation or feedback
+5. Repeat step 3 and 4 until the feature is implemented

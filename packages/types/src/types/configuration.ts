@@ -5,6 +5,7 @@ export type ConfigurationResponse = DataWrapper<{
   tenant: TenantApi;
   defaultTenant: boolean;
   authentication: 'none' | 'credentials';
+  version: string;
 }>;
 
 export type StoredConfiguration = {
