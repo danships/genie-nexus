@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       ? [
           {
             source: '/api/v1/:path*',
-            destination: 'http://localhost:3000/api/v1/:path*',
+            destination: `http://localhost:${process.env['PORT_ROUTER'] ?? 3000}/api/v1/:path*`,
           },
         ]
       : [];

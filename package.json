@@ -18,6 +18,10 @@
     "format": "concurrently \"pnpm:format:*\"",
     "format:biome": "pnpm -r format:biome",
     "test": "pnpm -r test",
+    "test:ui:ci": "playwright test && vitest run",
+    "test:ui": "./tests/run-local.sh",
+    "test:ui:auth-none:pui": "AUTH_METHOD=none PUI=1 ./tests/run-local.sh",
+    "test:ui:auth-none": "AUTH_METHOD=none ./tests/run-local.sh",
     "build": "pnpm -r build",
     "prepare": "husky",
     "pre-push": "concurrently \"pnpm lint\" \"pnpm test\"",
@@ -27,12 +31,14 @@
     "@biomejs/biome": "1.9.4",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "@playwright/test": "^1.54.1",
     "@tsconfig/node22": "^22.0.1",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.14.1",
     "concurrently": "^9.1.2",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.0.0"
+    "lint-staged": "^16.0.0",
+    "vitest": "^3.2.4"
   }
 }

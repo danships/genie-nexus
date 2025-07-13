@@ -1,6 +1,7 @@
 import type { Deployment } from '@genie-nexus/database';
 import { getConfiguration, getEntity } from '@lib/api/server-api';
 import { UserRequired } from '@lib/components/molecules/user-required';
+import { connection } from 'next/server';
 import { DeploymentLlmDetailClientPage } from './_page-llm';
 import { DeploymentWeaveDetailClientPage } from './_page-weave';
 
@@ -27,6 +28,7 @@ export default async function DeploymentDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await connection();
   const { id } = await params;
 
   const [deployment, configuration] = await Promise.all([
