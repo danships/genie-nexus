@@ -8,11 +8,13 @@ import { initialize as initializeDb } from '@genie-nexus/database';
 import { LoggerImplementation } from '@genie-nexus/logger/winston';
 import { InitializeStorage } from '@genie-nexus/storage';
 import { environment } from '@lib/environment';
+import { connection } from 'next/server';
 
 let initialized = false;
 let initializing: Promise<typeof container> | null = null;
 
 export async function getContainer(): Promise<typeof container> {
+  await connection();
   if (initialized) {
     return container;
   }

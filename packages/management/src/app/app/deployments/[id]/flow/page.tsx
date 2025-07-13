@@ -5,6 +5,7 @@ import type {
   WeaveFlowCreate,
 } from '@genie-nexus/types';
 import { createEntity, getEntityByQuery } from '@lib/api/server-api';
+import { connection } from 'next/server';
 import { getDeployment } from '../page';
 import { FlowEditorClientPage } from './_page';
 
@@ -68,6 +69,7 @@ export default async function FlowEditorPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await connection();
   const { id } = await params;
 
   const deployment = await getDeployment(id);

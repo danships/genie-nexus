@@ -15,5 +15,8 @@
     "clean": "rimraf dist",
     "format:biome": "biome check --write --config-path=biome.ci.json .",
     "lint:biome": "biome check --config-path=biome.ci.json ."
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
   }
 }
