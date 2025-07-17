@@ -3,3 +3,5 @@ node_modules
 dist
 db.sqlite
 packages/router/gnxs-data
+playwright-report
+test-results
