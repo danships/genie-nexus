@@ -8,7 +8,6 @@ import {
 } from '@genie-nexus/container';
 import type { Express, NextFunction, Request, Response } from 'express';
 import { initialize as initializeDependencyInjection } from './core/dependency-injection/initialize.js';
-import { isProduction } from './core/utils/is-production.js';
 import { initialize as initializeApiKey } from './modules/api-key/routes/index.js';
 import { initialize as initializeAuthentication } from './modules/auth/next-auth/initialize.js';
 import { initialize as initializeChatCompletions } from './modules/chat-completions/routes/index.js';
@@ -90,7 +89,6 @@ export class GenieNexusServer {
     }
 
     this.app.use(uniqueIdMiddleware);
-
     this.app.get('/_health', (_req: Request, res: Response) => {
       res.send('OK');
     });
@@ -125,11 +123,11 @@ export class GenieNexusServer {
         if (req.path.startsWith('/api')) {
           res.setHeader('Content-Type', 'application/json');
           res.json({
-            error: isProduction() ? 'An unexpected error occurred' : error,
+            error: !options.devMode ? 'An unexpected error occurred' : error,
           });
         } else {
           res.send(
-            isProduction()
+            !options.devMode
               ? 'An unexpected error occurred'
               : `${error.message}: ${error.stack}`
           );

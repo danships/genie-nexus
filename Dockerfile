@@ -1,11 +1,12 @@
 ARG NODE_IMAGE=node:22.16.0-alpine
+ARG VERSION
 
 FROM ${NODE_IMAGE} AS base
 
 RUN mkdir -p /app && chown -R node: /app
 WORKDIR /app
 
-RUN npm i -g pnpm
+RUN npm i -g pnpm@10.10.0 && apk add --no-cache jq
 
 FROM base AS build
 
@@ -22,10 +23,13 @@ FROM base
 RUN apk add --no-cache tini curl
 
 WORKDIR /app
+
+RUN mkdir /gnxs-data && chown -R node: /gnxs-data
 USER node
 
 # router
 COPY --from=build --chown=node:node /prod/router/ ./
+RUN if [ -n "$VERSION" ]; then jq --arg version "$VERSION" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json; fi
 
 # frontend
 RUN mkdir -p /app/.next && chown -R node: /app/.next

@@ -25,6 +25,7 @@ export class GetExpressConfiguration {
 
     this.configuration = {
       secret,
+      trustHost: true,
       cookies: {
         sessionToken: {
           name: COOKIE_NAME,

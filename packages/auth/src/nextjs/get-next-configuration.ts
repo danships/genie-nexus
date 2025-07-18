@@ -26,6 +26,7 @@ export class GetNextConfiguration {
 
     this.configuration = {
       secret,
+      trustHost: true,
       cookies: {
         sessionToken: {
           name: COOKIE_NAME,
