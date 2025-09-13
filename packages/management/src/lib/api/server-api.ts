@@ -12,7 +12,14 @@ import 'server-only';
 
 const API_URL_PREFIX = `${environment.HOST_PREFIX}/api/v1`;
 
-const serverLogger = (await getContainer()).resolve<Logger>(TypeSymbols.LOGGER);
+let serverLogger: Logger | null = null;
+
+async function getServerLogger(): Promise<Logger> {
+  if (!serverLogger) {
+    serverLogger = (await getContainer()).resolve<Logger>(TypeSymbols.LOGGER);
+  }
+  return serverLogger;
+}
 
 export async function getResponseFromApi<T>(path: string): Promise<T> {
   const response = await fetch(
@@ -57,9 +64,12 @@ export async function getEntity<T extends LocalBaseEntity>(
     await getCookieHeaders()
   );
   if (!response.ok) {
-    serverLogger.error(`Failed to fetch entities: ${response.statusText}`, {
-      response: await response.text(),
-    });
+    (await getServerLogger()).error(
+      `Failed to fetch entities: ${response.statusText}`,
+      {
+        response: await response.text(),
+      }
+    );
     throw new Error(`Failed to fetch entity: ${response.statusText}`);
   }
   const data = (await response.json()) as { data: T };
@@ -79,9 +89,12 @@ export async function createEntity<T, R>(collection: string, flow: T) {
     body: JSON.stringify(flow),
   });
   if (!response.ok) {
-    serverLogger.error(`Failed to create entity: ${response.statusText}`, {
-      response: await response.text(),
-    });
+    (await getServerLogger()).error(
+      `Failed to create entity: ${response.statusText}`,
+      {
+        response: await response.text(),
+      }
+    );
     throw new Error(`Failed to create entity: ${response.statusText}`);
   }
 
@@ -102,9 +115,12 @@ export async function getEntityByQuery<T extends LocalBaseEntity>(
   }
 
   if (!response.ok) {
-    serverLogger.error(`Failed to fetch entity: ${response.statusText}`, {
-      response: await response.text(),
-    });
+    (await getServerLogger()).error(
+      `Failed to fetch entity: ${response.statusText}`,
+      {
+        response: await response.text(),
+      }
+    );
     throw new Error(`Failed to fetch entity: ${response.statusText}`);
   }
   const data = (await response.json()) as { data: T[] };
@@ -123,9 +139,12 @@ export async function getEntities<T extends LocalBaseEntity>(
     await getCookieHeaders()
   );
   if (!response.ok) {
-    serverLogger.error(`Failed to fetch entities: ${response.statusText}`, {
-      response: await response.text(),
-    });
+    (await getServerLogger()).error(
+      `Failed to fetch entities: ${response.statusText}`,
+      {
+        response: await response.text(),
+      }
+    );
 
     throw new Error(`Failed to fetch entities: ${response.statusText}`);
   }
@@ -143,11 +162,15 @@ export async function getConfiguration(): Promise<
   );
   if (!configurationResponse.ok) {
     if (configurationResponse.status === 401) {
-      serverLogger.info('Unauthorized to fetch server configuration.');
+      (await getServerLogger()).info(
+        'Unauthorized to fetch server configuration.'
+      );
       const { signIn } = await getNextAuth();
       await signIn();
     }
-    serverLogger.warning('Could not retrieve server configuration.');
+    (await getServerLogger()).warning(
+      'Could not retrieve server configuration.'
+    );
     throw new Error('Failed to fetch server configuration.');
   }
 
