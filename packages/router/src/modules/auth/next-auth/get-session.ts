@@ -16,6 +16,7 @@ export async function getSession(
 
   const logger = getLogger();
   const session = await getSessionAuth(
+    // @ts-expect-error next-auth express and project express typings are not aligned
     req,
     await container.resolve(GetExpressConfiguration).getExpressConfiguration()
   );

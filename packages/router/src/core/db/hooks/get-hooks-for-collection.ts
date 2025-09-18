@@ -8,6 +8,7 @@ import updateBefore from './implementations/update-before.js';
 
 export function getHooksForCollection(): Hooks {
   return {
+    // @ts-expect-error Ignore types here because we require a tenantId in the hook.
     get,
     // @ts-expect-error Ignore types here because we require a tenantId in the hook.
     getById,
