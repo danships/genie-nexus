@@ -71,4 +71,15 @@ describe.skip('OpenAI Compatibility', () => {
     expect(typeof fullResponse).toBe('string');
     expect(fullResponse.length).toBeGreaterThan(0);
   });
+
+  it('should be able to use the OpenAI API to get models', async () => {
+    const openai = new OpenAI({
+      apiKey: publicApiKey,
+      baseURL: `http://localhost:${OPTIONS.port}/api/v1/static-echo`,
+    });
+    const models = await openai.models.list();
+    expect(models).toBeDefined();
+    expect(models.data.length).toBeGreaterThan(0);
+    expect(models.data[0].id).toBe('static-echo');
+  });
 });

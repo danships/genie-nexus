@@ -1,13 +1,18 @@
+import type { Deployment } from '@genie-nexus/database';
 import type {
   LlmFlow,
   LlmFlowCreate,
   WeaveFlow,
   WeaveFlowCreate,
 } from '@genie-nexus/types';
-import { createEntity, getEntityByQuery } from '@lib/api/server-api';
+import { createEntity, getEntity, getEntityByQuery } from '@lib/api/server-api';
 import { connection } from 'next/server';
-import { getDeployment } from '../page';
 import { FlowEditorClientPage } from './_page';
+
+async function getDeployment(id: string) {
+  const deployment = await getEntity<Deployment>('deployments', id);
+  return deployment;
+}
 
 async function getOrCreateWeaveFlow(deploymentId: string): Promise<WeaveFlow> {
   const flow = await getEntityByQuery<WeaveFlow>(

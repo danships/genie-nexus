@@ -1,0 +1,4 @@
+
+GET http://localhost:3000/api/v1/static-echo/models
+Content-Type: application/json
+Authorization: Bearer sk-gn1-45EZGuRgQj1Bd6bakeQMYF-2b9a560589deb36838aebe9c1cdf67a60c558ff4eb7ca0de26163b3ca43067cf
