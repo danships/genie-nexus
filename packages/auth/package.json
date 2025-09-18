@@ -47,7 +47,7 @@
   "dependencies": {
     "@genie-nexus/container": "workspace:*",
     "@genie-nexus/database": "workspace:*",
-    "argon2": "^0.41.1",
+    "argon2": "^0.44.0",
     "reflect-metadata": "^0.2.2",
     "zod": "^3.25.56"
   }
