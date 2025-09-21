@@ -111,8 +111,8 @@ importers:
         version: 3.25.76
     devDependencies:
       '@auth/express':
-        specifier: ^0.10.0
-        version: 0.10.1(express@5.1.0)
+        specifier: ^0.11.0
+        version: 0.11.0(express@5.1.0)
       '@genie-nexus/logger':
         specifier: workspace:*
         version: link:../logger
@@ -222,7 +222,7 @@ importers:
         version: 3.2.2(react@19.1.1)
       '@genie-nexus/auth':
         specifier: workspace:*
-        version: link:../auth
+        version: file:packages/auth(@auth/express@0.10.1(express@5.1.0))(express@5.1.0)(next-auth@5.0.0-beta.27(next@15.5.3(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1))
       '@genie-nexus/configuration':
         specifier: workspace:*
         version: link:../configuration
@@ -342,8 +342,8 @@ importers:
         specifier: ^0.2.12
         version: 0.2.16(zod@3.25.76)
       '@auth/express':
-        specifier: ^0.10.0
-        version: 0.10.1(express@5.1.0)
+        specifier: ^0.11.0
+        version: 0.11.0(express@5.1.0)
       '@genie-nexus/auth':
         specifier: workspace:*
         version: link:../auth
@@ -600,8 +600,27 @@ packages:
       nodemailer:
         optional: true
 
+  '@auth/core@0.40.0':
+    resolution: {integrity: sha512-n53uJE0RH5SqZ7N1xZoMKekbHfQgjd0sAEyUbE+IYJnmuQkbvuZnXItCU7d+i7Fj8VGOgqvNO7Mw4YfBTlZeQw==}
+    peerDependencies:
+      '@simplewebauthn/browser': ^9.0.1
+      '@simplewebauthn/server': ^9.0.2
+      nodemailer: ^6.8.0
+    peerDependenciesMeta:
+      '@simplewebauthn/browser':
+        optional: true
+      '@simplewebauthn/server':
+        optional: true
+      nodemailer:
+        optional: true
+
   '@auth/express@0.10.1':
     resolution: {integrity: sha512-P+W32En+p85aL0kKO12a+m0uv7j3bCnWkzaD35l+JJT+PSvLI0pndYaUdCxTeW/dcyZhTyHooPesQfAAE1sBjg==}
+    peerDependencies:
+      express: ^4.18.2 || ^5.0.0
+
+  '@auth/express@0.11.0':
+    resolution: {integrity: sha512-IOw4U5qMNHdSMCRwMMDGW9rEi/bcUaoEj142C1bJg/Uc3LKqoezOXqf23trZT8KkK9u/IH80K42RzAboa4J4Bw==}
     peerDependencies:
       express: ^4.18.2 || ^5.0.0
 
@@ -2024,6 +2043,25 @@ packages:
 
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
+
+  '@genie-nexus/auth@file:packages/auth':
+    resolution: {directory: packages/auth, type: directory}
+    peerDependencies:
+      '@auth/express': ^0.10.0
+      next-auth: 5.0.0-beta.27
+    peerDependenciesMeta:
+      '@auth/express':
+        optional: true
+      next-auth:
+        optional: true
+
+  '@genie-nexus/container@file:packages/container':
+    resolution: {directory: packages/container, type: directory}
+
+  '@genie-nexus/database@file:packages/database':
+    resolution: {directory: packages/database, type: directory}
+    peerDependencies:
+      express: 5.x
 
   '@hapi/hoek@9.3.0':
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -8426,10 +8464,29 @@ snapshots:
       oauth4webapi: 3.5.1
       preact: 10.24.3
       preact-render-to-string: 6.5.11(preact@10.24.3)
+    optional: true
+
+  '@auth/core@0.40.0':
+    dependencies:
+      '@panva/hkdf': 1.2.1
+      jose: 6.0.11
+      oauth4webapi: 3.5.1
+      preact: 10.24.3
+      preact-render-to-string: 6.5.11(preact@10.24.3)
 
   '@auth/express@0.10.1(express@5.1.0)':
     dependencies:
       '@auth/core': 0.39.1
+      express: 5.1.0
+    transitivePeerDependencies:
+      - '@simplewebauthn/browser'
+      - '@simplewebauthn/server'
+      - nodemailer
+    optional: true
+
+  '@auth/express@0.11.0(express@5.1.0)':
+    dependencies:
+      '@auth/core': 0.40.0
       express: 5.1.0
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
@@ -10585,6 +10642,34 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
+  '@genie-nexus/auth@file:packages/auth(@auth/express@0.10.1(express@5.1.0))(express@5.1.0)(next-auth@5.0.0-beta.27(next@15.5.3(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1))':
+    dependencies:
+      '@genie-nexus/container': file:packages/container
+      '@genie-nexus/database': file:packages/database(express@5.1.0)
+      argon2: 0.41.1
+      reflect-metadata: 0.2.2
+      zod: 3.25.76
+    optionalDependencies:
+      '@auth/express': 0.10.1(express@5.1.0)
+      next-auth: 5.0.0-beta.27(next@15.5.3(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+    transitivePeerDependencies:
+      - express
+      - supports-color
+
+  '@genie-nexus/container@file:packages/container':
+    dependencies:
+      tsyringe: 4.10.0
+
+  '@genie-nexus/database@file:packages/database(express@5.1.0)':
+    dependencies:
+      better-sqlite3: 12.2.0
+      debug: 4.4.1
+      express: 5.1.0
+      mysql2: 3.14.5
+      supersave: 0.20.0(better-sqlite3@12.2.0)(express@5.1.0)(mysql2@3.14.5)
+    transitivePeerDependencies:
+      - supports-color
+
   '@hapi/hoek@9.3.0': {}
 
   '@hapi/topo@5.1.0':
@@ -11508,6 +11593,14 @@ snapshots:
       magic-string: 0.30.19
     optionalDependencies:
       vite: 7.1.5(@types/node@22.18.3)(jiti@2.5.1)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.0)(yaml@2.8.1)
+
+  '@vitest/mocker@3.2.4(vite@7.1.5(@types/node@24.3.3)(jiti@2.5.1)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.0)(yaml@2.8.1))':
+    dependencies:
+      '@vitest/spy': 3.2.4
+      estree-walker: 3.0.3
+      magic-string: 0.30.19
+    optionalDependencies:
+      vite: 7.1.5(@types/node@24.3.3)(jiti@2.5.1)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.0)(yaml@2.8.1)
 
   '@vitest/pretty-format@3.2.4':
     dependencies:
@@ -17474,7 +17567,7 @@ snapshots:
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.4
-      '@vitest/mocker': 3.2.4(vite@7.1.5(@types/node@22.18.3)(jiti@2.5.1)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.0)(yaml@2.8.1))
+      '@vitest/mocker': 3.2.4(vite@7.1.5(@types/node@24.3.3)(jiti@2.5.1)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.0)(yaml@2.8.1))
       '@vitest/pretty-format': 3.2.4
       '@vitest/runner': 3.2.4
       '@vitest/snapshot': 3.2.4
