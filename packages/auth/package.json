@@ -27,7 +27,7 @@
   "files": ["dist"],
   "peerDependencies": {
     "@auth/express": "^0.10.0",
-    "next-auth": "5.0.0-beta.27"
+    "next-auth": "5.0.0-beta.29"
   },
   "peerDependenciesMeta": {
     "@auth/express": {
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@auth/express": "^0.10.0",
-    "next-auth": "5.0.0-beta.27",
+    "next-auth": "5.0.0-beta.29",
     "supersave": "^0.20.0",
     "typescript": "^5.7.0",
     "@genie-nexus/logger": "workspace:*"
