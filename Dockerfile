@@ -1,4 +1,4 @@
-ARG NODE_IMAGE=node:22.16.0-alpine
+ARG NODE_IMAGE=node:22.20.0-alpine
 ARG VERSION
 
 FROM ${NODE_IMAGE} AS base
