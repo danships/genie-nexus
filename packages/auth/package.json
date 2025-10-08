@@ -38,7 +38,7 @@
     }
   },
   "devDependencies": {
-    "@auth/express": "^0.10.0",
+    "@auth/express": "^0.12.0",
     "next-auth": "5.0.0-beta.27",
     "supersave": "^0.20.0",
     "typescript": "^5.7.0",
