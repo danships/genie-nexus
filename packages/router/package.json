@@ -18,7 +18,7 @@
   "dependencies": {
     "@ai-sdk/google": "^1.2.18",
     "@ai-sdk/openai-compatible": "^0.2.12",
-    "@auth/express": "^0.10.0",
+    "@auth/express": "^0.12.0",
     "@genie-nexus/auth": "workspace:*",
     "@genie-nexus/configuration": "workspace:*",
     "@genie-nexus/container": "workspace:*",
