@@ -26,7 +26,7 @@
     "@genie-nexus/logger": "workspace:*",
     "@genie-nexus/storage": "workspace:*",
     "@genie-nexus/types": "workspace:*",
-    "ai": "^4.3.19",
+    "ai": "^5.0.52",
     "argon2": "^0.41.1",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
