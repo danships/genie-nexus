@@ -19,7 +19,7 @@ todos:
     status: completed
   - id: phase2-apikeys
     content: Migrate API keys creation route
-    status: pending
+    status: completed
   - id: phase3-collections
     content: Create custom collection API routes with repository queries
     status: pending
@@ -180,9 +180,14 @@ flowchart TB
 >
 > **Note:** Telemetry event sending was omitted from the POST handler as it will be handled separately in phase 6.
 
-### 2.3 API Keys Route
+### 2.3 API Keys Route ✅
 
 - `/app/api/v1/api-keys/route.ts` - POST create API key
+
+> **Completed:** Created API keys route:
+>
+> - `src/app/api/v1/api-keys/route.ts` - POST endpoint requiring auth, creates LLM, Weave, or Management API keys
+> - `src/lib/api/generate-api-key.ts` - Utility with `generateLlmApiKey`, `generateWeaveApiKey`, `generateManagementApiKey` functions using argon2 hashing
 
 ---
 
