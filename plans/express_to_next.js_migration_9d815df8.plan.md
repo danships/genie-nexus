@@ -22,10 +22,10 @@ todos:
     status: completed
   - id: phase3-collections
     content: Create custom collection API routes with repository queries
-    status: pending
+    status: completed
   - id: phase3-query-helpers
     content: Implement query helper utilities for tenant/user filtering
-    status: pending
+    status: completed
   - id: phase4-chat
     content: Migrate chat completions with SSE streaming support
     status: pending
@@ -36,7 +36,7 @@ todos:
     content: Migrate weave proxy with catch-all route and all HTTP methods
     status: pending
   - id: phase6-telemetry
-    content: Migrate telemetry forwarding route
+    content: Migrate telemetry forwarding route and add missing telemetry events
     status: pending
   - id: phase7-dockerfile
     content: Update Dockerfile for Next.js standalone deployment
@@ -191,11 +191,11 @@ flowchart TB
 
 ---
 
-## Phase 3: Collections API (Custom Repository Queries)
+## Phase 3: Collections API (Custom Repository Queries) ✅
 
 Replace SuperSave auto-generated routes with explicit API routes using repository pattern:
 
-### 3.1 Create Collection Route Handlers
+### 3.1 Create Collection Route Handlers ✅
 
 For each collection (providers, deployments, api-keys, tenants, flows, etc.):
 
@@ -204,9 +204,22 @@ For each collection (providers, deployments, api-keys, tenants, flows, etc.):
 /app/api/v1/collections/[collection]/[id]/route.ts - GET, PUT, DELETE
 ```
 
-### 3.2 Implement Query Helpers
+> **Completed:** Created dynamic collection routes:
+>
+> - `src/app/api/v1/collections/[collection]/route.ts` - GET (list with query params), POST (create)
+> - `src/app/api/v1/collections/[collection]/[id]/route.ts` - GET, PUT, DELETE for individual entities
+>
+> **Supporting utilities:**
+>
+> - `src/lib/api/collections/types.ts` - Collection name mapping to repository type symbols
+> - `src/lib/api/collections/query-helpers.ts` - Query building with tenant filtering, pagination, sorting
+> - `src/lib/api/collections/transform-entity.ts` - Entity transformation (removes tenantId, hash, apiKey)
+>
+> **Collections supported:** provider, deployment, apiKey, tenant, weaveflow, llmflow, storedconfiguration
 
-Create query builder utilities in `packages/management/src/lib/api/query-helpers.ts`:
+### 3.2 Implement Query Helpers ✅
+
+Create query builder utilities in `packages/management/src/lib/api/collections/query-helpers.ts`:
 
 ```typescript
 export const addTenantIdToQuery = (query: Query, tenantId: string) => {
@@ -214,15 +227,22 @@ export const addTenantIdToQuery = (query: Query, tenantId: string) => {
 };
 ```
 
-### 3.3 Collection Types to Support
+> **Completed:** Implemented `buildQuery()` and `parseQueryParams()` functions supporting:
+>
+> - Tenant ID filtering (automatic)
+> - Custom filters via query params
+> - Pagination (limit, offset)
+> - Sorting (sort, order)
 
-- `providers` - LLM/Weave provider configurations
-- `deployments` - Deployment configurations
-- `api-keys` - API key records
-- `tenants` - Tenant records (if multi-tenant)
-- `llm-flows` - LLM flow configurations
-- `weave-flows` - Weave flow configurations
-- `stored-configuration` - Server configuration storage
+### 3.3 Collection Types to Support ✅
+
+- `provider` - LLM/Weave provider configurations
+- `deployment` - Deployment configurations
+- `apiKey` - API key records
+- `tenant` - Tenant records (if multi-tenant)
+- `llmflow` - LLM flow configurations
+- `weaveflow` - Weave flow configurations
+- `storedconfiguration` - Server configuration storage
 
 ---
 
@@ -273,6 +293,24 @@ export const addTenantIdToQuery = (query: Query, tenantId: string) => {
 
 - `/app/api/v1/tm/api/send/route.ts`
 - Port telemetry forwarding logic
+
+### 6.2 Add Missing Telemetry Events
+
+The following telemetry events from the Express implementation need to be added:
+
+**Collection creation events** (from `create-before.ts`):
+
+- `{ type: 'create', entity: 'deployment' }` - when creating deployments
+- `{ type: 'create', entity: 'provider' }` - when creating providers
+- `{ type: 'create', entity: 'apiKey' }` - when creating API keys
+- `{ type: 'create', entity: 'llmflow' }` - when creating LLM flows
+- `{ type: 'create', entity: 'weaveflow' }` - when creating Weave flows
+
+**Server configuration events** (from `update-server-configuration.ts`):
+
+- `{ type: 'telemetry-disabled' }` - when user disables telemetry
+- `{ type: 'telemetry-enabled' }` - when user enables telemetry
+- `{ type: 'registered' }` - after telemetry is enabled (with new server identifier)
 
 ---
 
