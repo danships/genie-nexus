@@ -16,7 +16,7 @@ todos:
     status: completed
   - id: phase2-config
     content: Migrate configuration API routes
-    status: pending
+    status: completed
   - id: phase2-apikeys
     content: Migrate API keys creation route
     status: pending
@@ -167,10 +167,18 @@ flowchart TB
 
 > **Completed:** Created health check route at `src/app/health/route.ts` - endpoint at `/health`, returns plain text `OK`.
 
-### 2.2 Configuration Routes
+### 2.2 Configuration Routes ✅
 
 - `/app/api/v1/configuration/route.ts` - GET configuration
 - `/app/api/v1/configuration/server/route.ts` - GET/POST server config
+
+> **Completed:** Created configuration API routes:
+>
+> - `src/app/api/v1/configuration/route.ts` - GET endpoint requiring auth, returns tenant info, auth type, and version
+> - `src/app/api/v1/configuration/server/route.ts` - GET (public) and POST (auth required) for server configuration
+> - `src/lib/api/get-app-version.ts` - Utility to get app version from package.json with caching
+>
+> **Note:** Telemetry event sending was omitted from the POST handler as it will be handled separately in phase 6.
 
 ### 2.3 API Keys Route
 
