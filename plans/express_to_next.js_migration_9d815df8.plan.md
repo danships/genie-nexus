@@ -7,7 +7,7 @@ todos:
     status: completed
   - id: phase1-di
     content: Consolidate dependency injection to register all repositories in management
-    status: pending
+    status: completed
   - id: phase1-middleware
     content: Create Next.js-compatible middleware utilities (API key, tenant, auth)
     status: pending
@@ -115,10 +115,23 @@ flowchart TB
 >
 > **Deviation from plan:** Rewrites were removed entirely instead of being added. The original rewrites forwarded requests to Express during development, but since Express is being fully replaced, they are no longer needed. All routes will be handled directly by Next.js API routes.
 
-### 1.2 Consolidate Dependency Injection
+### 1.2 Consolidate Dependency Injection ✅
 
 - Extend [`packages/management/src/lib/core/get-container.ts`](packages/management/src/lib/core/get-container.ts) to register all repositories currently initialized in the router package
 - Move relevant services from `packages/router/src/modules/` to shared packages or management
+
+> **Completed:** Extended `get-container.ts` to register all 8 repositories:
+>
+> - `PROVIDER_REPOSITORY`
+> - `DEPLOYMENT_REPOSITORY`
+> - `API_KEY_REPOSITORY`
+> - `TENANT_REPOSITORY`
+> - `NEXT_AUTH_USER_REPOSITORY`
+> - `WEAVE_FLOW_REPOSITORY`
+> - `LLM_FLOW_REPOSITORY`
+> - `STORED_CONFIGURATION_REPOSITORY`
+>
+> **Note:** Moving services from router to shared packages will be done as needed during route migration phases.
 
 ### 1.3 Create Shared Middleware Utilities
 
