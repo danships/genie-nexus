@@ -13,7 +13,7 @@ todos:
     status: completed
   - id: phase2-health
     content: Create health check API routes
-    status: pending
+    status: completed
   - id: phase2-config
     content: Migrate configuration API routes
     status: pending
@@ -161,9 +161,11 @@ flowchart TB
 
 ## Phase 2: Core API Routes Migration
 
-### 2.1 Health Check
+### 2.1 Health Check ✅
 
-- Create `/app/health/route.ts` and `/_health/route.ts`
+- Create `/app/health/route.ts`
+
+> **Completed:** Created health check route at `src/app/health/route.ts` - endpoint at `/health`, returns plain text `OK`.
 
 ### 2.2 Configuration Routes
 

@@ -47,7 +47,7 @@ ENV GNXS_RUNTIME_ENVIRONMENT=docker
 ENV PORT=3000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:${PORT}/_health || curl -f http://localhost:${PORT}/health-fe || exit 1
+  CMD curl -f http://localhost:${PORT}/health
 
 
 ENTRYPOINT ["/sbin/tini", "--"]
