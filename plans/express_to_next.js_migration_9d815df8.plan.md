@@ -10,7 +10,7 @@ todos:
     status: completed
   - id: phase1-middleware
     content: Create Next.js-compatible middleware utilities (API key, tenant, auth)
-    status: pending
+    status: completed
   - id: phase2-health
     content: Create health check API routes
     status: pending
@@ -53,6 +53,8 @@ todos:
 ---
 
 # Express to Next.js Migration Plan
+
+After each step, validate whether pnpm lint:tsc passes. If it doesn't, fix the errors and update the plan.
 
 ## Current Architecture
 
@@ -133,13 +135,27 @@ flowchart TB
 >
 > **Note:** Moving services from router to shared packages will be done as needed during route migration phases.
 
-### 1.3 Create Shared Middleware Utilities
+### 1.3 Create Shared Middleware Utilities ✅
 
 - Create Next.js-compatible middleware for:
 - API key validation (from `check-api-key.ts`)
 - Tenant resolution (from `get-tenant.ts`)
 - Request ID generation (from `unique-id-middleware.ts`)
 - Authentication checks (from `check-api-key-or-user.ts`)
+
+> **Completed:** Created middleware utilities in `packages/management/src/lib/api/middleware/`:
+>
+> - `check-api-key.ts` - Validates API keys from Authorization header
+> - `check-api-key-or-user.ts` - Validates either API key or user session
+> - `get-tenant.ts` - Resolves tenant from ID or returns default tenant
+> - `request-id.ts` - Generates unique request IDs
+> - `handle-api-error.ts` - Error handler for API routes returning NextResponse
+> - `errors.ts` - Error classes (ApplicationError, ApiKeyValidationError, etc.)
+> - `constants.ts` - Shared constants (API_KEY_PREFIX, DEFAULT_TENANT_ID)
+> - `break-down-api-key.ts` - Parses API key into ID and secret
+> - `validate-api-key.ts` - Validates API key against hash using argon2
+> - `generate-default-tenant.ts` - Creates default tenant object
+> - `index.ts` - Exports all utilities
 
 ---
 
