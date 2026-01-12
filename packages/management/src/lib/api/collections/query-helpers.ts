@@ -1,4 +1,4 @@
-import type { Repository } from "supersave";
+import type { Repository } from 'supersave';
 
 type QueryParams = {
   tenantId: string;
@@ -6,15 +6,15 @@ type QueryParams = {
   limit?: number | undefined;
   offset?: number | undefined;
   sort?: string | undefined;
-  order?: "asc" | "desc" | undefined;
+  order?: 'asc' | 'desc' | undefined;
 };
 
 export function buildQuery<T>(repository: Repository<T>, params: QueryParams) {
-  let query = repository.createQuery().eq("tenantId", params.tenantId);
+  let query = repository.createQuery().eq('tenantId', params.tenantId);
 
   if (params.filters) {
     for (const [key, value] of Object.entries(params.filters)) {
-      if (key !== "tenantId") {
+      if (key !== 'tenantId') {
         query = query.eq(key, value);
       }
     }
@@ -29,7 +29,7 @@ export function buildQuery<T>(repository: Repository<T>, params: QueryParams) {
   }
 
   if (params.sort) {
-    query = query.sort(params.sort, params.order ?? "asc");
+    query = query.sort(params.sort, params.order ?? 'asc');
   }
 
   return query;
@@ -37,15 +37,15 @@ export function buildQuery<T>(repository: Repository<T>, params: QueryParams) {
 
 export function parseQueryParams(
   searchParams: URLSearchParams
-): Omit<QueryParams, "tenantId"> {
+): Omit<QueryParams, 'tenantId'> {
   const filters: Record<string, string> = {};
-  const limit = searchParams.get("limit");
-  const offset = searchParams.get("offset");
-  const sort = searchParams.get("sort");
-  const order = searchParams.get("order");
+  const limit = searchParams.get('limit');
+  const offset = searchParams.get('offset');
+  const sort = searchParams.get('sort');
+  const order = searchParams.get('order');
 
   for (const [key, value] of searchParams.entries()) {
-    if (!["limit", "offset", "sort", "order"].includes(key)) {
+    if (!['limit', 'offset', 'sort', 'order'].includes(key)) {
       filters[key] = value;
     }
   }
@@ -55,6 +55,6 @@ export function parseQueryParams(
     limit: limit ? Number.parseInt(limit, 10) : undefined,
     offset: offset ? Number.parseInt(offset, 10) : undefined,
     sort: sort ?? undefined,
-    order: order === "desc" ? "desc" : order === "asc" ? "asc" : undefined,
+    order: order === 'desc' ? 'desc' : order === 'asc' ? 'asc' : undefined,
   };
 }

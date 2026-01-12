@@ -1,32 +1,32 @@
-import type { LocalBaseEntity } from "@genie-nexus/database";
-import type { Repository } from "supersave";
+import type { LocalBaseEntity } from '@genie-nexus/database';
 import {
   buildQuery,
   parseQueryParams,
-} from "@lib/api/collections/query-helpers";
+} from '@lib/api/collections/query-helpers';
 import {
   transformEntities,
   transformEntity,
-} from "@lib/api/collections/transform-entity";
+} from '@lib/api/collections/transform-entity';
 import {
   COLLECTION_MAP,
   type CollectionName,
   isValidCollection,
-} from "@lib/api/collections/types";
-import { checkApiKeyOrUser } from "@lib/api/middleware/check-api-key-or-user";
-import { ApplicationError } from "@lib/api/middleware/errors";
-import { getTenant } from "@lib/api/middleware/get-tenant";
-import { handleApiError } from "@lib/api/middleware/handle-api-error";
-import { getContainer } from "@lib/core/get-container";
-import { sendTelemetryEvent } from "@lib/telemetry";
-import { NextResponse } from "next/server";
+} from '@lib/api/collections/types';
+import { checkApiKeyOrUser } from '@lib/api/middleware/check-api-key-or-user';
+import { ApplicationError } from '@lib/api/middleware/errors';
+import { getTenant } from '@lib/api/middleware/get-tenant';
+import { handleApiError } from '@lib/api/middleware/handle-api-error';
+import { getContainer } from '@lib/core/get-container';
+import { sendTelemetryEvent } from '@lib/telemetry';
+import { NextResponse } from 'next/server';
+import type { Repository } from 'supersave';
 
 const TELEMETRY_ENTITY_MAP: Partial<Record<CollectionName, string>> = {
-  deployment: "deployment",
-  provider: "provider",
-  apiKey: "apiKey",
-  llmflow: "llmflow",
-  weaveflow: "weaveflow",
+  deployment: 'deployment',
+  provider: 'provider',
+  apiKey: 'apiKey',
+  llmflow: 'llmflow',
+  weaveflow: 'weaveflow',
 };
 
 type RouteParams = {
@@ -35,7 +35,7 @@ type RouteParams = {
 
 export async function GET(request: Request, { params }: RouteParams) {
   try {
-    await checkApiKeyOrUser(request, "management-key");
+    await checkApiKeyOrUser(request, 'management-key');
     const { tenant } = await getTenant();
     const { collection } = await params;
 
@@ -76,7 +76,7 @@ export async function GET(request: Request, { params }: RouteParams) {
 
 export async function POST(request: Request, { params }: RouteParams) {
   try {
-    await checkApiKeyOrUser(request, "management-key");
+    await checkApiKeyOrUser(request, 'management-key');
     const { tenant } = await getTenant();
     const { collection } = await params;
 
@@ -104,7 +104,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     const telemetryEntity = TELEMETRY_ENTITY_MAP[collection as CollectionName];
     if (telemetryEntity) {
-      sendTelemetryEvent({ type: "create", entity: telemetryEntity });
+      sendTelemetryEvent({ type: 'create', entity: telemetryEntity });
     }
 
     return NextResponse.json({ data: transformed }, { status: 201 });

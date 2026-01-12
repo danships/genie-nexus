@@ -1,1 +1,1 @@
-export * from "./weave-proxy";
+export * from './weave-proxy';

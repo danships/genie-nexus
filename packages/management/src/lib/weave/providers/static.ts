@@ -1,24 +1,24 @@
-import type { Provider } from "@genie-nexus/database";
-import type { ProviderResponse } from "../types";
+import type { Provider } from '@genie-nexus/database';
+import type { ProviderResponse } from '../types';
 
 export function generateStaticResponse(provider: Provider): ProviderResponse {
-  if (provider.type !== "http-static") {
-    throw new Error("Provider is not a static provider");
+  if (provider.type !== 'http-static') {
+    throw new Error('Provider is not a static provider');
   }
 
   const headers: Record<string, string> = {};
   if (provider.responseHeaders) {
     for (const header of provider.responseHeaders) {
       switch (header.operation) {
-        case "set":
-          headers[header.key] = header.value ?? "";
+        case 'set':
+          headers[header.key] = header.value ?? '';
           break;
-        case "add":
+        case 'add':
           headers[header.key] = headers[header.key]
             ? `${headers[header.key]}, ${header.value}`
-            : (header.value ?? "");
+            : (header.value ?? '');
           break;
-        case "remove":
+        case 'remove':
           delete headers[header.key];
           break;
       }
@@ -28,6 +28,6 @@ export function generateStaticResponse(provider: Provider): ProviderResponse {
   return {
     statusCode: provider.statusCode || 200,
     headers,
-    body: Buffer.from(provider.body ?? ""),
+    body: Buffer.from(provider.body ?? ''),
   };
 }

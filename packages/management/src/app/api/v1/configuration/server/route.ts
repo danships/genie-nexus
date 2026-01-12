@@ -1,24 +1,24 @@
 import {
   getServerConfiguration,
   updateServerConfiguration,
-} from "@genie-nexus/configuration";
-import { TypeSymbols } from "@genie-nexus/container";
-import type { StoredConfigurationRepository } from "@genie-nexus/database";
+} from '@genie-nexus/configuration';
+import { TypeSymbols } from '@genie-nexus/container';
+import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import type {
   ServerConfiguration,
   ServerConfigurationResponse,
-} from "@genie-nexus/types";
-import type { DataWrapper } from "@genie-nexus/types/dist/types/api.js";
-import { DEFAULT_TENANT_ID } from "@lib/api/middleware/constants";
-import { checkApiKeyOrUser } from "@lib/api/middleware/check-api-key-or-user";
-import { ApplicationError } from "@lib/api/middleware/errors";
-import { getTenant } from "@lib/api/middleware/get-tenant";
-import { handleApiError } from "@lib/api/middleware/handle-api-error";
-import { getContainer } from "@lib/core/get-container";
-import { environment } from "@lib/environment";
-import { sendTelemetryEvent } from "@lib/telemetry";
-import { NextResponse } from "next/server";
-import { z } from "zod";
+} from '@genie-nexus/types';
+import type { DataWrapper } from '@genie-nexus/types/dist/types/api.js';
+import { checkApiKeyOrUser } from '@lib/api/middleware/check-api-key-or-user';
+import { DEFAULT_TENANT_ID } from '@lib/api/middleware/constants';
+import { ApplicationError } from '@lib/api/middleware/errors';
+import { getTenant } from '@lib/api/middleware/get-tenant';
+import { handleApiError } from '@lib/api/middleware/handle-api-error';
+import { getContainer } from '@lib/core/get-container';
+import { environment } from '@lib/environment';
+import { sendTelemetryEvent } from '@lib/telemetry';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
 const requestValidator = z.object({
   telemetryEnabled: z.boolean().optional(),
@@ -56,7 +56,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    await checkApiKeyOrUser(request, "management-key");
+    await checkApiKeyOrUser(request, 'management-key');
     const { tenant } = await getTenant();
 
     const container = await getContainer();
@@ -111,10 +111,10 @@ export async function POST(request: Request) {
 
     if (parsedBody.telemetryEnabled !== undefined) {
       if (parsedBody.telemetryEnabled) {
-        sendTelemetryEvent({ type: "telemetry-enabled" }, newServerHash);
-        sendTelemetryEvent({ type: "registered" }, newServerHash);
+        sendTelemetryEvent({ type: 'telemetry-enabled' }, newServerHash);
+        sendTelemetryEvent({ type: 'registered' }, newServerHash);
       } else {
-        sendTelemetryEvent({ type: "telemetry-disabled" });
+        sendTelemetryEvent({ type: 'telemetry-disabled' });
       }
     }
 

@@ -1,5 +1,5 @@
-import type { generateText, streamText } from "ai";
-import type { OpenAIChatCompletionRequest } from "./types";
+import type { generateText, streamText } from 'ai';
+import type { OpenAIChatCompletionRequest } from './types';
 
 export function openAiToAiSdkRequestMapper(
   request: OpenAIChatCompletionRequest
@@ -10,28 +10,28 @@ export function openAiToAiSdkRequestMapper(
   const mappedParams: Record<string, any> = {};
 
   if (request.temperature !== undefined) {
-    mappedParams["temperature"] = request.temperature;
+    mappedParams['temperature'] = request.temperature;
   }
   if (request.max_tokens !== undefined) {
-    mappedParams["maxTokens"] = request.max_tokens;
+    mappedParams['maxTokens'] = request.max_tokens;
   }
   if (request.top_p !== undefined) {
-    mappedParams["topP"] = request.top_p;
+    mappedParams['topP'] = request.top_p;
   }
   if (request.stop !== undefined) {
-    mappedParams["stop"] = request.stop;
+    mappedParams['stop'] = request.stop;
   }
   if (request.presence_penalty !== undefined) {
-    mappedParams["presencePenalty"] = request.presence_penalty;
+    mappedParams['presencePenalty'] = request.presence_penalty;
   }
   if (request.frequency_penalty !== undefined) {
-    mappedParams["frequencyPenalty"] = request.frequency_penalty;
+    mappedParams['frequencyPenalty'] = request.frequency_penalty;
   }
   if (request.logit_bias !== undefined) {
-    mappedParams["logitBias"] = request.logit_bias;
+    mappedParams['logitBias'] = request.logit_bias;
   }
   if (request.user !== undefined) {
-    mappedParams["user"] = request.user;
+    mappedParams['user'] = request.user;
   }
 
   return mappedParams;

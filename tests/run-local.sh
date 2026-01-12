@@ -2,38 +2,30 @@
 
 set -e
 
-PORT_MANAGEMENT=$(( ( RANDOM % 16383 )  + 49152 ))
-PORT_ROUTER=$(( ( RANDOM % 16383 )  + 49152 ))
+PORT=$(( ( RANDOM % 16383 )  + 49152 ))
 TEST_IDENTIFIER=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 12)
 AUTH_METHOD="${AUTH_METHOD:-credentials}"
 
-export TEST_BASE_URL="http://localhost:${PORT_MANAGEMENT}"
+export TEST_BASE_URL="http://localhost:${PORT}"
 echo "TEST_BASE_URL: ${TEST_BASE_URL}"
 
 CURRENT_DIR=$(pwd)
 
-cd ${CURRENT_DIR}/packages/router
-LOG_LEVEL=debug DEBUG=true AUTH_METHOD=${AUTH_METHOD} PORT=${PORT_ROUTER} DB=sqlite:///tmp/${TEST_IDENTIFIER}.db pnpm start & 
-ROUTER_PID=$!
-
-echo "Router started ${ROUTER_PID}"
-
 cd ${CURRENT_DIR}/packages/management
-AUTH_METHOD=${AUTH_METHOD} PORT=${PORT_MANAGEMENT} PORT_ROUTER=${PORT_ROUTER} DB=sqlite:///tmp/${TEST_IDENTIFIER}.db pnpm run dev &
+LOG_LEVEL=debug AUTH_METHOD=${AUTH_METHOD} PORT=${PORT} DB=sqlite:///tmp/${TEST_IDENTIFIER}.db pnpm run dev &
 MGMT_PID=$!
 
-sleep 3 # give the servers a chance to start
+echo "Management server started ${MGMT_PID}"
+
+sleep 5 # give the server a chance to start
 
 cd ${CURRENT_DIR}
 
 cleanup() {
-  # Todo manual cleanup, run:
-  # ps aux | grep router | grep tsc-watch | awk '{print $2}' | xargs kill
-  # ps aux | grep next-server | awk '{print $2}' | xargs kill
   echo "Cleaning up background processes..."
-  kill $MGMT_PID $ROUTER_PID 2>/dev/null || true
-  wait $MGMT_PID $ROUTER_PID 2>/dev/null || true
-  echo "Cleanup complete, might be some background processes left..."
+  kill $MGMT_PID 2>/dev/null || true
+  wait $MGMT_PID 2>/dev/null || true
+  echo "Cleanup complete"
 }
 trap cleanup EXIT
 

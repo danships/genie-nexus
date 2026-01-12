@@ -1,7 +1,7 @@
-import { TypeSymbols } from "@genie-nexus/container";
-import type { Logger } from "@genie-nexus/logger";
-import type { WeaveAction, WeaveRequestContext } from "@genie-nexus/types";
-import { getContainer } from "@lib/core/get-container";
+import { TypeSymbols } from '@genie-nexus/container';
+import type { Logger } from '@genie-nexus/logger';
+import type { WeaveAction, WeaveRequestContext } from '@genie-nexus/types';
+import { getContainer } from '@lib/core/get-container';
 
 const MAX_DELAY_MS = 5000;
 
@@ -12,7 +12,7 @@ export async function executeWeaveAction(
   const container = await getContainer();
   const logger = container.resolve<Logger>(TypeSymbols.LOGGER);
 
-  logger.debug("Executing action", {
+  logger.debug('Executing action', {
     actionType: action.type,
     context: {
       path: context.path,
@@ -21,43 +21,43 @@ export async function executeWeaveAction(
   });
 
   switch (action.type) {
-    case "addRequestHeader":
-    case "setRequestHeader":
+    case 'addRequestHeader':
+    case 'setRequestHeader':
       context.requestHeaders[action.key] = action.value;
-      logger.debug("Updated request header", {
+      logger.debug('Updated request header', {
         key: action.key,
         value: action.value,
       });
       break;
-    case "removeRequestHeader":
+    case 'removeRequestHeader':
       delete context.requestHeaders[action.key];
-      logger.debug("Removed request header", { key: action.key });
+      logger.debug('Removed request header', { key: action.key });
       break;
-    case "addResponseHeader":
-    case "setResponseHeader":
+    case 'addResponseHeader':
+    case 'setResponseHeader':
       context.responseHeaders[action.key] = action.value;
-      logger.debug("Updated response header", {
+      logger.debug('Updated response header', {
         key: action.key,
         value: action.value,
       });
       break;
-    case "removeResponseHeader":
+    case 'removeResponseHeader':
       delete context.responseHeaders[action.key];
-      logger.debug("Removed response header", { key: action.key });
+      logger.debug('Removed response header', { key: action.key });
       break;
-    case "updateResponseBody":
+    case 'updateResponseBody':
       context.responseBody = action.value;
-      logger.debug("Updated response body", { value: action.value });
+      logger.debug('Updated response body', { value: action.value });
       break;
-    case "updateResponseStatusCode":
+    case 'updateResponseStatusCode':
       context.responseStatusCode = action.value;
-      logger.debug("Updated response status code", {
+      logger.debug('Updated response status code', {
         statusCode: context.responseStatusCode,
       });
       break;
-    case "transformData":
+    case 'transformData':
       try {
-        logger.debug("Transform data action executed", {
+        logger.debug('Transform data action executed', {
           expression: action.expression,
           context: {
             path: context.path,
@@ -68,13 +68,13 @@ export async function executeWeaveAction(
           },
         });
       } catch (error) {
-        logger.error("Error executing transform data action", { error });
+        logger.error('Error executing transform data action', { error });
         throw error;
       }
       break;
-    case "filter":
+    case 'filter':
       try {
-        logger.debug("Filter action executed", {
+        logger.debug('Filter action executed', {
           expression: action.expression,
           context: {
             path: context.path,
@@ -85,14 +85,14 @@ export async function executeWeaveAction(
           },
         });
       } catch (error) {
-        logger.error("Error executing filter action", { error });
+        logger.error('Error executing filter action', { error });
         throw error;
       }
       break;
-    case "delay": {
+    case 'delay': {
       const delayMs = Math.min(action.ms, MAX_DELAY_MS);
       if (delayMs !== action.ms) {
-        logger.warning("Delay action exceeded maximum delay limit", {
+        logger.warning('Delay action exceeded maximum delay limit', {
           requested: action.ms,
           actual: delayMs,
           maxAllowed: MAX_DELAY_MS,
@@ -102,7 +102,7 @@ export async function executeWeaveAction(
           },
         });
       }
-      logger.debug("Executing delay action", {
+      logger.debug('Executing delay action', {
         ms: delayMs,
         context: {
           path: context.path,
@@ -112,8 +112,8 @@ export async function executeWeaveAction(
       await new Promise((resolve) => setTimeout(resolve, delayMs));
       break;
     }
-    case "log":
-      logger.info(action.message || "Log action executed", {
+    case 'log':
+      logger.info(action.message || 'Log action executed', {
         context: {
           path: context.path,
           method: context.method,
@@ -123,9 +123,9 @@ export async function executeWeaveAction(
         },
       });
       break;
-    case "setProvider":
+    case 'setProvider':
       context.providerId = action.providerId;
-      logger.debug("Set provider", { providerId: action.providerId });
+      logger.debug('Set provider', { providerId: action.providerId });
       break;
   }
 }

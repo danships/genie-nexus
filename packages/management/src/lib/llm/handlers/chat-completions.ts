@@ -1,29 +1,29 @@
-import type { ApiKey } from "@genie-nexus/database";
-import type { DeploymentLLMApi, LlmRequestContext } from "@genie-nexus/types";
-import { isLlmApiKey } from "@genie-nexus/types";
-import { executeLlm } from "../execute-llm";
-import { getDeploymentBySlug } from "../get-deployment-by-slug";
+import type { ApiKey } from '@genie-nexus/database';
+import type { DeploymentLLMApi, LlmRequestContext } from '@genie-nexus/types';
+import { isLlmApiKey } from '@genie-nexus/types';
+import { NextResponse } from 'next/server';
+import { executeLlm } from '../execute-llm';
+import { getDeploymentBySlug } from '../get-deployment-by-slug';
 import {
   createChatCompletion as googleCreateChatCompletion,
   createStreamingChatCompletion as googleCreateStreamingChatCompletion,
-} from "../providers/google";
+} from '../providers/google';
 import {
   createChatCompletion as openAICreateChatCompletion,
   createStreamingChatCompletion as openAICreateStreamingChatCompletion,
-} from "../providers/openai";
+} from '../providers/openai';
 import {
   createChatCompletion as staticCreateChatCompletion,
   createStreamingChatCompletion as staticCreateStreamingChatCompletion,
-} from "../providers/static";
+} from '../providers/static';
 import {
   createOpenAIStreamFromAiSdk,
   createOpenAIStreamFromStatic,
-} from "../stream-response";
+} from '../stream-response';
 import type {
   OpenAIChatCompletionRequest,
   OpenAIChatCompletionResponse,
-} from "../types";
-import { NextResponse } from "next/server";
+} from '../types';
 
 type HandleChatCompletionParams = {
   apiKey: ApiKey;
@@ -42,27 +42,27 @@ export async function handleChatCompletion({
     return NextResponse.json(
       {
         error: {
-          message: "messages is required and must be an array",
-          type: "invalid_request_error",
+          message: 'messages is required and must be an array',
+          type: 'invalid_request_error',
         },
       },
       { status: 400 }
     );
   }
 
-  const deployment = await getDeploymentBySlug(tenantId, deploymentSlug, "llm");
+  const deployment = await getDeploymentBySlug(tenantId, deploymentSlug, 'llm');
 
   if (
     !isLlmApiKey(apiKey) ||
     (Array.isArray(apiKey.allowedDeployments) &&
       !apiKey.allowedDeployments.includes(deployment.id)) ||
-    deployment.type !== "llm"
+    deployment.type !== 'llm'
   ) {
     return NextResponse.json(
       {
         error: {
-          message: "model is not allowed for api key",
-          type: "invalid_request_error",
+          message: 'model is not allowed for api key',
+          type: 'invalid_request_error',
         },
       },
       { status: 400 }
@@ -72,9 +72,9 @@ export async function handleChatCompletion({
   const context: LlmRequestContext = {
     model: body.model,
     providerId: (deployment as DeploymentLLMApi).defaultProviderId,
-    systemPrompt: body.messages.filter((m) => m.role === "system")[0]?.content,
-    prompt: body.messages.filter((m) => m.role === "user")?.pop()?.content,
-    responseMessage: "",
+    systemPrompt: body.messages.filter((m) => m.role === 'system')[0]?.content,
+    prompt: body.messages.filter((m) => m.role === 'user')?.pop()?.content,
+    responseMessage: '',
   };
   if (body.user) {
     context.user = body.user;
@@ -92,7 +92,7 @@ export async function handleChatCompletion({
     let streamGenerator: AsyncGenerator<string>;
 
     switch (provider.type) {
-      case "openai": {
+      case 'openai': {
         const aiResponse = openAICreateStreamingChatCompletion(
           transformedRequest,
           provider.baseURL,
@@ -101,7 +101,7 @@ export async function handleChatCompletion({
         streamGenerator = createOpenAIStreamFromAiSdk(body.model, aiResponse);
         break;
       }
-      case "google": {
+      case 'google': {
         const aiResponse = googleCreateStreamingChatCompletion(
           transformedRequest,
           { apiKey: provider.apiKey }
@@ -109,7 +109,7 @@ export async function handleChatCompletion({
         streamGenerator = createOpenAIStreamFromAiSdk(body.model, aiResponse);
         break;
       }
-      case "static": {
+      case 'static': {
         const { id, text } =
           staticCreateStreamingChatCompletion(transformedRequest);
         streamGenerator = createOpenAIStreamFromStatic(body.model, id, text);
@@ -132,15 +132,15 @@ export async function handleChatCompletion({
 
     return new Response(stream, {
       headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
       },
     });
   }
 
   switch (provider.type) {
-    case "openai": {
+    case 'openai': {
       const response = await openAICreateChatCompletion(
         transformedRequest,
         provider.baseURL,
@@ -149,17 +149,17 @@ export async function handleChatCompletion({
 
       const openAIResponse: OpenAIChatCompletionResponse = {
         id: `chatcmpl-${Date.now()}`,
-        object: "chat.completion",
+        object: 'chat.completion',
         created: Math.floor(Date.now() / 1000),
         model: body.model,
         choices: [
           {
             index: 0,
             message: {
-              role: "assistant",
+              role: 'assistant',
               content: response.text,
             },
-            finish_reason: "stop",
+            finish_reason: 'stop',
           },
         ],
         usage: {
@@ -170,24 +170,24 @@ export async function handleChatCompletion({
       };
       return NextResponse.json(openAIResponse);
     }
-    case "google": {
+    case 'google': {
       const response = await googleCreateChatCompletion(transformedRequest, {
         apiKey: provider.apiKey,
       });
 
       const openAIResponse: OpenAIChatCompletionResponse = {
         id: `chatcmpl-${Date.now()}`,
-        object: "chat.completion",
+        object: 'chat.completion',
         created: Math.floor(Date.now() / 1000),
         model: body.model,
         choices: [
           {
             index: 0,
             message: {
-              role: "assistant",
+              role: 'assistant',
               content: response.text,
             },
-            finish_reason: "stop",
+            finish_reason: 'stop',
           },
         ],
         usage: {
@@ -198,21 +198,21 @@ export async function handleChatCompletion({
       };
       return NextResponse.json(openAIResponse);
     }
-    case "static": {
+    case 'static': {
       const { text, usage } = staticCreateChatCompletion(transformedRequest);
       const staticResponse: OpenAIChatCompletionResponse = {
         id: `chatcmpl-${Date.now()}`,
-        object: "chat.completion",
+        object: 'chat.completion',
         created: Math.floor(Date.now() / 1000),
         model: transformedRequest.model,
         choices: [
           {
             index: 0,
             message: {
-              role: "assistant",
+              role: 'assistant',
               content: text,
             },
-            finish_reason: "stop",
+            finish_reason: 'stop',
           },
         ],
         usage: {

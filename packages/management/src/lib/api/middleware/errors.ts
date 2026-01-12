@@ -10,7 +10,7 @@ export class ApplicationError extends Error {
 
 export class ApiKeyNotPresentError extends ApplicationError {
   constructor(message?: string) {
-    super(message ?? "API key not present", 401);
+    super(message ?? 'API key not present', 401);
   }
 }
 
@@ -28,6 +28,6 @@ export class ValidationError extends Error {
 
 export class TenantMissingError extends ApplicationError {
   constructor() {
-    super("Tenant missing", 404);
+    super('Tenant missing', 404);
   }
 }

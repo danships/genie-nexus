@@ -1,14 +1,14 @@
-import type { environment } from "@lib/environment";
+import type { environment } from '@lib/environment';
 
 export type Start = {
-  type: "start";
+  type: 'start';
   configuration: {
     authentication: typeof environment.AUTH_METHOD;
   };
 };
 
 export type Ping = {
-  type: "ping";
+  type: 'ping';
   stats: {
     deployments: Record<string, number>;
     providers: Record<string, number>;
@@ -17,20 +17,20 @@ export type Ping = {
 };
 
 export type Create = {
-  type: "create";
+  type: 'create';
   entity: string;
 };
 
 export type TelemetryDisabled = {
-  type: "telemetry-disabled";
+  type: 'telemetry-disabled';
 };
 
 export type TelemetryEnabled = {
-  type: "telemetry-enabled";
+  type: 'telemetry-enabled';
 };
 
 export type Registered = {
-  type: "registered";
+  type: 'registered';
 };
 
 export type Events =
@@ -53,8 +53,8 @@ export type TelemetryEvent = {
   software: {
     version: string;
     name: string;
-    db: "sqlite" | "mysql";
-    runtimeEnvironment: "cli" | "docker";
+    db: 'sqlite' | 'mysql';
+    runtimeEnvironment: 'cli' | 'docker';
   };
   hash: string;
   details: Events;

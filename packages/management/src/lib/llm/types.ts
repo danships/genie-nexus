@@ -1,5 +1,5 @@
 export type OpenAIChatMessage = {
-  role: "system" | "user" | "assistant";
+  role: 'system' | 'user' | 'assistant';
   content: string;
   name?: string;
 };

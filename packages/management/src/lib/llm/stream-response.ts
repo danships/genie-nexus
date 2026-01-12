@@ -1,4 +1,4 @@
-import type { ChatCompletionChunk } from "./types";
+import type { ChatCompletionChunk } from './types';
 
 export async function* createOpenAIStreamFromAiSdk(
   model: string,
@@ -11,7 +11,7 @@ export async function* createOpenAIStreamFromAiSdk(
   for await (const textPart of textStream) {
     const chunk: ChatCompletionChunk = {
       id: `chatcmpl-${Date.now()}`,
-      object: "chat.completion.chunk",
+      object: 'chat.completion.chunk',
       created: Math.floor(Date.now() / 1000),
       model,
       choices: [
@@ -28,19 +28,19 @@ export async function* createOpenAIStreamFromAiSdk(
   const finalResponse = await responsePromise;
   const finalChunk: ChatCompletionChunk = {
     id: finalResponse.id,
-    object: "chat.completion.chunk",
+    object: 'chat.completion.chunk',
     created: Math.floor(Date.now() / 1000),
     model,
     choices: [
       {
         index: 0,
         delta: {},
-        finish_reason: "stop",
+        finish_reason: 'stop',
       },
     ],
   };
   yield `data: ${JSON.stringify(finalChunk)}\n\n`;
-  yield "data: [DONE]\n\n";
+  yield 'data: [DONE]\n\n';
 }
 
 export async function* createOpenAIStreamFromStatic(
@@ -52,7 +52,7 @@ export async function* createOpenAIStreamFromStatic(
   for await (const { delta } of textGenerator) {
     const chunk: ChatCompletionChunk = {
       id: `${id}-${Date.now()}`,
-      object: "chat.completion.chunk",
+      object: 'chat.completion.chunk',
       created: Math.floor(Date.now() / 1000),
       model,
       choices: [
@@ -69,17 +69,17 @@ export async function* createOpenAIStreamFromStatic(
 
   const finalChunk: ChatCompletionChunk = {
     id: `chatcmpl-${Date.now()}`,
-    object: "chat.completion.chunk",
+    object: 'chat.completion.chunk',
     created: Math.floor(Date.now() / 1000),
     model,
     choices: [
       {
         index: index - 1,
         delta: {},
-        finish_reason: "stop",
+        finish_reason: 'stop',
       },
     ],
   };
   yield `data: ${JSON.stringify(finalChunk)}\n\n`;
-  yield "data: [DONE]\n\n";
+  yield 'data: [DONE]\n\n';
 }

@@ -1,4 +1,4 @@
-import type { OpenAIChatCompletionRequest } from "../types";
+import type { OpenAIChatCompletionRequest } from '../types';
 
 export type ChatCompletionResponse = {
   text: string;
@@ -18,10 +18,10 @@ export function createChatCompletion(
   request: OpenAIChatCompletionRequest
 ): ChatCompletionResponse {
   const userMessage = request.messages
-    .filter((message) => message.role === "user")
+    .filter((message) => message.role === 'user')
     .pop();
 
-  const replyText = userMessage?.content ?? "No user message";
+  const replyText = userMessage?.content ?? 'No user message';
   return {
     text: replyText,
     usage: {
@@ -36,10 +36,10 @@ export function createStreamingChatCompletion(
   request: OpenAIChatCompletionRequest
 ): ChatCompletionStreamResponse {
   const userMessage = request.messages
-    .filter((message) => message.role === "user")
+    .filter((message) => message.role === 'user')
     .pop();
 
-  const replyText = userMessage?.content ?? "No user message";
+  const replyText = userMessage?.content ?? 'No user message';
 
   async function* generateStream() {
     for (let i = 0; i < replyText.length; i += 2) {

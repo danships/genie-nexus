@@ -1,19 +1,19 @@
-import "server-only";
-import crypto from "node:crypto";
-import { TypeSymbols } from "@genie-nexus/container";
-import type { ApiKey, ApiKeyRepository } from "@genie-nexus/database";
+import 'server-only';
+import crypto from 'node:crypto';
+import { TypeSymbols } from '@genie-nexus/container';
+import type { ApiKey, ApiKeyRepository } from '@genie-nexus/database';
 import type {
   LlmApiKey,
   ManagementApiKey,
   WeaveApiKey,
-} from "@genie-nexus/types";
-import * as argon2 from "argon2";
-import { getContainer } from "@lib/core/get-container";
+} from '@genie-nexus/types';
+import { getContainer } from '@lib/core/get-container';
+import * as argon2 from 'argon2';
 import {
   API_KEY_PREFIX,
   API_KEY_SILENT_LLM_PREFIX,
   ID_SEPARATOR,
-} from "./middleware/constants";
+} from './middleware/constants';
 
 const KEY_PREVIEW_LENGTH = 12;
 
@@ -25,7 +25,7 @@ type ApiKeyGenerationResult = {
 async function generateApiKeySecret(
   id: string
 ): Promise<ApiKeyGenerationResult> {
-  const secret = crypto.randomBytes(32).toString("hex");
+  const secret = crypto.randomBytes(32).toString('hex');
   const hash = await argon2.hash(`${secret}${id}`, {
     type: argon2.argon2id,
     memoryCost: 65536,
@@ -38,8 +38,8 @@ async function generateApiKeySecret(
 }
 
 async function generateApiKeyHelper(
-  apiKeyToCreate: Omit<ApiKey, "id">,
-  keyPrefix = ""
+  apiKeyToCreate: Omit<ApiKey, 'id'>,
+  keyPrefix = ''
 ): Promise<string> {
   const container = await getContainer();
   const apiKeyRepository = container.resolve<ApiKeyRepository>(
@@ -48,7 +48,7 @@ async function generateApiKeyHelper(
 
   const createdApiKey = await apiKeyRepository.create(apiKeyToCreate);
 
-  const { secret, hash } = await generateApiKeySecret(createdApiKey.id ?? "");
+  const { secret, hash } = await generateApiKeySecret(createdApiKey.id ?? '');
   const generatedApiKey = `${keyPrefix}${API_KEY_PREFIX}${createdApiKey.id}${ID_SEPARATOR}${secret}`;
 
   await apiKeyRepository.update({
@@ -65,13 +65,13 @@ export function generateLlmApiKey(
   label: string,
   allowedDeployments?: string[]
 ) {
-  const apiKeyToCreate: Omit<LlmApiKey, "id"> = {
+  const apiKeyToCreate: Omit<LlmApiKey, 'id'> = {
     tenantId,
     label,
     active: true,
-    type: "llm-api-key",
-    hash: "",
-    keyPreview: "",
+    type: 'llm-api-key',
+    hash: '',
+    keyPreview: '',
     createdAt: new Date().toISOString(),
   };
   if (allowedDeployments) {
@@ -86,13 +86,13 @@ export function generateWeaveApiKey(
   label: string,
   allowedDeployments?: string[]
 ) {
-  const apiKeyToCreate: Omit<WeaveApiKey, "id"> = {
+  const apiKeyToCreate: Omit<WeaveApiKey, 'id'> = {
     tenantId,
     label,
     active: true,
-    type: "weave-api-key",
-    hash: "",
-    keyPreview: "",
+    type: 'weave-api-key',
+    hash: '',
+    keyPreview: '',
     createdAt: new Date().toISOString(),
   };
   if (allowedDeployments) {
@@ -107,13 +107,13 @@ export function generateManagementApiKey(
   label: string,
   scopes: string[]
 ): Promise<string> {
-  const apiKeyToCreate: Omit<ManagementApiKey, "id"> = {
+  const apiKeyToCreate: Omit<ManagementApiKey, 'id'> = {
     tenantId,
     label,
     active: true,
-    type: "management-key",
-    hash: "",
-    keyPreview: "",
+    type: 'management-key',
+    hash: '',
+    keyPreview: '',
     scopes,
     createdAt: new Date().toISOString(),
   };

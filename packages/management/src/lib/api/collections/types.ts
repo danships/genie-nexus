@@ -12,6 +12,24 @@ export const COLLECTION_MAP = {
 
 export type CollectionName = keyof typeof COLLECTION_MAP;
 
+const COLLECTION_NAME_ALIASES: Record<string, CollectionName> = {
+  providers: "provider",
+  deployments: "deployment",
+  apikeys: "apiKey",
+  tenants: "tenant",
+  weaveflows: "weaveflow",
+  llmflows: "llmflow",
+  storedconfigurations: "storedconfiguration",
+};
+
+export function normalizeCollectionName(name: string): CollectionName | null {
+  const lowercased = name.toLowerCase();
+  if (lowercased in COLLECTION_MAP) {
+    return lowercased as CollectionName;
+  }
+  return COLLECTION_NAME_ALIASES[lowercased] ?? null;
+}
+
 export function isValidCollection(name: string): name is CollectionName {
-  return name in COLLECTION_MAP;
+  return normalizeCollectionName(name) !== null;
 }

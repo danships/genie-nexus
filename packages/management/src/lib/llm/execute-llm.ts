@@ -1,13 +1,13 @@
-import { TypeSymbols } from "@genie-nexus/container";
+import { TypeSymbols } from '@genie-nexus/container';
 import type {
   Deployment,
   LlmFlowRepository,
   Provider,
   ProviderRepository,
-} from "@genie-nexus/database";
-import type { DeploymentLLMApi, LlmRequestContext } from "@genie-nexus/types";
-import { getContainer } from "@lib/core/get-container";
-import type { OpenAIChatCompletionRequest, OpenAIChatMessage } from "./types";
+} from '@genie-nexus/database';
+import type { DeploymentLLMApi, LlmRequestContext } from '@genie-nexus/types';
+import { getContainer } from '@lib/core/get-container';
+import type { OpenAIChatCompletionRequest, OpenAIChatMessage } from './types';
 
 function updateRequestWithContext(
   request: OpenAIChatCompletionRequest,
@@ -25,7 +25,7 @@ function updateRequestWithContext(
 
   if (context.systemPrompt) {
     const systemMessageIndex = updatedMessages.findIndex(
-      (message) => message.role === "system"
+      (message) => message.role === 'system'
     );
     if (systemMessageIndex !== -1 && updatedMessages[systemMessageIndex]) {
       updatedMessages[systemMessageIndex] = {
@@ -34,7 +34,7 @@ function updateRequestWithContext(
       };
     } else {
       const systemMessage: OpenAIChatMessage = {
-        role: "system",
+        role: 'system',
         content: context.systemPrompt,
       };
       updatedMessages.unshift(systemMessage);
@@ -44,7 +44,7 @@ function updateRequestWithContext(
   if (context.prompt) {
     let userMessageIndex = -1;
     for (let i = updatedMessages.length - 1; i >= 0; i--) {
-      if (updatedMessages[i]?.role === "user") {
+      if (updatedMessages[i]?.role === 'user') {
         userMessageIndex = i;
         break;
       }
@@ -52,12 +52,12 @@ function updateRequestWithContext(
     if (userMessageIndex !== -1 && updatedMessages[userMessageIndex]) {
       updatedMessages[userMessageIndex] = {
         ...updatedMessages[userMessageIndex],
-        role: "user",
+        role: 'user',
         content: context.prompt,
       };
     } else {
       const userMessage: OpenAIChatMessage = {
-        role: "user",
+        role: 'user',
         content: context.prompt,
       };
       updatedMessages.push(userMessage);
@@ -69,7 +69,8 @@ function updateRequestWithContext(
   return updatedRequest;
 }
 
-type DeploymentWithTenant = Deployment & DeploymentLLMApi & { tenantId: string };
+type DeploymentWithTenant = Deployment &
+  DeploymentLLMApi & { tenantId: string };
 
 export async function executeLlm(
   deployment: DeploymentWithTenant,
@@ -90,8 +91,8 @@ export async function executeLlm(
   const flow = await llmFlowRepository.getOneByQuery(
     llmFlowRepository
       .createQuery()
-      .eq("deploymentId", deployment.id)
-      .eq("isDeleted", false)
+      .eq('deploymentId', deployment.id)
+      .eq('isDeleted', false)
   );
 
   let transformedRequest = request;
@@ -99,20 +100,20 @@ export async function executeLlm(
 
   if (flow?.events) {
     const event = flow.events.find(
-      (e) => e.type === "incomingRequest" && e.enabled
+      (e) => e.type === 'incomingRequest' && e.enabled
     );
     if (event?.pipeline?.enabled) {
       for (const step of event.pipeline.steps) {
         const action = step.action;
-        if (action.type === "updateModel") {
+        if (action.type === 'updateModel') {
           updatedContext = { ...updatedContext, model: action.modelName };
-        } else if (action.type === "updatePrompt") {
-          if (action.what === "prompt") {
+        } else if (action.type === 'updatePrompt') {
+          if (action.what === 'prompt') {
             updatedContext = { ...updatedContext, prompt: action.value };
-          } else if (action.what === "systemPrompt") {
+          } else if (action.what === 'systemPrompt') {
             updatedContext = { ...updatedContext, systemPrompt: action.value };
           }
-        } else if (action.type === "setProvider") {
+        } else if (action.type === 'setProvider') {
           updatedContext = { ...updatedContext, providerId: action.providerId };
         }
       }
@@ -123,7 +124,7 @@ export async function executeLlm(
   const provider = await providerRepository.getById(updatedContext.providerId);
 
   if (!provider || provider.tenantId !== deployment.tenantId) {
-    throw new Error("Provider not found");
+    throw new Error('Provider not found');
   }
 
   return {

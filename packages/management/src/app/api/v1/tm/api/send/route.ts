@@ -1,19 +1,19 @@
-import { getServerConfiguration } from "@genie-nexus/configuration";
-import { TypeSymbols } from "@genie-nexus/container";
-import type { StoredConfigurationRepository } from "@genie-nexus/database";
-import { DEFAULT_TENANT_ID } from "@lib/api/middleware/constants";
-import { getContainer } from "@lib/core/get-container";
-import { environment } from "@lib/environment";
-import { NextResponse } from "next/server";
+import { getServerConfiguration } from '@genie-nexus/configuration';
+import { TypeSymbols } from '@genie-nexus/container';
+import type { StoredConfigurationRepository } from '@genie-nexus/database';
+import { DEFAULT_TENANT_ID } from '@lib/api/middleware/constants';
+import { getContainer } from '@lib/core/get-container';
+import { environment } from '@lib/environment';
+import { NextResponse } from 'next/server';
 
 function getClientIp(request: Request): string | null {
-  const forwardedFor = request.headers.get("x-forwarded-for");
+  const forwardedFor = request.headers.get('x-forwarded-for');
   if (forwardedFor) {
-    const ips = forwardedFor.split(",");
+    const ips = forwardedFor.split(',');
     return ips[0]?.trim() ?? null;
   }
 
-  const realIp = request.headers.get("x-real-ip");
+  const realIp = request.headers.get('x-real-ip');
   if (realIp) {
     return realIp;
   }
@@ -28,8 +28,8 @@ export const POST = async function (request: Request) {
       TypeSymbols.STORED_CONFIGURATION_REPOSITORY
     );
 
-  if (environment.NODE_ENV === "development") {
-    return NextResponse.json({ beep: "boop" });
+  if (environment.NODE_ENV === 'development') {
+    return NextResponse.json({ beep: 'boop' });
   }
 
   const serverConfig = await getServerConfiguration(
@@ -38,7 +38,7 @@ export const POST = async function (request: Request) {
   );
 
   if (!serverConfig.telemetryEnabled) {
-    return NextResponse.json({ beep: "boop-nope" });
+    return NextResponse.json({ beep: 'boop-nope' });
   }
 
   const requestBody = await request.json();
@@ -56,14 +56,14 @@ export const POST = async function (request: Request) {
     updatedBody.payload.ip = clientIp;
   }
 
-  const cache = request.headers.get("x-umami-cache") ?? "";
+  const cache = request.headers.get('x-umami-cache') ?? '';
 
   await fetch(`${environment.TELEMETRY_HOST_URL}/api/send`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "User-Agent": request.headers.get("user-agent") || "",
-      "X-Umami-Cache": cache,
+      'Content-Type': 'application/json',
+      'User-Agent': request.headers.get('user-agent') || '',
+      'X-Umami-Cache': cache,
     },
     body: JSON.stringify(updatedBody),
   });

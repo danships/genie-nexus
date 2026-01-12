@@ -1,18 +1,22 @@
-import { TypeSymbols } from "@genie-nexus/container";
+import { TypeSymbols } from '@genie-nexus/container';
 import type {
   Deployment,
   Provider,
   ProviderRepository,
   WeaveFlowRepository,
-} from "@genie-nexus/database";
-import type { DeploymentWeaveApi, WeaveRequestContext } from "@genie-nexus/types";
-import { getContainer } from "@lib/core/get-container";
-import { executeWeaveFlowEvent } from "./flow/execute-flow-event";
-import { proxyRequest } from "./providers/http-proxy";
-import { generateStaticResponse } from "./providers/static";
-import type { ProviderResponse } from "./types";
+} from '@genie-nexus/database';
+import type {
+  DeploymentWeaveApi,
+  WeaveRequestContext,
+} from '@genie-nexus/types';
+import { getContainer } from '@lib/core/get-container';
+import { executeWeaveFlowEvent } from './flow/execute-flow-event';
+import { proxyRequest } from './providers/http-proxy';
+import { generateStaticResponse } from './providers/static';
+import type { ProviderResponse } from './types';
 
-type DeploymentWithTenant = Deployment & DeploymentWeaveApi & { tenantId: string };
+type DeploymentWithTenant = Deployment &
+  DeploymentWeaveApi & { tenantId: string };
 
 export async function executeWeave(
   deployment: DeploymentWithTenant,
@@ -33,12 +37,12 @@ export async function executeWeave(
   const flow = await flowRepository.getOneByQuery(
     flowRepository
       .createQuery()
-      .eq("deploymentId", deployment.id)
-      .eq("isDeleted", false)
+      .eq('deploymentId', deployment.id)
+      .eq('isDeleted', false)
   );
 
   const transformedRequest = flow
-    ? await executeWeaveFlowEvent(flow, "incomingRequest", request)
+    ? await executeWeaveFlowEvent(flow, 'incomingRequest', request)
     : request;
 
   const provider = await providerRepository.getById(
@@ -46,12 +50,12 @@ export async function executeWeave(
   );
 
   if (!provider || provider.tenantId !== deployment.tenantId) {
-    throw new Error("Provider not found");
+    throw new Error('Provider not found');
   }
 
   let providerResponse: ProviderResponse;
   switch (provider.type) {
-    case "http-proxy": {
+    case 'http-proxy': {
       providerResponse = await proxyRequest(
         provider,
         transformedRequest,
@@ -59,7 +63,7 @@ export async function executeWeave(
       );
       break;
     }
-    case "http-static": {
+    case 'http-static': {
       providerResponse = generateStaticResponse(provider);
       break;
     }
@@ -76,7 +80,7 @@ export async function executeWeave(
   };
 
   const finalContext = flow
-    ? await executeWeaveFlowEvent(flow, "response", responseContext)
+    ? await executeWeaveFlowEvent(flow, 'response', responseContext)
     : responseContext;
 
   return {

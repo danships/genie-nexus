@@ -1,14 +1,14 @@
-import { TypeSymbols } from "@genie-nexus/container";
-import type { Logger } from "@genie-nexus/logger";
+import { TypeSymbols } from '@genie-nexus/container';
+import type { Logger } from '@genie-nexus/logger';
 import type {
   WeaveHttpProxyProvider,
   WeaveRequestContext,
-} from "@genie-nexus/types";
-import { getContainer } from "@lib/core/get-container";
-import type { ProviderResponse } from "../types";
-import { validateUrlDestination } from "../validate-url-destination";
+} from '@genie-nexus/types';
+import { getContainer } from '@lib/core/get-container';
+import type { ProviderResponse } from '../types';
+import { validateUrlDestination } from '../validate-url-destination';
 
-const NOT_ALLOWED_REQUEST_HEADERS = ["host", "authorization"];
+const NOT_ALLOWED_REQUEST_HEADERS = ['host', 'authorization'];
 
 export async function proxyRequest(
   provider: WeaveHttpProxyProvider,
@@ -19,7 +19,7 @@ export async function proxyRequest(
   const logger = container.resolve<Logger>(TypeSymbols.LOGGER);
 
   const targetUrl = new URL(path, provider.baseUrl).toString();
-  logger.debug("Proxying request", { targetUrl });
+  logger.debug('Proxying request', { targetUrl });
 
   await validateUrlDestination(targetUrl);
 
@@ -34,17 +34,17 @@ export async function proxyRequest(
   if (provider.requestHeaders) {
     for (const header of provider.requestHeaders) {
       switch (header.operation) {
-        case "set":
-          headers[header.key] = header.value ?? "";
+        case 'set':
+          headers[header.key] = header.value ?? '';
           break;
-        case "add":
+        case 'add':
           if (header.value) {
             headers[header.key] = headers[header.key]
               ? `${headers[header.key]}, ${header.value}`
               : header.value;
           }
           break;
-        case "remove":
+        case 'remove':
           delete headers[header.key];
           break;
       }
@@ -56,16 +56,16 @@ export async function proxyRequest(
       method: request.method,
       headers: new Headers({
         ...headers,
-        "accept-encoding": "gzip, deflate, br",
+        'accept-encoding': 'gzip, deflate, br',
       }),
     };
 
     if (
-      request.method.toUpperCase() !== "GET" &&
-      request.method.toUpperCase() !== "HEAD" &&
+      request.method.toUpperCase() !== 'GET' &&
+      request.method.toUpperCase() !== 'HEAD' &&
       request.requestBody !== undefined
     ) {
-      if (typeof request.requestBody === "string") {
+      if (typeof request.requestBody === 'string') {
         fetchOptions.body = request.requestBody;
       } else if (request.requestBody instanceof Buffer) {
         fetchOptions.body = request.requestBody;
@@ -80,7 +80,7 @@ export async function proxyRequest(
 
     const responseHeaders: Record<string, string> = {};
     fetchResponse.headers.forEach((value, key) => {
-      if (key.toLowerCase() !== "content-encoding") {
+      if (key.toLowerCase() !== 'content-encoding') {
         responseHeaders[key] = value;
       }
     });
@@ -88,17 +88,17 @@ export async function proxyRequest(
     if (provider.responseHeaders) {
       for (const header of provider.responseHeaders) {
         switch (header.operation) {
-          case "set":
-            responseHeaders[header.key] = header.value ?? "";
+          case 'set':
+            responseHeaders[header.key] = header.value ?? '';
             break;
-          case "add":
+          case 'add':
             if (header.value) {
               responseHeaders[header.key] = responseHeaders[header.key]
                 ? `${responseHeaders[header.key]}, ${header.value}`
                 : header.value;
             }
             break;
-          case "remove":
+          case 'remove':
             delete responseHeaders[header.key];
             break;
         }
@@ -111,7 +111,7 @@ export async function proxyRequest(
       body: Buffer.from(body),
     };
   } catch (error) {
-    logger.error("Proxy error:", { err: error });
+    logger.error('Proxy error:', { err: error });
     throw error;
   }
 }

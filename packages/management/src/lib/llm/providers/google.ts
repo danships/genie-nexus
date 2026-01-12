@@ -1,7 +1,7 @@
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { generateText, streamText } from "ai";
-import { openAiToAiSdkRequestMapper } from "../request-mapper";
-import type { OpenAIChatCompletionRequest } from "../types";
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { generateText, streamText } from 'ai';
+import { openAiToAiSdkRequestMapper } from '../request-mapper';
+import type { OpenAIChatCompletionRequest } from '../types';
 
 type GoogleProviderConfig = {
   apiKey: string;

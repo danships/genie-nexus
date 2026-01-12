@@ -40,16 +40,16 @@ todos:
     status: completed
   - id: phase7-dockerfile
     content: Update Dockerfile for Next.js standalone deployment
-    status: pending
+    status: completed
   - id: phase7-cleanup
     content: Remove Express dependencies and clean up router package
-    status: pending
+    status: completed
   - id: phase7-server-api
     content: Refactor server-api.ts to use direct repository calls
-    status: pending
+    status: completed
   - id: phase7-tests
     content: Update integration and E2E tests
-    status: pending
+    status: completed
 ---
 
 # Express to Next.js Migration Plan
@@ -361,31 +361,86 @@ export const addTenantIdToQuery = (query: Query, tenantId: string) => {
 
 ## Phase 7: Cleanup & Finalization
 
-### 7.1 Update Dockerfile
+### 7.1 Update Dockerfile ✅
 
 - Remove router package deployment
 - Build and run only the management package
 - Update CMD to use `next start`
 
-### 7.2 Remove Express Dependencies
+> **Completed:** Updated Dockerfile for Next.js standalone deployment:
+>
+> - Removed router package deployment (`pnpm deploy --prod --filter @genie-nexus/router`)
+> - Changed to copy Next.js standalone output from `.next/standalone`
+> - Added static assets copy (`.next/static`, `public`)
+> - Updated CMD from `node dist/server.js` to `node server.js`
+> - Added `HOSTNAME=0.0.0.0` environment variable for Next.js
+> - Updated health check from `/_health` to `/health`
+>
+> **Documentation updated:**
+>
+> - `docs/docs/installation/docker.md` - Updated health check path
+> - `docs/docs/installation/docker-compose.md` - Updated health check path in example
+
+### 7.2 Remove Express Dependencies ✅
 
 - Remove `@auth/express` from router
 - Clean up unused Express-specific code
 - Consider removing or archiving `packages/router`
 
-### 7.3 Update Server-Side API Calls
+> **Completed:** Removed the entire `packages/router` directory since all functionality has been migrated to Next.js API routes in the management package.
+>
+> **Removed:**
+>
+> - Express server and all Express-specific middleware
+> - `@auth/express` dependency
+> - All router modules (chat-completions, weave, api-key, configuration, telemetry, etc.)
+> - Router-specific dependency injection initialization
+
+### 7.3 Update Server-Side API Calls ✅
 
 - Refactor [`packages/management/src/lib/api/server-api.ts`](packages/management/src/lib/api/server-api.ts) to call repositories directly instead of HTTP fetch
 
-### 7.4 Update Tests
+> **Completed:** Refactored `server-api.ts` to use direct repository calls:
+>
+> - Replaced HTTP fetch with direct repository queries via `getContainer()`
+> - Added `normalizeCollectionName()` to handle plural collection names (e.g., 'deployments' → 'deployment')
+> - `getEntity()` - uses `repository.getById()` with tenant verification
+> - `createEntity()` - uses `repository.create()` with automatic tenantId injection
+> - `getEntityByQuery()` - uses `repository.getByQuery()` with parsed query params
+> - `getEntities()` - uses `repository.getByQuery()` for multiple results
+> - `getConfiguration()` - assembles configuration directly without HTTP call
+> - `getResponseFromApi()` - only supports `/configuration/server` path, calls repository directly
+>
+> **Benefits:**
+>
+> - Eliminates HTTP overhead for server components
+> - No more self-referential HTTP calls within the same process
+> - Simpler authentication flow (server components already verified)
+
+### 7.4 Update Tests ✅
 
 - Migrate integration tests to work with Next.js
 - Update Playwright tests if needed
 
-### 7.5 Update Documentation
+> **Completed:** Updated test infrastructure:
+>
+> - Updated `tests/run-local.sh` to only start the management package (removed router startup)
+> - Increased sleep time to 5s to allow Next.js dev server more startup time
+> - Simplified cleanup to only manage single process
+> - No changes needed for Playwright or vitest configs (already use dynamic `TEST_BASE_URL`)
+> - API tests in `tests/api/` work unchanged as they use the same endpoints
+
+### 7.5 Update Documentation ✅
 
 - Update installation docs
 - Update Docker Compose configuration
+
+> **Completed:** Documentation updates:
+>
+> - Updated `docs/docs/configuration/settings.md` - Changed "router server" to "server"
+> - Health check path updates were done in phase 7.1:
+>   - `docs/docs/installation/docker.md` - Updated from `/_health` to `/health`
+>   - `docs/docs/installation/docker-compose.md` - Updated health check in example
 
 ---
 

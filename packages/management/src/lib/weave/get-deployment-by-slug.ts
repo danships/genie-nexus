@@ -1,7 +1,7 @@
-import { TypeSymbols } from "@genie-nexus/container";
-import type { DeploymentRepository } from "@genie-nexus/database";
-import type { DeploymentWeaveApi } from "@genie-nexus/types";
-import { getContainer } from "@lib/core/get-container";
+import { TypeSymbols } from '@genie-nexus/container';
+import type { DeploymentRepository } from '@genie-nexus/database';
+import type { DeploymentWeaveApi } from '@genie-nexus/types';
+import { getContainer } from '@lib/core/get-container';
 
 export async function getWeaveDeploymentBySlug(
   tenantId: string,
@@ -15,13 +15,13 @@ export async function getWeaveDeploymentBySlug(
   const deployment = await deploymentRepository.getOneByQuery(
     deploymentRepository
       .createQuery()
-      .eq("tenantId", tenantId)
-      .eq("slug", slug)
-      .eq("type", "weave")
-      .eq("isDeleted", false)
+      .eq('tenantId', tenantId)
+      .eq('slug', slug)
+      .eq('type', 'weave')
+      .eq('isDeleted', false)
   );
 
-  if (!deployment || deployment.type !== "weave") {
+  if (!deployment || deployment.type !== 'weave') {
     return null;
   }
 

@@ -1,5 +1,5 @@
-import "server-only";
-import { readFile } from "node:fs/promises";
+import 'server-only';
+import { readFile } from 'node:fs/promises';
 
 type AppInfo = { name: string; version: string };
 
@@ -11,15 +11,15 @@ export async function getAppVersion(): Promise<AppInfo> {
   }
 
   try {
-    const packagePath = new URL("../../../package.json", import.meta.url);
-    const packageContent = await readFile(packagePath, "utf-8");
+    const packagePath = new URL('../../../package.json', import.meta.url);
+    const packageContent = await readFile(packagePath, 'utf-8');
     const packageJson = JSON.parse(packageContent);
     cachedInfo = {
-      name: packageJson.name ?? "unknown",
-      version: packageJson.version ?? "unknown",
+      name: packageJson.name ?? 'unknown',
+      version: packageJson.version ?? 'unknown',
     };
     return cachedInfo;
   } catch {
-    return { name: "unknown", version: "unknown" };
+    return { name: 'unknown', version: 'unknown' };
   }
 }

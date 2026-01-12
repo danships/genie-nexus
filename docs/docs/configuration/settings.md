@@ -13,7 +13,7 @@ Genie Nexus can be configured through environment variables and the management i
 
 | Variable    | Default | Description                                      |
 | ----------- | ------- | ------------------------------------------------ |
-| `PORT`      | `3000`  | Port for the router server                       |
+| `PORT`      | `3000`  | Port for the server                              |
 | `LOG_LEVEL` | `info`  | Logging level (`debug`, `info`, `warn`, `error`) |
 | `DEBUG`     | `false` | Enable debug mode                                |
 

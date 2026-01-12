@@ -1,15 +1,15 @@
-import { arch, platform, release } from "node:os";
-import { getServerConfiguration } from "@genie-nexus/configuration";
-import { TypeSymbols } from "@genie-nexus/container";
-import type { StoredConfigurationRepository } from "@genie-nexus/database";
-import type { Logger } from "@genie-nexus/logger";
-import { DEFAULT_TENANT_ID } from "@lib/api/middleware/constants";
-import { getAppVersion } from "@lib/api/get-app-version";
-import { getContainer } from "@lib/core/get-container";
-import { environment } from "@lib/environment";
-import type { Events, TelemetryEvent } from "./types";
+import { arch, platform, release } from 'node:os';
+import { getServerConfiguration } from '@genie-nexus/configuration';
+import { TypeSymbols } from '@genie-nexus/container';
+import type { StoredConfigurationRepository } from '@genie-nexus/database';
+import type { Logger } from '@genie-nexus/logger';
+import { getAppVersion } from '@lib/api/get-app-version';
+import { DEFAULT_TENANT_ID } from '@lib/api/middleware/constants';
+import { getContainer } from '@lib/core/get-container';
+import { environment } from '@lib/environment';
+import type { Events, TelemetryEvent } from './types';
 
-function getOsInfo(): TelemetryEvent["os"] {
+function getOsInfo(): TelemetryEvent['os'] {
   return {
     platform: platform(),
     release: release(),
@@ -18,8 +18,8 @@ function getOsInfo(): TelemetryEvent["os"] {
   };
 }
 
-function getDbType(): "sqlite" | "mysql" {
-  return environment.DB.startsWith("mysql") ? "mysql" : "sqlite";
+function getDbType(): 'sqlite' | 'mysql' {
+  return environment.DB.startsWith('mysql') ? 'mysql' : 'sqlite';
 }
 
 async function createTelemetryEvent(
@@ -37,8 +37,8 @@ async function createTelemetryEvent(
       version: applicationInfo.version,
       db: getDbType(),
       runtimeEnvironment: environment.GNXS_RUNTIME_ENVIRONMENT as
-        | "cli"
-        | "docker",
+        | 'cli'
+        | 'docker',
     },
     details: event,
     hash:
@@ -61,29 +61,29 @@ async function sendWithRetry(
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const response = await fetch("https://www.gnxs.io/api/tm/send", {
-        method: "POST",
+      const response = await fetch('https://www.gnxs.io/api/tm/send', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(telemetryEvent),
       });
 
       if (!response.ok) {
-        logger.info("Failed to send telemetry event", {
+        logger.info('Failed to send telemetry event', {
           status: response.status,
           statusText: response.statusText,
           body: await response.text(),
         });
-        throw new Error("Failed to send telemetry event.");
+        throw new Error('Failed to send telemetry event.');
       }
 
-      logger.debug("Telemetry event sent successfully");
+      logger.debug('Telemetry event sent successfully');
       return;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
       if (attempt < maxRetries - 1) {
-        logger.debug("Retrying telemetry event.");
+        logger.debug('Retrying telemetry event.');
         await new Promise((resolve) =>
           setTimeout(resolve, 1000 * (attempt + 1))
         );
@@ -106,8 +106,8 @@ export async function sendTelemetryEvent(
     );
 
   try {
-    if (environment.NODE_ENV === "development") {
-      logger.debug("Skipping telemetry event in dev mode", { event });
+    if (environment.NODE_ENV === 'development') {
+      logger.debug('Skipping telemetry event in dev mode', { event });
       return;
     }
 
@@ -116,7 +116,7 @@ export async function sendTelemetryEvent(
       DEFAULT_TENANT_ID
     );
     if (!serverConfig.telemetryEnabled) {
-      logger.debug("Skipping telemetry event because telemetry is disabled", {
+      logger.debug('Skipping telemetry event because telemetry is disabled', {
         event,
       });
       return;
@@ -128,10 +128,10 @@ export async function sendTelemetryEvent(
       storedConfigurationRepository
     );
 
-    logger.debug("Sending telemetry event", { event: telemetryEvent });
+    logger.debug('Sending telemetry event', { event: telemetryEvent });
 
     await sendWithRetry(telemetryEvent, logger);
   } catch (error) {
-    logger.info("Final fail to send telemetry event", { error });
+    logger.info('Final fail to send telemetry event', { error });
   }
 }

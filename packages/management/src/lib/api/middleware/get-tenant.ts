@@ -1,9 +1,9 @@
-import { TypeSymbols } from "@genie-nexus/container";
-import type { Tenant, TenantRepository } from "@genie-nexus/database";
-import { getContainer } from "@lib/core/get-container";
-import { environment } from "@lib/environment";
-import { TenantMissingError } from "./errors";
-import { generateDefaultTenant } from "./generate-default-tenant";
+import { TypeSymbols } from '@genie-nexus/container';
+import type { Tenant, TenantRepository } from '@genie-nexus/database';
+import { getContainer } from '@lib/core/get-container';
+import { environment } from '@lib/environment';
+import { TenantMissingError } from './errors';
+import { generateDefaultTenant } from './generate-default-tenant';
 
 export type GetTenantResult = {
   tenant: Tenant;
