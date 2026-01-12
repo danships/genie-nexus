@@ -34,7 +34,7 @@ todos:
     status: completed
   - id: phase5-weave
     content: Migrate weave proxy with catch-all route and all HTTP methods
-    status: pending
+    status: completed
   - id: phase6-telemetry
     content: Migrate telemetry forwarding route and add missing telemetry events
     status: pending
@@ -298,19 +298,30 @@ export const addTenantIdToQuery = (query: Query, tenantId: string) => {
 
 ## Phase 5: Weave Proxy Migration
 
-### 5.1 Create Catch-All Route
+### 5.1 Create Catch-All Route ✅
 
 ```javascript
 /app/weave/[deploymentSlug]/[[...path]]/route.ts
+/app/weave/[tenantPath]/[deploymentSlug]/[[...path]]/route.ts
 ```
 
-(With tenant support if needed)
+> **Completed:** Created routes at:
+>
+> - `src/app/weave/[deploymentSlug]/[[...path]]/route.ts` - non-tenant path (single-tenant mode)
+> - `src/app/weave/[tenantPath]/[deploymentSlug]/[[...path]]/route.ts` - tenant-specific path (multi-tenant mode)
+>
+> **Shared handler:** `src/lib/weave/handlers/weave-proxy.ts`
 
-### 5.2 Implement All HTTP Methods
+### 5.2 Implement All HTTP Methods ✅
 
-- Export handlers for GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD
-- Port `ProcessRequest` handler logic
-- Maintain request/response header forwarding
+> **Completed:**
+>
+> - Exported handlers for GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD
+> - Ported `ProcessRequest` handler logic to `handleWeaveProxy`
+> - Maintained request/response header forwarding
+> - Implemented flow event execution (incomingRequest/response)
+> - Support for `http-proxy` and `http-static` provider types
+> - API key validation only when `deployment.requiresApiKey` is true
 
 ---
 
