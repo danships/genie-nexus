@@ -4,27 +4,9 @@ import { handleApiError } from '@lib/api/middleware/handle-api-error';
 import { handleModels } from '@lib/llm/handlers';
 import { NextResponse } from 'next/server';
 
-type RouteParams = {
-  params: Promise<{ tenantPath: string }>;
-};
-
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(request: Request) {
   try {
-    const { apiKey } = await checkApiKey(request, 'llm-api-key');
-    const { tenantPath } = await params;
-
-    if (apiKey.tenantId !== tenantPath) {
-      return NextResponse.json(
-        {
-          error: {
-            message: 'API key tenant does not match requested tenant',
-            type: 'invalid_request_error',
-          },
-        },
-        { status: 403 }
-      );
-    }
-
+    await checkApiKey(request, 'llm-api-key');
     return handleModels();
   } catch (error) {
     if (error instanceof ApplicationError) {
@@ -34,7 +16,7 @@ export async function GET(request: Request, { params }: RouteParams) {
   }
 }
 
-export async function OPTIONS() {
+export function OPTIONS() {
   return new NextResponse(null, {
     status: 204,
     headers: {

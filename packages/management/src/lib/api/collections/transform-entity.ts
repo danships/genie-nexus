@@ -7,7 +7,7 @@ export function transformEntity<T extends EntityWithTenant>(
   collectionName: CollectionName,
   entity: T
 ): Omit<T, 'tenantId'> {
-  const { tenantId, ...rest } = entity;
+  const { tenantId, ...rest } = entity; // eslint-disable-line @typescript-eslint/no-unused-vars
   const result = rest as Record<string, unknown>;
 
   if (collectionName === 'apiKey' && 'hash' in result) {

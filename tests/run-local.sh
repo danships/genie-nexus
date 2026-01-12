@@ -31,8 +31,8 @@ trap cleanup EXIT
 
 echo "Running tests..."
 if [ -n "$PUI" ]; then
-  playwright test --ui
+  pnpm exec playwright test --ui
 else
-  playwright test
+  pnpm exec playwright test
 fi
-vitest --run
+pnpm exec vitest --run

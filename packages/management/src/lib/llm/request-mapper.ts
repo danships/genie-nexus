@@ -7,7 +7,7 @@ export function openAiToAiSdkRequestMapper(
   | Partial<Parameters<typeof generateText>[0]>
   | Partial<Parameters<typeof streamText>[0]> {
   // biome-ignore lint/suspicious/noExplicitAny: It's hard to have the correct type here
-  const mappedParams: Record<string, any> = {};
+  const mappedParams: Record<string, any> = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   if (request.temperature !== undefined) {
     mappedParams['temperature'] = request.temperature;

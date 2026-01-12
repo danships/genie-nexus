@@ -7,10 +7,12 @@ const DEFAULT_TENANT_ID = 'default';
 
 async function handleRequest(
   request: Request,
-  context: { params: Promise<{ deploymentSlug: string; path?: string[] }> }
+  context: {
+    params: Promise<{ tenantOrDeploymentSlug: string; path?: string[] }>;
+  }
 ) {
   const params = await context.params;
-  const { deploymentSlug, path } = params;
+  const { tenantOrDeploymentSlug: deploymentSlug, path } = params;
 
   if (environment.MULTI_TENANT) {
     return NextResponse.json(

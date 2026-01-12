@@ -3,7 +3,7 @@ import type { ChatCompletionChunk } from './types';
 export async function* createOpenAIStreamFromAiSdk(
   model: string,
   // biome-ignore lint/suspicious/noExplicitAny: AI SDK types are complex
-  aiResponse: { textStream: AsyncIterable<string>; response: Promise<any> }
+  aiResponse: { textStream: AsyncIterable<string>; response: Promise<any> } // eslint-disable-line @typescript-eslint/no-explicit-any
 ): AsyncGenerator<string> {
   const { textStream, response: responsePromise } = aiResponse;
 

@@ -1,21 +1,21 @@
-import { TypeSymbols } from '@genie-nexus/container';
-import type { TenantRepository } from '@genie-nexus/database';
-import { getContainer } from '@lib/core/get-container';
-import { handleWeaveProxy } from '@lib/weave/handlers/weave-proxy';
-import { NextResponse } from 'next/server';
+import { TypeSymbols } from "@genie-nexus/container";
+import type { TenantRepository } from "@genie-nexus/database";
+import { getContainer } from "@lib/core/get-container";
+import { handleWeaveProxy } from "@lib/weave/handlers/weave-proxy";
+import { NextResponse } from "next/server";
 
 async function handleRequest(
   request: Request,
   context: {
     params: Promise<{
-      tenantPath: string;
+      tenantOrDeploymentSlug: string;
       deploymentSlug: string;
       path?: string[];
     }>;
   }
 ) {
   const params = await context.params;
-  const { tenantPath, deploymentSlug, path } = params;
+  const { tenantOrDeploymentSlug: tenantPath, deploymentSlug, path } = params;
 
   const container = await getContainer();
   const tenantRepository = container.resolve<TenantRepository>(
@@ -24,10 +24,10 @@ async function handleRequest(
 
   const tenant = await tenantRepository.getById(tenantPath);
   if (!tenant) {
-    return NextResponse.json({ error: 'Tenant not found' }, { status: 404 });
+    return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
   }
 
-  const fullPath = path ? `/${path.join('/')}` : '/';
+  const fullPath = path ? `/${path.join("/")}` : "/";
 
   return handleWeaveProxy(request, {
     tenantId: tenantPath,

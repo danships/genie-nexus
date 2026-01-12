@@ -6,18 +6,31 @@ import type { OpenAIChatCompletionRequest } from '@lib/llm/types';
 import { NextResponse } from 'next/server';
 
 type RouteParams = {
-  params: Promise<{ deploymentSlug: string }>;
+  params: Promise<{ tenantOrDeploymentSlug: string; deploymentSlug: string }>;
 };
 
 export async function POST(request: Request, { params }: RouteParams) {
   try {
     const { apiKey } = await checkApiKey(request, 'llm-api-key');
-    const { deploymentSlug } = await params;
+    const { tenantOrDeploymentSlug: tenantPath, deploymentSlug } = await params;
+
+    if (apiKey.tenantId !== tenantPath) {
+      return NextResponse.json(
+        {
+          error: {
+            message: 'API key tenant does not match requested tenant',
+            type: 'invalid_request_error',
+          },
+        },
+        { status: 403 }
+      );
+    }
+
     const body: OpenAIChatCompletionRequest = await request.json();
 
     return await handleChatCompletion({
       apiKey,
-      tenantId: apiKey.tenantId,
+      tenantId: tenantPath,
       deploymentSlug,
       body,
     });
@@ -26,7 +39,6 @@ export async function POST(request: Request, { params }: RouteParams) {
       return handleApiError(error);
     }
 
-    console.error('Error in chat completion:', error);
     return NextResponse.json(
       {
         error: {
@@ -39,7 +51,7 @@ export async function POST(request: Request, { params }: RouteParams) {
   }
 }
 
-export async function OPTIONS() {
+export function OPTIONS() {
   return new NextResponse(null, {
     status: 204,
     headers: {
