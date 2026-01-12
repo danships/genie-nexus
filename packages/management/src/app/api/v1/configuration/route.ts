@@ -12,14 +12,14 @@ export async function GET(request: Request) {
   try {
     await checkApiKeyOrUser(request, "management-key");
     const { tenant } = await getTenant();
-    const version = await getAppVersion();
+    const appInfo = await getAppVersion();
 
     return NextResponse.json({
       data: {
         tenant,
         defaultTenant: tenant.id === DEFAULT_TENANT_ID,
         authentication: environment.AUTH_METHOD,
-        version,
+        version: appInfo.version,
       },
     } satisfies ConfigurationResponse);
   } catch (error) {

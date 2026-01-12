@@ -16,6 +16,7 @@ import { getTenant } from "@lib/api/middleware/get-tenant";
 import { handleApiError } from "@lib/api/middleware/handle-api-error";
 import { getContainer } from "@lib/core/get-container";
 import { environment } from "@lib/environment";
+import { sendTelemetryEvent } from "@lib/telemetry";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -89,10 +90,12 @@ export async function POST(request: Request) {
 
     const configurationUpdates: Partial<ServerConfiguration> = {};
 
+    let newServerHash: string | undefined;
     if (parsedBody.telemetryEnabled !== undefined) {
       configurationUpdates.telemetryEnabled = parsedBody.telemetryEnabled;
       if (parsedBody.telemetryEnabled) {
-        configurationUpdates.server = crypto.randomUUID();
+        newServerHash = crypto.randomUUID();
+        configurationUpdates.server = newServerHash;
       }
     }
 
@@ -105,6 +108,15 @@ export async function POST(request: Request) {
       tenant.id,
       configurationUpdates
     );
+
+    if (parsedBody.telemetryEnabled !== undefined) {
+      if (parsedBody.telemetryEnabled) {
+        sendTelemetryEvent({ type: "telemetry-enabled" }, newServerHash);
+        sendTelemetryEvent({ type: "registered" }, newServerHash);
+      } else {
+        sendTelemetryEvent({ type: "telemetry-disabled" });
+      }
+    }
 
     return NextResponse.json({
       data: updatedConfiguration,

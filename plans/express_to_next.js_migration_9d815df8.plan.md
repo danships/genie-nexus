@@ -37,7 +37,7 @@ todos:
     status: completed
   - id: phase6-telemetry
     content: Migrate telemetry forwarding route and add missing telemetry events
-    status: pending
+    status: completed
   - id: phase7-dockerfile
     content: Update Dockerfile for Next.js standalone deployment
     status: pending
@@ -325,30 +325,37 @@ export const addTenantIdToQuery = (query: Query, tenantId: string) => {
 
 ---
 
-## Phase 6: Telemetry Migration
+## Phase 6: Telemetry Migration ✅
 
-### 6.1 Create Telemetry Route
+### 6.1 Create Telemetry Route ✅
 
-- `/app/api/v1/tm/api/send/route.ts`
-- Port telemetry forwarding logic
+> **Completed:** Created at `src/app/api/v1/tm/api/send/route.ts`
+>
+> - Forwards analytics from frontend to Umami
+> - Respects dev mode and telemetry enabled settings
+> - Adds website ID and client IP to payload
 
-### 6.2 Add Missing Telemetry Events
+### 6.2 Add Missing Telemetry Events ✅
 
-The following telemetry events from the Express implementation need to be added:
+**Telemetry infrastructure** (`src/lib/telemetry/`):
 
-**Collection creation events** (from `create-before.ts`):
+- `types.ts` - Event type definitions
+- `send-event.ts` - Event sending with retry logic
+- Added `TELEMETRY_SITE_ID` and `TELEMETRY_HOST_URL` to environment
 
-- `{ type: 'create', entity: 'deployment' }` - when creating deployments
-- `{ type: 'create', entity: 'provider' }` - when creating providers
-- `{ type: 'create', entity: 'apiKey' }` - when creating API keys
-- `{ type: 'create', entity: 'llmflow' }` - when creating LLM flows
-- `{ type: 'create', entity: 'weaveflow' }` - when creating Weave flows
+**Collection creation events** (in `src/app/api/v1/collections/[collection]/route.ts`):
 
-**Server configuration events** (from `update-server-configuration.ts`):
+- ✅ `{ type: 'create', entity: 'deployment' }` - when creating deployments
+- ✅ `{ type: 'create', entity: 'provider' }` - when creating providers
+- ✅ `{ type: 'create', entity: 'apiKey' }` - when creating API keys
+- ✅ `{ type: 'create', entity: 'llmflow' }` - when creating LLM flows
+- ✅ `{ type: 'create', entity: 'weaveflow' }` - when creating Weave flows
 
-- `{ type: 'telemetry-disabled' }` - when user disables telemetry
-- `{ type: 'telemetry-enabled' }` - when user enables telemetry
-- `{ type: 'registered' }` - after telemetry is enabled (with new server identifier)
+**Server configuration events** (in `src/app/api/v1/configuration/server/route.ts`):
+
+- ✅ `{ type: 'telemetry-disabled' }` - when user disables telemetry
+- ✅ `{ type: 'telemetry-enabled' }` - when user enables telemetry
+- ✅ `{ type: 'registered' }` - after telemetry is enabled (with new server identifier)
 
 ---
 

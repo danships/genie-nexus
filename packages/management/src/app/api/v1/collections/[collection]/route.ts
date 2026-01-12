@@ -18,7 +18,16 @@ import { ApplicationError } from "@lib/api/middleware/errors";
 import { getTenant } from "@lib/api/middleware/get-tenant";
 import { handleApiError } from "@lib/api/middleware/handle-api-error";
 import { getContainer } from "@lib/core/get-container";
+import { sendTelemetryEvent } from "@lib/telemetry";
 import { NextResponse } from "next/server";
+
+const TELEMETRY_ENTITY_MAP: Partial<Record<CollectionName, string>> = {
+  deployment: "deployment",
+  provider: "provider",
+  apiKey: "apiKey",
+  llmflow: "llmflow",
+  weaveflow: "weaveflow",
+};
 
 type RouteParams = {
   params: Promise<{ collection: string }>;
@@ -92,6 +101,11 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     const created = await repository.create(entityToCreate);
     const transformed = transformEntity(collection as CollectionName, created);
+
+    const telemetryEntity = TELEMETRY_ENTITY_MAP[collection as CollectionName];
+    if (telemetryEntity) {
+      sendTelemetryEvent({ type: "create", entity: telemetryEntity });
+    }
 
     return NextResponse.json({ data: transformed }, { status: 201 });
   } catch (error) {
