@@ -28,10 +28,10 @@ todos:
     status: completed
   - id: phase4-chat
     content: Migrate chat completions with SSE streaming support
-    status: pending
+    status: completed
   - id: phase4-models
     content: Migrate models endpoint
-    status: pending
+    status: completed
   - id: phase5-weave
     content: Migrate weave proxy with catch-all route and all HTTP methods
     status: pending
@@ -246,26 +246,53 @@ export const addTenantIdToQuery = (query: Query, tenantId: string) => {
 
 ---
 
-## Phase 4: LLM Chat Completions Migration
+## Phase 4: LLM Chat Completions Migration ✅
 
-### 4.1 Create Dynamic Route Structure
+### 4.1 Create Dynamic Route Structure ✅
 
 ```javascript
 /app/api/v1/[deploymentSlug]/chat/completions/route.ts
 /app/api/v1/[deploymentSlug]/models/route.ts
+/app/api/v1/[tenantPath]/[deploymentSlug]/chat/completions/route.ts
+/app/api/v1/[tenantPath]/[deploymentSlug]/models/route.ts
 ```
 
-(Or with tenant path if multi-tenant: `/app/api/v1/[tenantPath]/[deploymentSlug]/...`)
+> **Completed:** Created routes at:
+>
+> - `src/app/api/v1/[deploymentSlug]/chat/completions/route.ts` - non-tenant path
+> - `src/app/api/v1/[deploymentSlug]/models/route.ts` - non-tenant path
+> - `src/app/api/v1/[tenantPath]/[deploymentSlug]/chat/completions/route.ts` - tenant-specific path
+> - `src/app/api/v1/[tenantPath]/[deploymentSlug]/models/route.ts` - tenant-specific path
+>
+> **Shared handlers:** `src/lib/llm/handlers/` contains shared logic to minimize duplication:
+>
+> - `chat-completions.ts` - Core chat completion handling
+> - `models.ts` - Core models handling
 
-### 4.2 Migrate Chat Completion Handler
+### 4.2 Migrate Chat Completion Handler ✅
 
 - Move `ChatCompletionHandler` logic to Next.js route handler
 - Implement SSE streaming using Next.js `ReadableStream` response
 - Port LLM provider proxies (OpenAI, Google, Static)
 
-### 4.3 Migrate Models Endpoint
+> **Completed:** Created LLM infrastructure:
+>
+> - `src/lib/llm/types.ts` - OpenAI-compatible types
+> - `src/lib/llm/providers/openai.ts` - OpenAI/compatible provider using AI SDK
+> - `src/lib/llm/providers/google.ts` - Google AI provider using AI SDK
+> - `src/lib/llm/providers/static.ts` - Static test provider
+> - `src/lib/llm/request-mapper.ts` - Maps OpenAI params to AI SDK params
+> - `src/lib/llm/stream-response.ts` - Converts AI SDK streams to SSE format
+> - `src/lib/llm/execute-llm.ts` - Executes LLM with flow pipeline support
+> - `src/lib/llm/get-deployment-by-slug.ts` - Fetches deployment by slug
+>
+> **Dependencies added:** `ai`, `@ai-sdk/google`, `@ai-sdk/openai-compatible`
+
+### 4.3 Migrate Models Endpoint ✅
 
 - Port `ModelsHandler` to Next.js route
+
+> **Completed:** Created models endpoint with CORS support
 
 ---
 
