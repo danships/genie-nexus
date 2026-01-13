@@ -1,17 +1,16 @@
-import type { LocalBaseEntity } from '@genie-nexus/database';
-import { transformEntity } from '@lib/api/collections/transform-entity';
+import type { LocalBaseEntity } from "@genie-nexus/database";
+import { transformEntity } from "@lib/api/collections/transform-entity";
 import {
   COLLECTION_MAP,
-  type CollectionName,
-  isValidCollection,
-} from '@lib/api/collections/types';
-import { checkApiKeyOrUser } from '@lib/api/middleware/check-api-key-or-user';
-import { ApplicationError } from '@lib/api/middleware/errors';
-import { getTenant } from '@lib/api/middleware/get-tenant';
-import { handleApiError } from '@lib/api/middleware/handle-api-error';
-import { getContainer } from '@lib/core/get-container';
-import { NextResponse } from 'next/server';
-import type { Repository } from 'supersave';
+  normalizeCollectionName,
+} from "@lib/api/collections/types";
+import { checkApiKeyOrUser } from "@lib/api/middleware/check-api-key-or-user";
+import { ApplicationError } from "@lib/api/middleware/errors";
+import { getTenant } from "@lib/api/middleware/get-tenant";
+import { handleApiError } from "@lib/api/middleware/handle-api-error";
+import { getContainer } from "@lib/core/get-container";
+import { NextResponse } from "next/server";
+import type { Repository } from "supersave";
 
 type EntityWithTenant = LocalBaseEntity & { tenantId?: string };
 
@@ -21,13 +20,14 @@ type RouteParams = {
 
 export async function GET(request: Request, { params }: RouteParams) {
   try {
-    await checkApiKeyOrUser(request, 'management-key');
+    await checkApiKeyOrUser(request, "management-key");
     const { tenant } = await getTenant();
-    const { collection, id } = await params;
+    const { collection: collectionParam, id } = await params;
 
-    if (!isValidCollection(collection)) {
+    const collection = normalizeCollectionName(collectionParam);
+    if (!collection) {
       return NextResponse.json(
-        { error: `Unknown collection: ${collection}` },
+        { error: `Unknown collection: ${collectionParam}` },
         { status: 404 }
       );
     }
@@ -40,14 +40,14 @@ export async function GET(request: Request, { params }: RouteParams) {
     const entity = await repository.getById(id);
 
     if (!entity) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
     if (entity.tenantId !== tenant.id) {
-      return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
+      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
     }
 
-    const transformed = transformEntity(collection as CollectionName, entity);
+    const transformed = transformEntity(collection, entity);
     return NextResponse.json({ data: transformed });
   } catch (error) {
     if (error instanceof ApplicationError) {
@@ -59,13 +59,14 @@ export async function GET(request: Request, { params }: RouteParams) {
 
 export async function PUT(request: Request, { params }: RouteParams) {
   try {
-    await checkApiKeyOrUser(request, 'management-key');
+    await checkApiKeyOrUser(request, "management-key");
     const { tenant } = await getTenant();
-    const { collection, id } = await params;
+    const { collection: collectionParam, id } = await params;
 
-    if (!isValidCollection(collection)) {
+    const collection = normalizeCollectionName(collectionParam);
+    if (!collection) {
       return NextResponse.json(
-        { error: `Unknown collection: ${collection}` },
+        { error: `Unknown collection: ${collectionParam}` },
         { status: 404 }
       );
     }
@@ -78,11 +79,11 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const existing = await repository.getById(id);
 
     if (!existing) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
     if (existing.tenantId !== tenant.id) {
-      return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
+      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
     }
 
     const body = await request.json();
@@ -94,7 +95,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
       tenantId: tenant.id,
     });
 
-    const transformed = transformEntity(collection as CollectionName, updated);
+    const transformed = transformEntity(collection, updated);
     return NextResponse.json({ data: transformed });
   } catch (error) {
     if (error instanceof ApplicationError) {
@@ -104,15 +105,18 @@ export async function PUT(request: Request, { params }: RouteParams) {
   }
 }
 
+export { PUT as PATCH };
+
 export async function DELETE(request: Request, { params }: RouteParams) {
   try {
-    await checkApiKeyOrUser(request, 'management-key');
+    await checkApiKeyOrUser(request, "management-key");
     const { tenant } = await getTenant();
-    const { collection, id } = await params;
+    const { collection: collectionParam, id } = await params;
 
-    if (!isValidCollection(collection)) {
+    const collection = normalizeCollectionName(collectionParam);
+    if (!collection) {
       return NextResponse.json(
-        { error: `Unknown collection: ${collection}` },
+        { error: `Unknown collection: ${collectionParam}` },
         { status: 404 }
       );
     }
@@ -125,11 +129,11 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     const existing = await repository.getById(id);
 
     if (!existing) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
     if (existing.tenantId !== tenant.id) {
-      return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
+      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
     }
 
     await repository.deleteUsingId(id);

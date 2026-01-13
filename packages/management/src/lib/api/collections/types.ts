@@ -29,7 +29,3 @@ export function normalizeCollectionName(name: string): CollectionName | null {
   }
   return COLLECTION_NAME_ALIASES[lowercased] ?? null;
 }
-
-export function isValidCollection(name: string): name is CollectionName {
-  return normalizeCollectionName(name) !== null;
-}
