@@ -1,4 +1,4 @@
-import { TypeSymbols } from "@genie-nexus/container";
+import { TypeSymbols } from '@genie-nexus/container';
 
 export const COLLECTION_MAP = {
   provider: TypeSymbols.PROVIDER_REPOSITORY,
@@ -13,13 +13,13 @@ export const COLLECTION_MAP = {
 export type CollectionName = keyof typeof COLLECTION_MAP;
 
 const COLLECTION_NAME_ALIASES: Record<string, CollectionName> = {
-  providers: "provider",
-  deployments: "deployment",
-  apikeys: "apiKey",
-  tenants: "tenant",
-  weaveflows: "weaveflow",
-  llmflows: "llmflow",
-  storedconfigurations: "storedconfiguration",
+  providers: 'provider',
+  deployments: 'deployment',
+  apikeys: 'apiKey',
+  tenants: 'tenant',
+  weaveflows: 'weaveflow',
+  llmflows: 'llmflow',
+  storedconfigurations: 'storedconfiguration',
 };
 
 export function normalizeCollectionName(name: string): CollectionName | null {

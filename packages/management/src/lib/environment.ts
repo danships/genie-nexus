@@ -33,4 +33,13 @@ export const environment = cleanEnv(process.env, {
   TELEMETRY_HOST_URL: str({
     default: 'https://a.debuggingdan.com',
   }),
+  BETTER_AUTH_SECRET: str({
+    default: 'better-auth-secret-123456789',
+  }),
+  BETTER_AUTH_URL: str({
+    default: 'http://localhost:3000',
+  }),
+  NEXT_PUBLIC_BETTER_AUTH_URL: str({
+    default: 'http://localhost:3000',
+  }),
 });

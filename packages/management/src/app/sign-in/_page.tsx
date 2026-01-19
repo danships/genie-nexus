@@ -1,5 +1,6 @@
 'use client';
 
+import { authClient } from '@lib/auth/auth-client';
 import { ErrorNotification } from '@lib/components/atoms/error-notification';
 import { PageTitle } from '@lib/components/atoms/page-title';
 import {
@@ -12,24 +13,40 @@ import {
   Stack,
   TextInput,
 } from '@mantine/core';
-import { getCsrfToken } from 'next-auth/react';
 import localFont from 'next/font/local';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useEffect } from 'react';
 
 const karma = localFont({
   src: '../fonts/karma-suture.otf',
 });
 
-export function LoginClientPage({ error }: { error?: string }) {
-  const [csrfToken, setCsrfToken] = useState('');
+export function LoginClientPage({ error: initialError }: { error?: string }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(initialError || '');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  useEffect(() => {
-    void (async () => {
-      const csrfToken = await getCsrfToken();
-      setCsrfToken(csrfToken);
-    })();
-  }, []);
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    const { error: signInError } = await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: '/app',
+    });
+
+    if (signInError) {
+      setError(signInError.message || 'Invalid credentials');
+      setLoading(false);
+    } else {
+      router.push('/app');
+      router.refresh();
+    }
+  };
 
   return (
     <Container
@@ -48,14 +65,27 @@ export function LoginClientPage({ error }: { error?: string }) {
       <Paper className="is-half-size" w={400}>
         {error && <ErrorNotification>{error}</ErrorNotification>}
         <Stack>
-          <form method="post" action="/api/auth/callback/credentials">
-            <input type="hidden" name="csrfToken" value={csrfToken} />
-            <TextInput label="Email" type="email" name="email" required />
-            <PasswordInput label="Password" name="password" required />
+          <form onSubmit={handleSignIn}>
+            <TextInput
+              label="Email"
+              type="email"
+              name="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
+            />
+            <PasswordInput
+              label="Password"
+              name="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
+            />
             <Button
               type="submit"
               mt="md"
               fullWidth
+              loading={loading}
               data-umami-event="login-submit"
             >
               Login

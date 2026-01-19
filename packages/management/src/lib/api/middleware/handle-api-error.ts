@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { ApplicationError } from "./errors";
+import { NextResponse } from 'next/server';
+import { ApplicationError } from './errors';
 
 export function handleApiError(error: unknown): NextResponse {
   if (error instanceof ApplicationError) {
@@ -10,7 +10,7 @@ export function handleApiError(error: unknown): NextResponse {
   }
 
   return NextResponse.json(
-    { error: "An unexpected error occurred" },
+    { error: 'An unexpected error occurred' },
     { status: 500 }
   );
 }

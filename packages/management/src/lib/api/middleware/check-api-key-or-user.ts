@@ -1,5 +1,5 @@
 import type { ApiKey } from '@genie-nexus/database';
-import { getNextAuth } from '@lib/auth/next-auth';
+import { auth } from '@lib/auth/auth';
 import { environment } from '@lib/environment';
 import { type CheckApiKeyResult, checkApiKey } from './check-api-key';
 import { API_KEY_PREFIX } from './constants';
@@ -25,8 +25,9 @@ export async function checkApiKeyOrUser(
     return { type: 'apiKey', apiKey: result.apiKey };
   }
 
-  const { auth } = await getNextAuth();
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
 
   if (!session?.user) {
     throw new ApplicationError('Unauthorized', 401);
