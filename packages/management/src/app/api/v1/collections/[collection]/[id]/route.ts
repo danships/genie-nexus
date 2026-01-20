@@ -1,16 +1,16 @@
-import type { LocalBaseEntity } from "@genie-nexus/database";
-import { transformEntity } from "@lib/api/collections/transform-entity";
+import type { LocalBaseEntity } from '@genie-nexus/database';
+import { transformEntity } from '@lib/api/collections/transform-entity';
 import {
   COLLECTION_MAP,
   normalizeCollectionName,
-} from "@lib/api/collections/types";
-import { checkApiKeyOrUser } from "@lib/api/middleware/check-api-key-or-user";
-import { ApplicationError } from "@lib/api/middleware/errors";
-import { getTenant } from "@lib/api/middleware/get-tenant";
-import { handleApiError } from "@lib/api/middleware/handle-api-error";
-import { getContainer } from "@lib/core/get-container";
-import { NextResponse } from "next/server";
-import type { Repository } from "supersave";
+} from '@lib/api/collections/types';
+import { checkApiKeyOrUser } from '@lib/api/middleware/check-api-key-or-user';
+import { ApplicationError } from '@lib/api/middleware/errors';
+import { getTenant } from '@lib/api/middleware/get-tenant';
+import { handleApiError } from '@lib/api/middleware/handle-api-error';
+import { getContainer } from '@lib/core/get-container';
+import { NextResponse } from 'next/server';
+import type { Repository } from 'supersave';
 
 type EntityWithTenant = LocalBaseEntity & { tenantId?: string };
 
@@ -20,7 +20,7 @@ type RouteParams = {
 
 export async function GET(request: Request, { params }: RouteParams) {
   try {
-    await checkApiKeyOrUser(request, "management-key");
+    await checkApiKeyOrUser(request, 'management-key');
     const { tenant } = await getTenant();
     const { collection: collectionParam, id } = await params;
 
@@ -40,11 +40,11 @@ export async function GET(request: Request, { params }: RouteParams) {
     const entity = await repository.getById(id);
 
     if (!entity) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
     if (entity.tenantId !== tenant.id) {
-      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
     }
 
     const transformed = transformEntity(collection, entity);
@@ -59,7 +59,7 @@ export async function GET(request: Request, { params }: RouteParams) {
 
 export async function PUT(request: Request, { params }: RouteParams) {
   try {
-    await checkApiKeyOrUser(request, "management-key");
+    await checkApiKeyOrUser(request, 'management-key');
     const { tenant } = await getTenant();
     const { collection: collectionParam, id } = await params;
 
@@ -79,11 +79,11 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const existing = await repository.getById(id);
 
     if (!existing) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
     if (existing.tenantId !== tenant.id) {
-      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -109,7 +109,7 @@ export { PUT as PATCH };
 
 export async function DELETE(request: Request, { params }: RouteParams) {
   try {
-    await checkApiKeyOrUser(request, "management-key");
+    await checkApiKeyOrUser(request, 'management-key');
     const { tenant } = await getTenant();
     const { collection: collectionParam, id } = await params;
 
@@ -129,11 +129,11 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     const existing = await repository.getById(id);
 
     if (!existing) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
     if (existing.tenantId !== tenant.id) {
-      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Not authorized' }, { status: 401 });
     }
 
     await repository.deleteUsingId(id);

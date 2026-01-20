@@ -1,8 +1,10 @@
-import { getNextAuth } from '@lib/auth/next-auth';
+import { auth } from '@lib/auth/auth';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export const GET = async function () {
-  const auth = await getNextAuth();
-  await auth.signOut();
+  await auth.api.signOut({
+    headers: await headers(),
+  });
   redirect('/');
 };

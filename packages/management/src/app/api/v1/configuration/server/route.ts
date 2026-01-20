@@ -1,7 +1,3 @@
-import {
-  getServerConfiguration,
-  updateServerConfiguration,
-} from '@lib/configuration';
 import { TypeSymbols } from '@genie-nexus/container';
 import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import type {
@@ -14,6 +10,10 @@ import { DEFAULT_TENANT_ID } from '@lib/api/middleware/constants';
 import { ApplicationError } from '@lib/api/middleware/errors';
 import { getTenant } from '@lib/api/middleware/get-tenant';
 import { handleApiError } from '@lib/api/middleware/handle-api-error';
+import {
+  getServerConfiguration,
+  updateServerConfiguration,
+} from '@lib/configuration';
 import { getContainer } from '@lib/core/get-container';
 import { environment } from '@lib/environment';
 import { sendTelemetryEvent } from '@lib/telemetry';

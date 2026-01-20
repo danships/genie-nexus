@@ -5,7 +5,6 @@ import { AnimatedBackground } from '@lib/components/molecules/animated-backgroun
 import { Navbar } from '@lib/components/molecules/navbar';
 import { AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { SessionProvider } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -69,14 +68,5 @@ export default function LayoutWithSessionProvider({
   children: React.ReactNode;
   authMethod: AuthMethod;
 }) {
-  if (authMethod === 'none') {
-    return (
-      <AppLayoutClient authMethod={authMethod}>{children}</AppLayoutClient>
-    );
-  }
-  return (
-    <SessionProvider>
-      <AppLayoutClient authMethod={authMethod}>{children}</AppLayoutClient>
-    </SessionProvider>
-  );
+  return <AppLayoutClient authMethod={authMethod}>{children}</AppLayoutClient>;
 }

@@ -1,7 +1,7 @@
-import { getServerConfiguration } from '@lib/configuration';
 import { TypeSymbols } from '@genie-nexus/container';
 import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import { DEFAULT_TENANT_ID } from '@lib/api/middleware/constants';
+import { getServerConfiguration } from '@lib/configuration';
 import { getContainer } from '@lib/core/get-container';
 import { environment } from '@lib/environment';
 import { NextResponse } from 'next/server';

@@ -1,8 +1,8 @@
-import { TypeSymbols } from "@genie-nexus/container";
-import type { TenantRepository } from "@genie-nexus/database";
-import { getContainer } from "@lib/core/get-container";
-import { handleWeaveProxy } from "@lib/weave/handlers/weave-proxy";
-import { NextResponse } from "next/server";
+import { TypeSymbols } from '@genie-nexus/container';
+import type { TenantRepository } from '@genie-nexus/database';
+import { getContainer } from '@lib/core/get-container';
+import { handleWeaveProxy } from '@lib/weave/handlers/weave-proxy';
+import { NextResponse } from 'next/server';
 
 async function handleRequest(
   request: Request,
@@ -24,10 +24,10 @@ async function handleRequest(
 
   const tenant = await tenantRepository.getById(tenantPath);
   if (!tenant) {
-    return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
+    return NextResponse.json({ error: 'Tenant not found' }, { status: 404 });
   }
 
-  const fullPath = path ? `/${path.join("/")}` : "/";
+  const fullPath = path ? `/${path.join('/')}` : '/';
 
   return handleWeaveProxy(request, {
     tenantId: tenantPath,

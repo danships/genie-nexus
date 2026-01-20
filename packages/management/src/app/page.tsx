@@ -1,5 +1,6 @@
+import { auth } from '@lib/auth/auth';
 import { getAuthMethod } from '@lib/auth/get-auth-method';
-import { getNextAuth } from '@lib/auth/next-auth';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { HomePageClient } from './_page';
 
@@ -8,8 +9,9 @@ export default async function HomePage() {
     redirect('/app');
   }
 
-  const { auth } = await getNextAuth();
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   const authorized = !!session?.user;
 
   if (authorized) {
