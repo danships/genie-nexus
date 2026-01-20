@@ -1,4 +1,5 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import type { LanguageModel } from 'ai';
 import { generateText, streamText } from 'ai';
 import { openAiToAiSdkRequestMapper } from '../request-mapper';
 import type { OpenAIChatCompletionRequest } from '../types';
@@ -12,7 +13,7 @@ export async function createChatCompletion(
   config: GoogleProviderConfig
 ) {
   const google = createGoogleGenerativeAI({ apiKey: config.apiKey });
-  const model = google(request.model);
+  const model = google.languageModel(request.model) as unknown as LanguageModel;
 
   return await generateText({
     model,
@@ -26,7 +27,7 @@ export function createStreamingChatCompletion(
   config: GoogleProviderConfig
 ) {
   const google = createGoogleGenerativeAI({ apiKey: config.apiKey });
-  const model = google(request.model);
+  const model = google.languageModel(request.model) as unknown as LanguageModel;
 
   return streamText({
     model,

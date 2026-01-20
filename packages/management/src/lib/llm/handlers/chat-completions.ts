@@ -163,9 +163,9 @@ export async function handleChatCompletion({
           },
         ],
         usage: {
-          prompt_tokens: response.usage.promptTokens,
-          completion_tokens: response.usage.completionTokens,
-          total_tokens: response.usage.totalTokens,
+          prompt_tokens: response.usage.inputTokens ?? 0,
+          completion_tokens: response.usage.outputTokens ?? 0,
+          total_tokens: response.usage.totalTokens ?? 0,
         },
       };
       return NextResponse.json(openAIResponse);
@@ -191,9 +191,9 @@ export async function handleChatCompletion({
           },
         ],
         usage: {
-          prompt_tokens: response.usage.promptTokens,
-          completion_tokens: response.usage.completionTokens,
-          total_tokens: response.usage.totalTokens,
+          prompt_tokens: response.usage.inputTokens ?? 0,
+          completion_tokens: response.usage.outputTokens ?? 0,
+          total_tokens: response.usage.totalTokens ?? 0,
         },
       };
       return NextResponse.json(openAIResponse);

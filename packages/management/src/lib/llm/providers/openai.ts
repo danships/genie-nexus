@@ -1,4 +1,5 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+import type { LanguageModel } from 'ai';
 import { generateText, streamText } from 'ai';
 import { openAiToAiSdkRequestMapper } from '../request-mapper';
 import type { OpenAIChatCompletionRequest } from '../types';
@@ -12,12 +13,14 @@ export async function createChatCompletion(
     throw new Error('OpenAI API key is required');
   }
 
+  const model = createOpenAICompatible({
+    baseURL,
+    name: 'OpenAI Compatible',
+    apiKey,
+  }).chatModel(request.model) as unknown as LanguageModel;
+
   const response = await generateText({
-    model: createOpenAICompatible({
-      baseURL,
-      name: 'OpenAI Compatible',
-      apiKey,
-    }).chatModel(request.model),
+    model,
     messages: request.messages,
     ...openAiToAiSdkRequestMapper(request),
   });
@@ -34,12 +37,14 @@ export function createStreamingChatCompletion(
     throw new Error('OpenAI API key is required');
   }
 
+  const model = createOpenAICompatible({
+    baseURL,
+    name: 'OpenAI Compatible',
+    apiKey,
+  }).chatModel(request.model) as unknown as LanguageModel;
+
   const response = streamText({
-    model: createOpenAICompatible({
-      baseURL,
-      name: 'OpenAI Compatible',
-      apiKey,
-    }).chatModel(request.model),
+    model,
     messages: request.messages,
     ...openAiToAiSdkRequestMapper(request),
   });

@@ -1,13 +1,20 @@
-import type { generateText, streamText } from 'ai';
 import type { OpenAIChatCompletionRequest } from './types';
+
+type MappedParams = {
+  temperature?: number;
+  maxTokens?: number;
+  topP?: number;
+  stop?: string | string[];
+  presencePenalty?: number;
+  frequencyPenalty?: number;
+  logitBias?: Record<string, number>;
+  user?: string;
+};
 
 export function openAiToAiSdkRequestMapper(
   request: OpenAIChatCompletionRequest
-):
-  | Partial<Parameters<typeof generateText>[0]>
-  | Partial<Parameters<typeof streamText>[0]> {
-  // biome-ignore lint/suspicious/noExplicitAny: It's hard to have the correct type here
-  const mappedParams: Record<string, any> = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+): MappedParams {
+  const mappedParams: MappedParams = {};
 
   if (request.temperature !== undefined) {
     mappedParams['temperature'] = request.temperature;

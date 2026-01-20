@@ -1,4 +1,3 @@
-import type { Application, Router } from 'express';
 import type { Collection, Hooks } from 'supersave';
 import { SuperSave } from 'supersave';
 import {
@@ -20,7 +19,6 @@ let superSave!: SuperSave;
 type Options = {
   connectionString: string;
   executeMigrations: boolean;
-  app?: Application | Router;
   hooks?: Hooks;
 };
 
@@ -37,7 +35,6 @@ function addHooksToCollection(
 
 export async function initialize({
   connectionString,
-  app,
   executeMigrations,
   hooks,
 }: Options) {
@@ -58,12 +55,6 @@ export async function initialize({
 
   if (executeMigrations) {
     await migrate(db);
-  }
-
-  if (app) {
-    const collectionRouter = await db.getRouter('/api/v1/collections');
-
-    app.use(collectionRouter);
   }
 
   superSave = db;
