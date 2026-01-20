@@ -119,11 +119,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       next-auth:
-        specifier: 5.0.0-beta.27
-        version: 5.0.0-beta.27(next@15.5.9(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
-      supersave:
-        specifier: ^0.20.0
-        version: 0.20.0(better-sqlite3@12.2.0)(express@5.1.0)(mysql2@3.14.5)
+        specifier: ^5.0.0-beta.30
+        version: 5.0.0-beta.30(next@15.5.9(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
       typescript:
         specifier: ^5.7.0
         version: 5.9.2
@@ -159,9 +156,6 @@ importers:
       '@types/debug':
         specifier: ^4.1.12
         version: 4.1.12
-      '@types/express':
-        specifier: ^5.0.3
-        version: 5.0.3
       typescript:
         specifier: ^5.8.3
         version: 5.9.2
@@ -214,7 +208,7 @@ importers:
         version: 3.2.2(react@19.1.1)
       '@genie-nexus/auth':
         specifier: workspace:*
-        version: file:packages/auth(express@5.1.0)(next-auth@5.0.0-beta.30(next@15.5.9(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1))
+        version: link:../auth
       '@genie-nexus/container':
         specifier: workspace:*
         version: link:../container
@@ -466,20 +460,6 @@ packages:
   '@algolia/requester-node-http@5.37.0':
     resolution: {integrity: sha512-npZ9aeag4SGTx677eqPL3rkSPlQrnzx/8wNrl1P7GpWq9w/eTmRbOq+wKrJ2r78idlY0MMgmY/mld2tq6dc44g==}
     engines: {node: '>= 14.0.0'}
-
-  '@auth/core@0.39.0':
-    resolution: {integrity: sha512-jusviw/sUSfAh6S/wjY5tRmJOq0Itd3ImF+c/b4HB9DfmfChtcfVJTNJeqCeExeCG8oh4PBKRsMQJsn2W6NhFQ==}
-    peerDependencies:
-      '@simplewebauthn/browser': ^9.0.1
-      '@simplewebauthn/server': ^9.0.2
-      nodemailer: ^6.8.0
-    peerDependenciesMeta:
-      '@simplewebauthn/browser':
-        optional: true
-      '@simplewebauthn/server':
-        optional: true
-      nodemailer:
-        optional: true
 
   '@auth/core@0.41.0':
     resolution: {integrity: sha512-Wd7mHPQ/8zy6Qj7f4T46vg3aoor8fskJm6g2Zyj064oQ3+p0xNZXAV60ww0hY+MbTesfu29kK14Zk5d5JTazXQ==}
@@ -1911,20 +1891,6 @@ packages:
 
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
-
-  '@genie-nexus/auth@file:packages/auth':
-    resolution: {directory: packages/auth, type: directory}
-    peerDependencies:
-      '@auth/express': '*'
-      next-auth: 5.0.0-beta.27
-    peerDependenciesMeta:
-      '@auth/express':
-        optional: true
-      next-auth:
-        optional: true
-
-  '@genie-nexus/container@file:packages/container':
-    resolution: {directory: packages/container, type: directory}
 
   '@genie-nexus/database@file:packages/database':
     resolution: {directory: packages/database, type: directory}
@@ -5844,22 +5810,6 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  next-auth@5.0.0-beta.27:
-    resolution: {integrity: sha512-/QtP9C0C99YpEuBEJqMaDXH3ISWMgObQalwVZEoC7sskaIPhv5fQl6fXS/rXJQKqLY6MNJ42rqjqmRdoXZH2EQ==}
-    peerDependencies:
-      '@simplewebauthn/browser': ^9.0.1
-      '@simplewebauthn/server': ^9.0.2
-      next: ^14.0.0-0 || ^15.0.0-0
-      nodemailer: ^6.6.5
-      react: ^18.2.0 || ^19.0.0-0
-    peerDependenciesMeta:
-      '@simplewebauthn/browser':
-        optional: true
-      '@simplewebauthn/server':
-        optional: true
-      nodemailer:
-        optional: true
-
   next-auth@5.0.0-beta.30:
     resolution: {integrity: sha512-+c51gquM3F6nMVmoAusRJ7RIoY0K4Ts9HCCwyy/BRoe4mp3msZpOzYMyb5LAYc1wSo74PMQkGDcaghIO7W6Xjg==}
     peerDependencies:
@@ -8288,14 +8238,6 @@ snapshots:
     dependencies:
       '@algolia/client-common': 5.37.0
 
-  '@auth/core@0.39.0':
-    dependencies:
-      '@panva/hkdf': 1.2.1
-      jose: 6.0.10
-      oauth4webapi: 3.5.0
-      preact: 10.24.3
-      preact-render-to-string: 6.5.11(preact@10.24.3)
-
   '@auth/core@0.41.0':
     dependencies:
       '@panva/hkdf': 1.2.1
@@ -10451,26 +10393,6 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@genie-nexus/auth@file:packages/auth(express@5.1.0)(next-auth@5.0.0-beta.30(next@15.5.9(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1))':
-    dependencies:
-      '@genie-nexus/container': file:packages/container
-      '@genie-nexus/database': file:packages/database(express@5.1.0)
-      argon2: 0.41.1
-      reflect-metadata: 0.2.2
-      zod: 3.25.76
-    optionalDependencies:
-      next-auth: 5.0.0-beta.30(next@15.5.9(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
-    transitivePeerDependencies:
-      - bare-abort-controller
-      - bare-buffer
-      - express
-      - react-native-b4a
-      - supports-color
-
-  '@genie-nexus/container@file:packages/container':
-    dependencies:
-      tsyringe: 4.10.0
-
   '@genie-nexus/database@file:packages/database(express@5.1.0)':
     dependencies:
       better-sqlite3: 12.2.0
@@ -11963,7 +11885,7 @@ snapshots:
       bytes: 3.1.2
       content-type: 1.0.5
       debug: 4.4.3
-      http-errors: 2.0.0
+      http-errors: 2.0.1
       iconv-lite: 0.7.0
       on-finished: 2.4.1
       qs: 6.14.1
@@ -15017,12 +14939,6 @@ snapshots:
     optional: true
 
   neo-async@2.6.2: {}
-
-  next-auth@5.0.0-beta.27(next@15.5.9(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
-    dependencies:
-      '@auth/core': 0.39.0
-      next: 15.5.9(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      react: 19.1.1
 
   next-auth@5.0.0-beta.30(next@15.5.9(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
     dependencies:

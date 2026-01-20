@@ -24,19 +24,15 @@
     "dist"
   ],
   "peerDependencies": {
-    "next-auth": "5.0.0-beta.27"
+    "next-auth": "^5.0.0-beta.30"
   },
   "peerDependenciesMeta": {
-    "@auth/express": {
-      "optional": true
-    },
     "next-auth": {
       "optional": true
     }
   },
   "devDependencies": {
-    "next-auth": "5.0.0-beta.27",
-    "supersave": "^0.20.0",
+    "next-auth": "^5.0.0-beta.30",
     "typescript": "^5.7.0",
     "@genie-nexus/logger": "workspace:*"
   },
