@@ -26,7 +26,7 @@
     "@genie-nexus/logger": "workspace:*",
     "@genie-nexus/storage": "workspace:*",
     "@genie-nexus/types": "workspace:*",
-    "@mantine/core": "^7.5.0",
+    "@mantine/core": "^8.0.0",
     "@mantine/form": "^8.0.1",
     "@mantine/hooks": "^7.17.5",
     "@mantine/notifications": "^7.17.7",
