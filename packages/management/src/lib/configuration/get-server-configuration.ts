@@ -3,9 +3,9 @@ import type {
   ServerConfiguration,
   StoredConfiguration,
 } from '@genie-nexus/types';
-import { SERVER_CONFIGURATION_KEY } from './constants/keys.js';
-import { SERVER_CONFIGURATION_KEYS } from './types.js';
-import { updateServerConfiguration } from './update-server-configuration.js';
+import { SERVER_CONFIGURATION_KEY } from './constants/keys';
+import { SERVER_CONFIGURATION_KEYS } from './types';
+import { updateServerConfiguration } from './update-server-configuration';
 
 function getServerConfigurationValue<T>(
   configuration: StoredConfiguration | null,
@@ -36,7 +36,6 @@ export async function getServerConfiguration(
 
   let generatedServerIdentifier: string | undefined;
   if (!configuration?.values[SERVER_CONFIGURATION_KEYS.SERVER_IDENTIFIER]) {
-    // generate an identifier
     generatedServerIdentifier = crypto.randomUUID();
     await updateServerConfiguration(storedConfigurationRepository, tenantId, {
       server: generatedServerIdentifier,

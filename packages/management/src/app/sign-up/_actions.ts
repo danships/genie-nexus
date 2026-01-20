@@ -1,7 +1,7 @@
 'use server';
 
 import { saltAndHashPassword } from '@genie-nexus/auth';
-import { getServerConfiguration } from '@genie-nexus/configuration';
+import { getServerConfiguration } from '@lib/configuration';
 import { TypeSymbols } from '@genie-nexus/container';
 import type {
   NextAuthUserRepository,

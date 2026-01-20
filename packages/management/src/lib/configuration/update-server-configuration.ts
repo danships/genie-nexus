@@ -3,8 +3,8 @@ import type {
   ServerConfiguration,
   StoredConfiguration,
 } from '@genie-nexus/types';
-import { SERVER_CONFIGURATION_KEY } from './constants/keys.js';
-import { SERVER_CONFIGURATION_KEYS } from './types.js';
+import { SERVER_CONFIGURATION_KEY } from './constants/keys';
+import { SERVER_CONFIGURATION_KEYS } from './types';
 
 export async function updateServerConfiguration(
   storedConfigurationRepository: StoredConfigurationRepository,

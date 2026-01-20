@@ -1,7 +1,7 @@
 import {
   getServerConfiguration,
   updateServerConfiguration,
-} from '@genie-nexus/configuration';
+} from '@lib/configuration';
 import { TypeSymbols } from '@genie-nexus/container';
 import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import type {

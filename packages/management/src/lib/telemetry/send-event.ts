@@ -1,5 +1,5 @@
 import { arch, platform, release } from 'node:os';
-import { getServerConfiguration } from '@genie-nexus/configuration';
+import { getServerConfiguration } from '@lib/configuration';
 import { TypeSymbols } from '@genie-nexus/container';
 import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import type { Logger } from '@genie-nexus/logger';

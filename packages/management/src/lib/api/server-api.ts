@@ -41,9 +41,7 @@ function getRepository<T extends LocalBaseEntity>(
 
 export async function getResponseFromApi<T>(path: string): Promise<T> {
   if (path === '/configuration/server') {
-    const { getServerConfiguration } = await import(
-      '@genie-nexus/configuration'
-    );
+    const { getServerConfiguration } = await import('@lib/configuration');
     const container = await getContainer();
     const storedConfigurationRepository =
       container.resolve<StoredConfigurationRepository>(
