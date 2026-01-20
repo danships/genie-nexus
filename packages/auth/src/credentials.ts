@@ -1,5 +1,3 @@
-import type { NextAuthUser } from '@genie-nexus/database';
-import type { Repository } from 'supersave';
 import { ZodError, z } from 'zod';
 import { logger, verifyUsingHashedPassword } from './utils.js';
 
@@ -15,7 +13,7 @@ export const credentialsSchema = z.object({
 });
 
 export const getCredentialsAuthorize =
-  (userRepository: Repository<NextAuthUser>) =>
+  (userRepository: any) =>
   async (credentials: Partial<Record<'email' | 'password', unknown>>) => {
     try {
       const input = await credentialsSchema.parseAsync(credentials);

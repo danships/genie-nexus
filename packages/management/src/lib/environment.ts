@@ -27,4 +27,10 @@ export const environment = cleanEnv(process.env, {
   GITHUB_RELEASES_URL: str({
     default: 'https://api.github.com/repos/danships/genie-nexus/releases',
   }),
+  TELEMETRY_SITE_ID: str({
+    default: '09eab260-0866-4cbc-b2d7-5914d7136066',
+  }),
+  TELEMETRY_HOST_URL: str({
+    default: 'https://a.debuggingdan.com',
+  }),
 });

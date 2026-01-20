@@ -1,7 +1,13 @@
 import { TypeSymbols, container } from '@genie-nexus/container';
 import {
+  type ApiKey,
+  type Deployment,
+  type LlmFlow,
   type NextAuthUser,
+  type Provider,
   type StoredConfiguration,
+  type Tenant,
+  type WeaveFlow,
   entities,
 } from '@genie-nexus/database';
 import { initialize as initializeDb } from '@genie-nexus/database';
@@ -57,15 +63,34 @@ export async function getContainer(): Promise<typeof container> {
       container.register(TypeSymbols.DB, {
         useValue: db,
       });
-      container.register(TypeSymbols.STORED_CONFIGURATION_REPOSITORY, {
-        useValue: db.getRepository<StoredConfiguration>(
-          entities.StoredConfiguration.name
-        ),
+
+      container.register(TypeSymbols.PROVIDER_REPOSITORY, {
+        useValue: db.getRepository<Provider>(entities.Provider.name),
+      });
+      container.register(TypeSymbols.DEPLOYMENT_REPOSITORY, {
+        useValue: db.getRepository<Deployment>(entities.Deployment.name),
+      });
+      container.register(TypeSymbols.API_KEY_REPOSITORY, {
+        useValue: db.getRepository<ApiKey>(entities.ApiKey.name),
+      });
+      container.register(TypeSymbols.TENANT_REPOSITORY, {
+        useValue: db.getRepository<Tenant>(entities.Tenant.name),
       });
       container.register(TypeSymbols.NEXT_AUTH_USER_REPOSITORY, {
         useValue: db.getRepository<NextAuthUser>(
           entities.NextAuthUser.name,
           entities.NextAuthUser.namespace
+        ),
+      });
+      container.register(TypeSymbols.WEAVE_FLOW_REPOSITORY, {
+        useValue: db.getRepository<WeaveFlow>(entities.WeaveFlow.name),
+      });
+      container.register(TypeSymbols.LLM_FLOW_REPOSITORY, {
+        useValue: db.getRepository<LlmFlow>(entities.LlmFlow.name),
+      });
+      container.register(TypeSymbols.STORED_CONFIGURATION_REPOSITORY, {
+        useValue: db.getRepository<StoredConfiguration>(
+          entities.StoredConfiguration.name
         ),
       });
     }

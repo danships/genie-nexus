@@ -15,32 +15,24 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./express": {
-      "import": "./dist/express/index.js",
-      "types": "./dist/express/index.d.ts"
-    },
     "./nextjs": {
       "import": "./dist/nextjs/index.js",
       "types": "./dist/nextjs/index.d.ts"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "peerDependencies": {
-    "@auth/express": "^0.10.0",
-    "next-auth": "5.0.0-beta.27"
+    "next-auth": "^5.0.0-beta.30"
   },
   "peerDependenciesMeta": {
-    "@auth/express": {
-      "optional": true
-    },
     "next-auth": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@auth/express": "^0.10.0",
-    "next-auth": "5.0.0-beta.27",
-    "supersave": "^0.20.0",
+    "next-auth": "^5.0.0-beta.30",
     "typescript": "^5.7.0",
     "@genie-nexus/logger": "workspace:*"
   },

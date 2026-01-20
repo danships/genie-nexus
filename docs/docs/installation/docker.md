@@ -59,7 +59,7 @@ docker run -p 3000:3000 \
 Verify your installation is working:
 
 ```bash
-curl http://localhost:3000/_health
+curl http://localhost:3000/health
 ```
 
 You should see `OK` as the response.

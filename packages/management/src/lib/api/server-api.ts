@@ -1,16 +1,18 @@
-import { COOKIE_NAME } from '@genie-nexus/auth';
 import { TypeSymbols } from '@genie-nexus/container';
-import type { LocalBaseEntity } from '@genie-nexus/database';
+import type {
+  LocalBaseEntity,
+  StoredConfigurationRepository,
+} from '@genie-nexus/database';
 import type { Logger } from '@genie-nexus/logger';
 import type { ConfigurationResponse } from '@genie-nexus/types';
-import { getAuthMethod } from '@lib/auth/get-auth-method';
-import { getNextAuth } from '@lib/auth/next-auth';
 import { getContainer } from '@lib/core/get-container';
 import { environment } from '@lib/environment';
-import { cookies } from 'next/headers';
 import 'server-only';
-
-const API_URL_PREFIX = `${environment.HOST_PREFIX}/api/v1`;
+import type { Repository } from 'supersave';
+import { COLLECTION_MAP, normalizeCollectionName } from './collections/types';
+import { getAppVersion } from './get-app-version';
+import { DEFAULT_TENANT_ID } from './middleware/constants';
+import { generateDefaultTenant } from './middleware/generate-default-tenant';
 
 let serverLogger: Logger | null = null;
 
@@ -21,159 +23,150 @@ async function getServerLogger(): Promise<Logger> {
   return serverLogger;
 }
 
-export async function getResponseFromApi<T>(path: string): Promise<T> {
-  const response = await fetch(
-    `${API_URL_PREFIX}${path}`,
-    await getCookieHeaders()
+function getTenantId(): string {
+  return DEFAULT_TENANT_ID;
+}
+
+function getRepository<T extends LocalBaseEntity>(
+  collection: string
+): Promise<Repository<T>> {
+  const normalizedName = normalizeCollectionName(collection);
+  if (!normalizedName) {
+    throw new Error(`Unknown collection: ${collection}`);
+  }
+  return getContainer().then((container) =>
+    container.resolve<Repository<T>>(COLLECTION_MAP[normalizedName])
   );
-  if (!response.ok) {
-    throw new Error(`Failed to fetch from API: ${response.statusText}`);
-  }
-  const parsedResponse = await response.json();
-  if ('data' in parsedResponse) {
-    return parsedResponse.data as T;
-  }
-  return parsedResponse as T;
 }
 
-async function getCookieHeaders() {
-  if ((await getAuthMethod()) === 'none') {
-    return {};
+export async function getResponseFromApi<T>(path: string): Promise<T> {
+  if (path === '/configuration/server') {
+    const { getServerConfiguration } = await import('@lib/configuration');
+    const container = await getContainer();
+    const storedConfigurationRepository =
+      container.resolve<StoredConfigurationRepository>(
+        TypeSymbols.STORED_CONFIGURATION_REPOSITORY
+      );
+    return (await getServerConfiguration(
+      storedConfigurationRepository,
+      getTenantId()
+    )) as T;
   }
-
-  const requestCookies = await cookies();
-  const nextAuthCookie = requestCookies.get(COOKIE_NAME);
-
-  if (!nextAuthCookie) {
-    return {};
-  }
-
-  return {
-    headers: {
-      Cookie: `${COOKIE_NAME}=${nextAuthCookie.value}`,
-    },
-  };
+  throw new Error(`Unsupported API path: ${path}`);
 }
+
+type EntityWithTenant = LocalBaseEntity & { tenantId?: string };
 
 export async function getEntity<T extends LocalBaseEntity>(
   collection: string,
   id: string
-) {
-  const response = await fetch(
-    `${API_URL_PREFIX}/collections/${collection}/${id}`,
-    await getCookieHeaders()
-  );
-  if (!response.ok) {
-    (await getServerLogger()).error(
-      `Failed to fetch entities: ${response.statusText}`,
-      {
-        response: await response.text(),
-      }
-    );
-    throw new Error(`Failed to fetch entity: ${response.statusText}`);
-  }
-  const data = (await response.json()) as { data: T };
+): Promise<T> {
+  const repository = await getRepository<EntityWithTenant>(collection);
+  const tenantId = getTenantId();
 
-  return data.data;
+  const entity = await repository.getById(id);
+
+  if (!entity) {
+    (await getServerLogger()).error(`Entity not found: ${collection}/${id}`);
+    throw new Error(`Entity not found: ${collection}/${id}`);
+  }
+
+  if (entity.tenantId !== tenantId) {
+    (await getServerLogger()).error(
+      `Entity not authorized: ${collection}/${id}`
+    );
+    throw new Error(`Not authorized to access entity: ${collection}/${id}`);
+  }
+
+  return entity as T;
 }
 
-export async function createEntity<T, R>(collection: string, flow: T) {
-  const cookieHeaders = await getCookieHeaders();
+export async function createEntity<T, R>(
+  collection: string,
+  data: T
+): Promise<R> {
+  const repository = await getRepository<EntityWithTenant>(collection);
+  const tenantId = getTenantId();
 
-  const response = await fetch(`${API_URL_PREFIX}/collections/${collection}`, {
-    method: 'POST',
-    headers: {
-      ...cookieHeaders.headers,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(flow),
-  });
-  if (!response.ok) {
-    (await getServerLogger()).error(
-      `Failed to create entity: ${response.statusText}`,
-      {
-        response: await response.text(),
-      }
-    );
-    throw new Error(`Failed to create entity: ${response.statusText}`);
+  const entityToCreate = {
+    ...(data as object),
+    tenantId,
+  } as EntityWithTenant;
+
+  const created = await repository.create(entityToCreate);
+  return created as R;
+}
+
+function parseQueryString(queryString: string): Record<string, string> {
+  const params: Record<string, string> = {};
+  const searchParams = new URLSearchParams(queryString);
+  for (const [key, value] of searchParams) {
+    params[key] = value;
   }
-
-  const data = (await response.json()) as { data: R };
-  return data.data;
+  return params;
 }
 
 export async function getEntityByQuery<T extends LocalBaseEntity>(
   collection: string,
-  query: string
-) {
-  const response = await fetch(
-    `${API_URL_PREFIX}/collections/${collection}?${query}`,
-    await getCookieHeaders()
-  );
-  if (response.status === 404) {
-    return null;
+  queryString: string
+): Promise<T | null> {
+  const repository = await getRepository<EntityWithTenant>(collection);
+  const tenantId = getTenantId();
+
+  const params = parseQueryString(queryString);
+  let query = repository.createQuery().eq('tenantId', tenantId);
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value === 'true') {
+      query = query.eq(key, true);
+    } else if (value === 'false') {
+      query = query.eq(key, false);
+    } else {
+      query = query.eq(key, value);
+    }
   }
 
-  if (!response.ok) {
-    (await getServerLogger()).error(
-      `Failed to fetch entity: ${response.statusText}`,
-      {
-        response: await response.text(),
-      }
-    );
-    throw new Error(`Failed to fetch entity: ${response.statusText}`);
-  }
-  const data = (await response.json()) as { data: T[] };
-  if (data.data.length === 0) {
+  const entities = await repository.getByQuery(query);
+  if (entities.length === 0) {
     return null;
   }
-  return data.data[0] ?? null;
+  return entities[0] as T;
 }
 
 export async function getEntities<T extends LocalBaseEntity>(
   collection: string,
-  query: string
-) {
-  const response = await fetch(
-    `${API_URL_PREFIX}/collections/${collection}?${query}`,
-    await getCookieHeaders()
-  );
-  if (!response.ok) {
-    (await getServerLogger()).error(
-      `Failed to fetch entities: ${response.statusText}`,
-      {
-        response: await response.text(),
-      }
-    );
+  queryString: string
+): Promise<T[]> {
+  const repository = await getRepository<EntityWithTenant>(collection);
+  const tenantId = getTenantId();
 
-    throw new Error(`Failed to fetch entities: ${response.statusText}`);
+  const params = parseQueryString(queryString);
+  let query = repository.createQuery().eq('tenantId', tenantId);
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value === 'true') {
+      query = query.eq(key, true);
+    } else if (value === 'false') {
+      query = query.eq(key, false);
+    } else {
+      query = query.eq(key, value);
+    }
   }
-  const data = (await response.json()) as { data: T[] };
 
-  return data.data;
+  const entities = await repository.getByQuery(query);
+  return entities as T[];
 }
 
 export async function getConfiguration(): Promise<
   ConfigurationResponse['data']
 > {
-  const configurationResponse = await fetch(
-    `${API_URL_PREFIX}/configuration`,
-    await getCookieHeaders()
-  );
-  if (!configurationResponse.ok) {
-    if (configurationResponse.status === 401) {
-      (await getServerLogger()).info(
-        'Unauthorized to fetch server configuration.'
-      );
-      const { signIn } = await getNextAuth();
-      await signIn();
-    }
-    (await getServerLogger()).warning(
-      'Could not retrieve server configuration.'
-    );
-    throw new Error('Failed to fetch server configuration.');
-  }
+  const tenant = generateDefaultTenant();
+  const appInfo = await getAppVersion();
 
-  const data = (await configurationResponse.json()) as ConfigurationResponse;
-  return data.data;
+  return {
+    tenant,
+    defaultTenant: tenant.id === DEFAULT_TENANT_ID,
+    authentication: environment.AUTH_METHOD,
+    version: appInfo.version,
+  };
 }

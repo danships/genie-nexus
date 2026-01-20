@@ -24,7 +24,7 @@
     "test:ui": "./tests/run-local.sh",
     "test:ui:auth-none:pui": "AUTH_METHOD=none PUI=1 ./tests/run-local.sh",
     "test:ui:auth-none": "AUTH_METHOD=none ./tests/run-local.sh",
-    "build": "pnpm -r build",
+    "build": "pnpm -r --workspace-concurrency=1 build",
     "prepare": "husky",
     "pre-push": "concurrently \"pnpm lint\" \"pnpm test\"",
     "lint-staged": "lint-staged",
@@ -34,7 +34,7 @@
     "@biomejs/biome": "1.9.4",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@playwright/test": "^1.55.0",
+    "@playwright/test": "^1.55.1",
     "@tsconfig/node22": "^22.0.2",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.18.3",
@@ -44,5 +44,18 @@
     "lint-staged": "^16.1.6",
     "rimraf": "^6.0.1",
     "vitest": "^3.2.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "tar-fs": ">=2.1.4",
+      "node-forge": ">=1.3.2",
+      "qs": ">=6.14.1",
+      "body-parser": ">=2.2.1",
+      "js-yaml": ">=4.1.1",
+      "gray-matter>js-yaml": "^3.14.1",
+      "mdast-util-to-hast": ">=13.2.1",
+      "playwright": ">=1.55.1",
+      "webpack-dev-server": ">=5.2.1"
+    }
   }
 }

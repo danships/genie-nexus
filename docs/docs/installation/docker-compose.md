@@ -128,7 +128,7 @@ services:
   genie-nexus:
     image: ghcr.io/danships/genie-nexus:latest
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/_health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s
       timeout: 10s
       retries: 3

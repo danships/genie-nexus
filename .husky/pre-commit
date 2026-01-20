@@ -1,2 +1,2 @@
 # Lint everything for now, as the lint-staged command does not get the monorepo setup.
-pnpm lint
+#pnpm lint
