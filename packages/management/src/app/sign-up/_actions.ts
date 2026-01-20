@@ -1,12 +1,12 @@
 'use server';
 
-import { getServerConfiguration } from '@lib/configuration';
 import { TypeSymbols } from '@genie-nexus/container';
 import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import type { Logger } from '@genie-nexus/logger';
 import { auth } from '@lib/auth/auth';
 import { DEFAULT_TENANT_ID } from '@lib/auth/constants';
 import { getAuthMethod } from '@lib/auth/get-auth-method';
+import { getServerConfiguration } from '@lib/configuration';
 import { getContainer } from '@lib/core/get-container';
 import { environment } from '@lib/environment';
 import { headers } from 'next/headers';

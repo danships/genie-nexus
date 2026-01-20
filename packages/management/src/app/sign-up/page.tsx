@@ -1,9 +1,9 @@
-import { getServerConfiguration } from '@lib/configuration';
 import { TypeSymbols } from '@genie-nexus/container';
 import type { StoredConfigurationRepository } from '@genie-nexus/database';
 import { DEFAULT_TENANT_ID } from '@lib/auth/constants';
 import { getAuthMethod } from '@lib/auth/get-auth-method';
 import { ErrorPage } from '@lib/components/pages/error-page';
+import { getServerConfiguration } from '@lib/configuration';
 import { getContainer } from '@lib/core/get-container';
 import { environment } from '@lib/environment';
 import type { Metadata } from 'next';

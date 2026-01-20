@@ -8,6 +8,7 @@ import Link from 'next/link';
 
 export function UserClientPage({
   session,
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 }: { session: typeof import('@lib/auth/auth').auth.$Infer.Session }) {
   return (
     <>
