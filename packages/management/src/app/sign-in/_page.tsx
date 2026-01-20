@@ -33,18 +33,23 @@ export function LoginClientPage({ error: initialError }: { error?: string }) {
     setLoading(true);
     setError('');
 
-    const { error: signInError } = await authClient.signIn.email({
-      email,
-      password,
-      callbackURL: '/app',
-    });
+    try {
+      const { error: signInError } = await authClient.signIn.email({
+        email,
+        password,
+        callbackURL: '/app',
+      });
 
-    if (signInError) {
-      setError(signInError.message || 'Invalid credentials');
+      if (signInError) {
+        setError(signInError.message || 'Invalid credentials');
+      } else {
+        router.push('/app');
+        router.refresh();
+      }
+    } catch {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
       setLoading(false);
-    } else {
-      router.push('/app');
-      router.refresh();
     }
   };
 

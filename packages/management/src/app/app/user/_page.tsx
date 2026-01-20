@@ -1,6 +1,5 @@
 'use client';
 
-import type { auth } from '@lib/auth/auth';
 import { PageTitle } from '@lib/components/atoms/page-title';
 import { DetailCard } from '@lib/components/molecules/detail-card';
 import { Button, Stack } from '@mantine/core';
@@ -9,7 +8,7 @@ import Link from 'next/link';
 
 export function UserClientPage({
   session,
-}: { session: typeof auth.$Infer.Session }) {
+}: { session: typeof import('@lib/auth/auth').auth.$Infer.Session }) {
   return (
     <>
       <PageTitle>User Details</PageTitle>

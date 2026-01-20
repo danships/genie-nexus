@@ -41,7 +41,13 @@ export async function doSignUp(
     headers: await headers(),
   });
 
-  if (newsletter && result.user) {
+  if (!result.user) {
+    const logger = (await getContainer()).resolve<Logger>(TypeSymbols.LOGGER);
+    logger.error('Sign-up failed: no user returned', { email });
+    throw new Error('Sign-up failed. Please try again.');
+  }
+
+  if (newsletter) {
     await subscribeToNewsletter(email, result.user.id, 'sign-up', name);
   }
 }
